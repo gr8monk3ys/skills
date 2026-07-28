@@ -1,5 +1,9 @@
 # Lorenzo's Claude Code Plugin
 
+<p align="center">
+  <img src="docs/assets/hero.png" alt="lorenzos-claude-code preview" width="640">
+</p>
+
 [![License: GPL-3.0](https://img.shields.io/badge/License-GPL--3.0-blue.svg)](LICENSE)
 [![Node.js](https://img.shields.io/badge/Node.js-18%2B-green.svg)](https://nodejs.org)
 
