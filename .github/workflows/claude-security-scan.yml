@@ -59,7 +59,7 @@ jobs:
 
       - name: Run Claude Security Review
         if: steps.creds.outputs.present == 'true'
-        uses: anthropics/claude-code-action@64c7a0ef71df67b14cb4471f4d9c8565c61042bf
+        uses: anthropics/claude-code-action@4633baf5267540f3f8cb58b684f79901d564c280
         with:
           prompt: |
             Perform a comprehensive security review of this PR.
