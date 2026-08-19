@@ -117,5 +117,26 @@ function renderTable(rows) {
   }
   return lines.join('\n')
 }
+function scanSkills(dir, buckets) {
+  const out = []
+  for (const bucket of buckets) {
+    const bucketDir = path.join(dir, bucket)
+    if (!fs.existsSync(bucketDir)) continue
+    for (const entry of fs.readdirSync(bucketDir, { withFileTypes: true })) {
+      if (!entry.isDirectory()) continue
+      const skillFile = path.join(bucketDir, entry.name, 'SKILL.md')
+      if (!fs.existsSync(skillFile)) continue
+      const fm = parseFrontmatter(fs.readFileSync(skillFile, 'utf8'))
+      out.push({
+        name: fm.name || entry.name,
+        description: fm.description || '',
+        path: skillFile,
+        bucket,
+      })
+    }
+  }
+  out.sort((a, b) => a.name.localeCompare(b.name))
+  return out
+}
 
-module.exports = { parseFrontmatter, scanCategory, scanHooks, scanMonitors, buildPluginJson, replaceMarker, renderTable }
+module.exports = { parseFrontmatter, scanCategory, scanHooks, scanMonitors, buildPluginJson, replaceMarker, renderTable, scanSkills }

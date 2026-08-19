@@ -171,6 +171,30 @@ test('buildPluginJson assembles a manifest with arrays and preserves mcpServers'
   assert.deepEqual(out.profiles, { minimal: '.claude/profiles/mcp-minimal.json' })
 })
 
+test('scanSkills returns only promoted-bucket skills, reading SKILL.md only', () => {
+  const fixtures = path.join(__dirname, 'fixtures/manifest/skills')
+  const entries = manifest.scanSkills(fixtures, ['engineering', 'productivity'])
+  assert.deepEqual(entries.map(e => e.name), ['alpha', 'beta'])
+  const alpha = entries.find(e => e.name === 'alpha')
+  assert.equal(alpha.bucket, 'engineering')
+  assert.equal(alpha.description, 'Alpha engineering skill')
+  assert.match(alpha.path.replace(/\\/g, '/'), /skills\/engineering\/alpha\/SKILL\.md$/)
+})
+
+test('scanSkills ignores bucket READMEs, support files, and non-promoted buckets', () => {
+  const fixtures = path.join(__dirname, 'fixtures/manifest/skills')
+  const entries = manifest.scanSkills(fixtures, ['engineering', 'productivity'])
+  assert.ok(!entries.some(e => e.name === 'old-skill'))
+  assert.ok(!entries.some(e => e.name === 'notes'))
+  assert.ok(!entries.some(e => e.name === 'README'))
+})
+
+test('scanSkills tolerates a missing bucket directory', () => {
+  const fixtures = path.join(__dirname, 'fixtures/manifest/skills')
+  const entries = manifest.scanSkills(fixtures, ['engineering', 'does-not-exist'])
+  assert.deepEqual(entries.map(e => e.name), ['alpha'])
+})
+
 const { execFileSync } = require('node:child_process')
 
 test('sync-manifest --check passes against committed state', () => {

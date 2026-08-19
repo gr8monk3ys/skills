@@ -10,6 +10,7 @@ const PLUGIN_JSON = path.join(REPO_ROOT, '.claude-plugin', 'plugin.json')
 const PACKAGE_JSON = path.join(REPO_ROOT, 'package.json')
 const README = path.join(REPO_ROOT, 'README.md')
 const CLAUDE_MD = path.join(REPO_ROOT, 'CLAUDE.md')
+const PROMOTED = ['engineering', 'productivity']
 
 const CHECK = process.argv.includes('--check')
 
@@ -28,7 +29,7 @@ function main() {
 
   const commands = m.scanCategory(path.join(REPO_ROOT, '.claude/commands'))
   const agents = m.scanCategory(path.join(REPO_ROOT, '.claude/agents'))
-  const skills = m.scanCategory(path.join(REPO_ROOT, '.claude/skills'))
+  const skills = m.scanSkills(path.join(REPO_ROOT, '.claude/skills'), PROMOTED)
   const hooks = m.scanHooks(path.join(REPO_ROOT, '.claude/hooks'))
   const monitors = m.scanMonitors(path.join(REPO_ROOT, '.claude/monitors'))
 
