@@ -207,6 +207,11 @@
       "description": "WHEN to auto-invoke: Creating UI components, building React/Vue/Svelte components, Next.js pages, styling with Tailwind/CSS, state management setup, form handling, accessibility improvements, client-side interactivity."
     },
     {
+      "name": "handoff",
+      "path": ".claude/skills/productivity/handoff/SKILL.md",
+      "description": "Compact the current conversation into a handoff document for another agent to pick up."
+    },
+    {
       "name": "prototype",
       "path": ".claude/skills/engineering/prototype/SKILL.md",
       "description": "Build a throwaway prototype to answer a design question. Use when the user wants to sanity-check whether a state model or logic feels right, or explore what a UI should look like."
@@ -222,9 +227,24 @@
       "description": "\"Use when you need to resolve an in-progress git merge/rebase conflict.\""
     },
     {
+      "name": "to-questionnaire",
+      "path": ".claude/skills/productivity/to-questionnaire/SKILL.md",
+      "description": "Turn a decision you can't fully answer into a questionnaire for someone else to fill in."
+    },
+    {
+      "name": "wait-what",
+      "path": ".claude/skills/productivity/wait-what/SKILL.md",
+      "description": "Stop. That last message did not land — re-pitch it."
+    },
+    {
       "name": "wizard",
       "path": ".claude/skills/engineering/wizard/SKILL.md",
       "description": "Generate an interactive bash wizard that walks a human through steps only they can perform. Use when provisioning infrastructure, setting up credentials or CI secrets, walking an unfamiliar third-party dashboard, or running a one-off migration or cutover. Don't invoke this for steps the agent can perform itself."
+    },
+    {
+      "name": "writing-for-agents",
+      "path": ".claude/skills/productivity/writing-for-agents/SKILL.md",
+      "description": "Writing documents for agents. Use when creating or editing skills, or modifying AGENTS.md or CLAUDE.md."
     }
   ]
 }

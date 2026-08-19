@@ -8,7 +8,7 @@
 Scaffolds components, API routes, hooks, Supabase types, and Edge Functions. Composes with [superpowers](https://github.com/obra/superpowers) — install both for the full toolkit.
 
 <!-- AUTOGEN:counts -->
-**17 commands** · **6 agents** · **9 skills** · **14 hooks** · **2 monitors**
+**17 commands** · **6 agents** · **13 skills** · **14 hooks** · **2 monitors**
 <!-- /AUTOGEN:counts -->
 
 ---
@@ -87,10 +87,14 @@ Or, from inside Claude Code:
 | `database-operations` | WHEN to auto-invoke: Database schema design, creating migrations, writing SQL queries, query optimization, Supabase operations, Prisma/Drizzle schema changes, PostgreSQL tasks, RLS policies, indexes. |
 | `domain-modeling` | Build and sharpen a project's domain model. Use when discussing codebase terminology, writing or editing a CONTEXT.md, or recording or editing an ADR. |
 | `frontend-development` | WHEN to auto-invoke: Creating UI components, building React/Vue/Svelte components, Next.js pages, styling with Tailwind/CSS, state management setup, form handling, accessibility improvements, client-side interactivity. |
+| `handoff` | Compact the current conversation into a handoff document for another agent to pick up. |
 | `prototype` | Build a throwaway prototype to answer a design question. Use when the user wants to sanity-check whether a state model or logic feels right, or explore what a UI should look like. |
 | `research` | Investigate a question against high-trust primary sources and capture the findings as a Markdown file in the repo. Use when the user wants a topic researched, docs or API facts gathered, or reading legwork delegated to a background agent. |
 | `resolving-merge-conflicts` | "Use when you need to resolve an in-progress git merge/rebase conflict." |
+| `to-questionnaire` | Turn a decision you can't fully answer into a questionnaire for someone else to fill in. |
+| `wait-what` | Stop. That last message did not land — re-pitch it. |
 | `wizard` | Generate an interactive bash wizard that walks a human through steps only they can perform. Use when provisioning infrastructure, setting up credentials or CI secrets, walking an unfamiliar third-party dashboard, or running a one-off migration or cutover. Don't invoke this for steps the agent can perform itself. |
+| `writing-for-agents` | Writing documents for agents. Use when creating or editing skills, or modifying AGENTS.md or CLAUDE.md. |
 <!-- /AUTOGEN:skills -->
 
 ## Hooks
