@@ -5,7 +5,7 @@ Skills for managing conversations, handoffs, and decisions. This is a promoted b
 ## User-invoked
 
 - **[handoff](./handoff/SKILL.md)** — Compact the current conversation into a handoff document for another agent to pick up.
-- **[wait-what](./wait-what/SKILL.md)** — Stop.
+- **[wait-what](./wait-what/SKILL.md)** — Stop. That last message did not land — re-pitch it.
 - **[to-questionnaire](./to-questionnaire/SKILL.md)** — Turn a decision you can't fully answer into a questionnaire for someone else to fill in.
 
 ## Model-invoked
