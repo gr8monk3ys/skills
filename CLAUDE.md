@@ -82,7 +82,7 @@ A Claude Code plugin that scaffolds Next.js + React + Supabase code, distributed
 .claude-plugin/plugin.json     # Generated — DO NOT hand-edit
 .claude/commands/              # Slash commands (.md with frontmatter)
 .claude/agents/                # Subagent personas (.md with frontmatter)
-.claude/skills/                # Auto-activated skills (.md with frontmatter)
+.claude/skills/<bucket>/<name>/SKILL.md  # engineering|productivity ship; misc|in-progress|deprecated don't
 .claude/hooks/                 # Lifecycle hooks (.js scripts + hooks.json + skill-rules.json)
 .claude/monitors/              # Background watchers (monitors.json) — counted by sync
 .claude/scripts/               # Plugin-internal helpers
@@ -92,6 +92,14 @@ tests/manifest-sync.test.js    # node:test unit tests for sync logic
 tests/run-all.js               # Integration smoke tests
 bin/cli.js                     # `lorenzo-claude` / `lcc` CLI installer
 ```
+
+## Skill buckets
+
+`engineering/` and `productivity/` are the promoted buckets — exactly these ship in `plugin.json`, the README tables, and `lcc install` (enforced by `scanSkills` in `scripts/lib/manifest.js`, not by convention). `misc/` holds skills that overlap superpowers, kept unshipped on purpose. Promote by moving the folder and running `npm run sync`.
+
+`ask-lorenzo` is the router. When you add, rename, remove, or change the behaviour of a user-reachable command or promoted skill, re-read its SKILL.md and update the map — a router that lies is worse than none.
+
+`CONTEXT.md` holds this repo's shared vocabulary; use its terms and keep it current (the `domain-modeling` skill maintains it).
 
 ## Workflow
 
