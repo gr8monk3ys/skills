@@ -29,7 +29,7 @@ Once the GitHub repository is created, run these commands:
 cd ~/Documents/GitHub/lorenzos-claude-code
 
 # Add the GitHub remote
-git remote add origin https://github.com/gr8monk3ys/lorenzos-claude-code.git
+git remote add origin https://github.com/gr8monk3ys/skills.git
 
 # Push your code
 git push -u origin main
@@ -127,7 +127,7 @@ Features:
 
 Perfect for Next.js, React, TypeScript, and Supabase projects!
 
-GitHub: https://github.com/gr8monk3ys/lorenzos-claude-code
+GitHub: https://github.com/gr8monk3ys/skills
 ```
 
 ## Step 5: Maintain Your Plugin
@@ -196,7 +196,7 @@ Check:
 
 For major versions, create GitHub releases:
 
-1. Go to your repo: <https://github.com/gr8monk3ys/lorenzos-claude-code>
+1. Go to your repo: <https://github.com/gr8monk3ys/skills>
 2. Click "Releases" → "Create a new release"
 3. Tag version: `v1.0.0`
 4. Release title: `v1.0.0 - Initial Release`

@@ -34,7 +34,7 @@ lcc doctor
 Or, from inside Claude Code:
 
 ```text
-/plugin marketplace add https://github.com/gr8monk3ys/lorenzos-claude-code
+/plugin marketplace add https://github.com/gr8monk3ys/skills
 /plugin install lorenzos-claude-code
 ```
 

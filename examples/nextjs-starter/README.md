@@ -170,4 +170,4 @@ This plugin includes 6 MCP servers:
 
 - Check the [main README](../../README.md) for command reference
 - See [MCP-SERVERS.md](../../.claude-plugin/MCP-SERVERS.md) for server configuration
-- Report issues at <https://github.com/gr8monk3ys/lorenzos-claude-code/issues>
+- Report issues at <https://github.com/gr8monk3ys/skills/issues>

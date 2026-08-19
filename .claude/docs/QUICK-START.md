@@ -9,7 +9,7 @@
 
 # 2. Push your code
 cd ~/Documents/GitHub/lorenzos-claude-code
-git remote add origin https://github.com/gr8monk3ys/lorenzos-claude-code.git
+git remote add origin https://github.com/gr8monk3ys/skills.git
 git push -u origin main
 
 # 3. Share with others
@@ -57,7 +57,7 @@ git push -u origin main
 
 ## Your Plugin URL (after publishing)
 
-<https://github.com/gr8monk3ys/lorenzos-claude-code>
+<https://github.com/gr8monk3ys/skills>
 
 ## Need Help?
 
