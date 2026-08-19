@@ -149,7 +149,6 @@ function install() {
   const componentsToCopy = [
     { name: "commands", src: path.join(sourceClaude, "commands") },
     { name: "agents", src: path.join(sourceClaude, "agents") },
-    { name: "skills", src: path.join(sourceClaude, "skills") },
     { name: "hooks", src: path.join(sourceClaude, "hooks") },
     { name: "rules", src: path.join(sourceClaude, "rules") },
     { name: "memory", src: path.join(sourceClaude, "memory") },
@@ -161,6 +160,21 @@ function install() {
       copyDirSync(component.src, path.join(CLAUDE_DIR, component.name));
       success(`Installed ${component.name}`);
     }
+  }
+
+  // Skills ship from promoted buckets only, flattened to ~/.claude/skills/<name>/
+  const PROMOTED_BUCKETS = ["engineering", "productivity"];
+  for (const bucket of PROMOTED_BUCKETS) {
+    const bucketDir = path.join(sourceClaude, "skills", bucket);
+    if (!fs.existsSync(bucketDir)) continue;
+    for (const entry of fs.readdirSync(bucketDir, { withFileTypes: true })) {
+      if (!entry.isDirectory()) continue;
+      copyDirSync(
+        path.join(bucketDir, entry.name),
+        path.join(CLAUDE_DIR, "skills", entry.name),
+      );
+    }
+    success(`Installed skills (${bucket})`);
   }
 
   // Copy plugin manifest
@@ -261,9 +275,9 @@ function doctor() {
 
   // Check components
   const components = [
-    { name: "commands", expected: 14 },
+    { name: "commands", expected: 17 },
     { name: "agents", expected: 6 },
-    { name: "skills", expected: 3 },
+    { name: "skills", expected: 14 },
     { name: "hooks", expected: 15 }, // hooks.json + 14 hook scripts
   ];
 
