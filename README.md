@@ -8,7 +8,7 @@
 Scaffolds components, API routes, hooks, Supabase types, and Edge Functions. Composes with [superpowers](https://github.com/obra/superpowers) — install both for the full toolkit.
 
 <!-- AUTOGEN:counts -->
-**17 commands** · **6 agents** · **13 skills** · **14 hooks** · **2 monitors**
+**17 commands** · **6 agents** · **14 skills** · **14 hooks** · **2 monitors**
 <!-- /AUTOGEN:counts -->
 
 ---
@@ -83,6 +83,7 @@ Or, from inside Claude Code:
 | Name | Description |
 | --- | --- |
 | `api-development` | WHEN to auto-invoke: Creating API routes, building endpoints, adding route.ts files, implementing REST/GraphQL APIs, adding authentication to APIs, rate limiting, API validation with Zod, handling HTTP methods (GET/POST/PUT/DELETE). |
+| `ask-lorenzo` | Ask which command or skill in this plugin fits your situation. A router over everything user-reachable — scaffolding, quality gates, delivery, and the ported workflow skills. |
 | `background-automation` | WHEN to auto-invoke: Setting up recurring or self-paced tasks, watching CI or deploys, babysitting pull requests, configuring monitors, running long jobs in the background, scheduling check-ins, polling for a condition, or wiring Claude Code on the web/cloud sessions and PR activity subscriptions. |
 | `database-operations` | WHEN to auto-invoke: Database schema design, creating migrations, writing SQL queries, query optimization, Supabase operations, Prisma/Drizzle schema changes, PostgreSQL tasks, RLS policies, indexes. |
 | `domain-modeling` | Build and sharpen a project's domain model. Use when discussing codebase terminology, writing or editing a CONTEXT.md, or recording or editing an ADR. |
