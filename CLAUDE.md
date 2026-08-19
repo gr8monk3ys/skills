@@ -7,7 +7,7 @@ Project memory for Claude when working in this repository.
 A Claude Code plugin that scaffolds Next.js + React + Supabase code, distributed via npm (`@gr8monk3ys/claude-code-plugin`) and the Claude Code plugin marketplace. Designed to compose with the [superpowers](https://github.com/obra/superpowers) plugin — superpowers handles process, this plugin handles stack-specific scaffolding.
 
 <!-- AUTOGEN:counts -->
-**17 commands** · **6 agents** · **4 skills** · **14 hooks** · **2 monitors**
+**17 commands** · **6 agents** · **9 skills** · **14 hooks** · **2 monitors**
 <!-- /AUTOGEN:counts -->
 
 ## Commands
@@ -55,7 +55,12 @@ A Claude Code plugin that scaffolds Next.js + React + Supabase code, distributed
 | `api-development` | WHEN to auto-invoke: Creating API routes, building endpoints, adding route.ts files, implementing REST/GraphQL APIs, adding authentication to APIs, rate limiting, API validation with Zod, handling HTTP methods (GET/POST/PUT/DELETE). |
 | `background-automation` | WHEN to auto-invoke: Setting up recurring or self-paced tasks, watching CI or deploys, babysitting pull requests, configuring monitors, running long jobs in the background, scheduling check-ins, polling for a condition, or wiring Claude Code on the web/cloud sessions and PR activity subscriptions. |
 | `database-operations` | WHEN to auto-invoke: Database schema design, creating migrations, writing SQL queries, query optimization, Supabase operations, Prisma/Drizzle schema changes, PostgreSQL tasks, RLS policies, indexes. |
+| `domain-modeling` | Build and sharpen a project's domain model. Use when discussing codebase terminology, writing or editing a CONTEXT.md, or recording or editing an ADR. |
 | `frontend-development` | WHEN to auto-invoke: Creating UI components, building React/Vue/Svelte components, Next.js pages, styling with Tailwind/CSS, state management setup, form handling, accessibility improvements, client-side interactivity. |
+| `prototype` | Build a throwaway prototype to answer a design question. Use when the user wants to sanity-check whether a state model or logic feels right, or explore what a UI should look like. |
+| `research` | Investigate a question against high-trust primary sources and capture the findings as a Markdown file in the repo. Use when the user wants a topic researched, docs or API facts gathered, or reading legwork delegated to a background agent. |
+| `resolving-merge-conflicts` | "Use when you need to resolve an in-progress git merge/rebase conflict." |
+| `wizard` | Generate an interactive bash wizard that walks a human through steps only they can perform. Use when provisioning infrastructure, setting up credentials or CI secrets, walking an unfamiliar third-party dashboard, or running a one-off migration or cutover. Don't invoke this for steps the agent can perform itself. |
 <!-- /AUTOGEN:skills -->
 
 ## Code standards

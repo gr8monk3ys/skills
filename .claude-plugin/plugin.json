@@ -197,9 +197,34 @@
       "description": "WHEN to auto-invoke: Database schema design, creating migrations, writing SQL queries, query optimization, Supabase operations, Prisma/Drizzle schema changes, PostgreSQL tasks, RLS policies, indexes."
     },
     {
+      "name": "domain-modeling",
+      "path": ".claude/skills/engineering/domain-modeling/SKILL.md",
+      "description": "Build and sharpen a project's domain model. Use when discussing codebase terminology, writing or editing a CONTEXT.md, or recording or editing an ADR."
+    },
+    {
       "name": "frontend-development",
       "path": ".claude/skills/engineering/frontend-development/SKILL.md",
       "description": "WHEN to auto-invoke: Creating UI components, building React/Vue/Svelte components, Next.js pages, styling with Tailwind/CSS, state management setup, form handling, accessibility improvements, client-side interactivity."
+    },
+    {
+      "name": "prototype",
+      "path": ".claude/skills/engineering/prototype/SKILL.md",
+      "description": "Build a throwaway prototype to answer a design question. Use when the user wants to sanity-check whether a state model or logic feels right, or explore what a UI should look like."
+    },
+    {
+      "name": "research",
+      "path": ".claude/skills/engineering/research/SKILL.md",
+      "description": "Investigate a question against high-trust primary sources and capture the findings as a Markdown file in the repo. Use when the user wants a topic researched, docs or API facts gathered, or reading legwork delegated to a background agent."
+    },
+    {
+      "name": "resolving-merge-conflicts",
+      "path": ".claude/skills/engineering/resolving-merge-conflicts/SKILL.md",
+      "description": "\"Use when you need to resolve an in-progress git merge/rebase conflict.\""
+    },
+    {
+      "name": "wizard",
+      "path": ".claude/skills/engineering/wizard/SKILL.md",
+      "description": "Generate an interactive bash wizard that walks a human through steps only they can perform. Use when provisioning infrastructure, setting up credentials or CI secrets, walking an unfamiliar third-party dashboard, or running a one-off migration or cutover. Don't invoke this for steps the agent can perform itself."
     }
   ]
 }
