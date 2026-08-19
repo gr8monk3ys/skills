@@ -165,7 +165,20 @@ test("frontend-architect has code examples", () => {
 // Test: Skills
 console.log("\nSkills:");
 const skillsDir = path.join(__dirname, "..", ".claude", "skills");
-const skillFiles = fs.readdirSync(skillsDir).filter((f) => f.endsWith(".md"));
+const skillFiles = [];
+const buckets = ["engineering", "productivity"];
+for (const bucket of buckets) {
+  const bucketDir = path.join(skillsDir, bucket);
+  if (fs.existsSync(bucketDir)) {
+    const subdirs = fs.readdirSync(bucketDir);
+    for (const subdir of subdirs) {
+      const skillFile = path.join(bucketDir, subdir, "SKILL.md");
+      if (fs.existsSync(skillFile)) {
+        skillFiles.push(skillFile);
+      }
+    }
+  }
+}
 
 test(`Found ${skillFiles.length} skill files`, () => {
   if (skillFiles.length < 3) {
