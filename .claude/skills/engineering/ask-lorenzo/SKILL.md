@@ -11,6 +11,7 @@ You are the router for this plugin. The user tells you what they're trying to do
 ## The map
 
 **Scaffold something new (Next.js / React / Supabase)**
+
 - React component → `/component-new` · custom hook → `/hook-new` · page → `/page-new`
 - API route → `/api-new` · Server Action → `/action-new` · Supabase Edge Function → `/edge-function-new`
 - RLS policies → `/rls-new` · DB types → `/types-gen` · test files → `/test-new`
@@ -18,13 +19,16 @@ You are the router for this plugin. The user tells you what they're trying to do
 - Deeper guidance while building: skills `api-development`, `frontend-development`, `database-operations`.
 
 **Check or fix quality**
+
 - Lint and autofix → `/lint` · full verification loop → `/verify` · pre-completion quality gates → `/review` · exercise endpoints → `/api-test`
 
 **Deliver**
+
 - Resolve a GitHub issue end-to-end → `/fixissue` · watch a PR and fix CI → `/babysit` · validate-merge-cleanup → `/automerge`
 - Recurring/background work, monitors, loops → skill `background-automation`
 
 **Work the workflow (ported from mattpocock/skills)**
+
 - Human-only setup steps (credentials, dashboards, one-off migrations) → skill `wizard`
 - Mid-merge or mid-rebase conflicts → skill `resolving-merge-conflicts`
 - Answer a design question with throwaway code → skill `prototype`

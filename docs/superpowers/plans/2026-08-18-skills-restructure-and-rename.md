@@ -28,6 +28,7 @@
 **Files:** none in-repo; filesystem + GitHub only.
 
 **Interfaces:**
+
 - Produces: repo lives at `~/code/skills`, GitHub name `gr8monk3ys/skills`, origin URL updated. Matt's clone at `~/code/mattpocock-skills`. All later tasks run in `~/code/skills`.
 
 - [ ] **Step 1: Preflight — confirm both working trees are safe to move**
@@ -46,6 +47,7 @@ mv /Users/natalyscaturchio/code/skills /Users/natalyscaturchio/code/mattpocock-s
 ```bash
 gh api -X PATCH repos/gr8monk3ys/claude-code-config -f name=skills --jq .full_name
 ```
+
 Expected output: `gr8monk3ys/skills`
 
 - [ ] **Step 4: Move local folder and fix remote**
@@ -56,6 +58,7 @@ cd /Users/natalyscaturchio/code/skills
 git remote set-url origin https://github.com/gr8monk3ys/skills.git
 git fetch origin --prune && git remote show origin | head -4
 ```
+
 Expected: fetch succeeds; remote URL shows `gr8monk3ys/skills.git`.
 
 - [ ] **Step 5: Verify no redirect dependence**
@@ -66,10 +69,12 @@ Expected: `{"name":"skills","nameWithOwner":"gr8monk3ys/skills"}`
 ### Task 2: Fleet plumbing for the rename
 
 **Files:**
+
 - Modify: `/Users/natalyscaturchio/code/orchestrator/repos.yml` (line ~96, key `claude-code-config`)
 - Modify: `/Users/natalyscaturchio/code/CLAUDE.md` (known-renames bullet in "gh traps")
 
 **Interfaces:**
+
 - Consumes: Task 1 complete (GitHub name is `skills`).
 - Produces: fleet config that resolves the new name; loops keep producing output.
 
@@ -80,7 +85,9 @@ In `/Users/natalyscaturchio/code/orchestrator/repos.yml`, change:
 ```yaml
   claude-code-config:   { track: X, status: automate, pm: bun, loops: [dep_hygiene, ci_repair] }   # your CC plugin; renamed from lorenzos-claude-code — the old key 404'd, so both loops had been no-ops
 ```
+
 to:
+
 ```yaml
   skills:               { track: X, status: automate, pm: bun, loops: [dep_hygiene, ci_repair] }   # your CC plugin; renamed lorenzos-claude-code → claude-code-config → skills (2026-08-18)
 ```
@@ -108,11 +115,13 @@ In `/Users/natalyscaturchio/code/CLAUDE.md`, in the renames bullet, change `` `l
 ### Task 3: Feature branch + in-repo URL updates
 
 **Files:**
+
 - Modify: `/Users/natalyscaturchio/code/skills/package.json` (repository/homepage/bugs URLs if present)
 - Modify: `.claude-plugin/plugin.json` (`repository`, `homepage` base fields)
 - Modify: `README.md` (marketplace add URL, badge/links)
 
 **Interfaces:**
+
 - Produces: branch `feat/skills-structure`; all GitHub URLs point at `gr8monk3ys/skills`. Later tasks commit onto this branch.
 
 - [ ] **Step 1: Branch**
@@ -134,21 +143,25 @@ git add -A && git commit -m "chore: point repository URLs at gr8monk3ys/skills
 
 Co-Authored-By: Claude Fable 5 <noreply@anthropic.com>"
 ```
+
 Expected: sync clean, tests pass (plugin.json regenerates `repository` from its base fields).
 
 ### Task 4: `scanSkills` — bucket-aware scanner (TDD)
 
 **Files:**
+
 - Create: `tests/fixtures/manifest/skills/engineering/alpha/SKILL.md`, `tests/fixtures/manifest/skills/engineering/alpha/notes.md`, `tests/fixtures/manifest/skills/engineering/README.md`, `tests/fixtures/manifest/skills/productivity/beta/SKILL.md`, `tests/fixtures/manifest/skills/misc/old-skill/SKILL.md`
 - Modify: `scripts/lib/manifest.js`, `scripts/sync-manifest.js`
 - Test: `tests/manifest-sync.test.js`
 
 **Interfaces:**
+
 - Produces: `scanSkills(dir, buckets)` → `[{ name, description, path, bucket }]`, exported from `scripts/lib/manifest.js`; `sync-manifest.js` uses `m.scanSkills(path.join(REPO_ROOT, '.claude/skills'), PROMOTED)` with `const PROMOTED = ['engineering', 'productivity']`.
 
 - [ ] **Step 1: Create fixtures**
 
 `tests/fixtures/manifest/skills/engineering/alpha/SKILL.md`:
+
 ```markdown
 ---
 name: alpha
@@ -156,15 +169,21 @@ description: Alpha engineering skill
 ---
 Body.
 ```
+
 `tests/fixtures/manifest/skills/engineering/alpha/notes.md` (no frontmatter — must be ignored, would throw in scanCategory):
+
 ```markdown
 Support file without frontmatter.
 ```
+
 `tests/fixtures/manifest/skills/engineering/README.md`:
+
 ```markdown
 Bucket readme — must be ignored.
 ```
+
 `tests/fixtures/manifest/skills/productivity/beta/SKILL.md`:
+
 ```markdown
 ---
 name: beta
@@ -172,7 +191,9 @@ description: Beta productivity skill
 ---
 Body.
 ```
+
 `tests/fixtures/manifest/skills/misc/old-skill/SKILL.md`:
+
 ```markdown
 ---
 name: old-skill
@@ -243,10 +264,13 @@ function scanSkills(dir, buckets) {
 - [ ] **Step 5: Wire into sync-manifest.js**
 
 In `scripts/sync-manifest.js`, below the constants add `const PROMOTED = ['engineering', 'productivity']`, and change:
+
 ```js
   const skills = m.scanCategory(path.join(REPO_ROOT, '.claude/skills'))
 ```
+
 to:
+
 ```js
   const skills = m.scanSkills(path.join(REPO_ROOT, '.claude/skills'), PROMOTED)
 ```
@@ -268,11 +292,13 @@ Co-Authored-By: Claude Fable 5 <noreply@anthropic.com>"
 ### Task 5: Migrate the 4 existing skills; delete stale root `skills/`
 
 **Files:**
+
 - Move: `.claude/skills/<name>.md` → `.claude/skills/engineering/<name>/SKILL.md` (×4)
 - Delete: root `skills/` (verified exact duplicate of old `.claude/skills/`)
 - Regenerated: `.claude-plugin/plugin.json`, `README.md`, `CLAUDE.md` AUTOGEN blocks
 
 **Interfaces:**
+
 - Consumes: `scanSkills` from Task 4.
 - Produces: bucket layout live; plugin.json paths like `.claude/skills/engineering/api-development/SKILL.md`.
 
@@ -307,10 +333,12 @@ Co-Authored-By: Claude Fable 5 <noreply@anthropic.com>"
 ### Task 6: Attribution file + port the 5 engineering promoted skills
 
 **Files:**
+
 - Create: `LICENSES/mattpocock-skills-MIT.txt`
 - Create: `.claude/skills/engineering/{wizard,resolving-merge-conflicts,prototype,research,domain-modeling}/` from `~/code/mattpocock-skills/skills/engineering/<name>/`
 
 **Interfaces:**
+
 - Consumes: bucket layout from Task 5.
 - Produces: 9 promoted engineering skills after this task.
 
@@ -334,11 +362,13 @@ for s in wizard resolving-merge-conflicts prototype research domain-modeling; do
   rm -rf .claude/skills/engineering/$s/agents
 done
 ```
+
 This carries support files: `wizard/template.sh`, `prototype/{LOGIC.md,UI.md}`, `domain-modeling/{ADR-FORMAT.md,CONTEXT-FORMAT.md}`.
 
 - [ ] **Step 3: Add attribution comment to each ported SKILL.md**
 
 Directly after the closing `---` of the frontmatter in each of the 5 `SKILL.md`s, insert:
+
 ```markdown
 <!-- Adapted from mattpocock/skills (MIT © Matt Pocock): https://github.com/mattpocock/skills — see LICENSES/mattpocock-skills-MIT.txt -->
 ```
@@ -362,9 +392,11 @@ Co-Authored-By: Claude Fable 5 <noreply@anthropic.com>"
 ### Task 7: Port the 4 productivity promoted skills
 
 **Files:**
+
 - Create: `.claude/skills/productivity/{handoff,writing-for-agents,wait-what,to-questionnaire}/` from `~/code/mattpocock-skills/skills/productivity/<name>/`
 
 **Interfaces:**
+
 - Produces: 13 promoted skills after this task. `handoff`, `wait-what`, `to-questionnaire` keep `disable-model-invocation: true` frontmatter (user-invoked); `writing-for-agents` stays model-invoked.
 
 - [ ] **Step 1: Copy, dropping `agents/`**
@@ -377,6 +409,7 @@ for s in handoff writing-for-agents wait-what to-questionnaire; do
   rm -rf .claude/skills/productivity/$s/agents
 done
 ```
+
 Carries `writing-for-agents/SKILL-MECHANICS.md`.
 
 - [ ] **Step 2: Attribution comment** — same line as Task 6 Step 3, in each of the 4 SKILL.md files.
@@ -395,9 +428,11 @@ Co-Authored-By: Claude Fable 5 <noreply@anthropic.com>"
 ### Task 8: Port the 6 overlap skills into `misc/` (not shipped)
 
 **Files:**
+
 - Create: `.claude/skills/misc/{grilling,tdd,diagnosing-bugs,to-spec,code-review,implement}/`
 
 **Interfaces:**
+
 - Produces: skills present on disk, absent from plugin.json (count stays 13).
 
 - [ ] **Step 1: Copy, dropping `agents/`**
@@ -411,11 +446,13 @@ done
 cp -R /Users/natalyscaturchio/code/mattpocock-skills/skills/productivity/grilling .claude/skills/misc/grilling
 rm -rf .claude/skills/misc/grilling/agents
 ```
+
 Carries `tdd/{mocking.md,tests.md}` and `diagnosing-bugs/scripts/`.
 
 - [ ] **Step 2: Attribution + not-shipped note**
 
 In each of the 6 SKILL.md files, directly after the frontmatter insert the attribution comment (Task 6 Step 3) plus this line:
+
 ```markdown
 > **Not shipped in the plugin.** Overlaps a superpowers skill (see table in `.claude/skills/misc/README.md`). To ship it, move it to a promoted bucket and run `npm run sync`.
 ```
@@ -423,14 +460,14 @@ In each of the 6 SKILL.md files, directly after the frontmatter insert the attri
 - [ ] **Step 3: Replace Matt's setup references (the only two real adaptations)**
 
 In `.claude/skills/misc/to-spec/SKILL.md` replace:
-`The issue tracker and triage label vocabulary should have been provided to you. If not, tell the user to run ` `` `/setup-matt-pocock-skills` `` `.`
+`The issue tracker and triage label vocabulary should have been provided to you. If not, tell the user to run` `` `/setup-matt-pocock-skills` `` `.`
 with:
-`The issue tracker and triage label vocabulary should have been provided to you. If not, ask the user whether to use GitHub Issues (via ` `` `gh` `` `) or a local ` `` `docs/issues/` `` ` folder, and which labels they triage with.`
+`The issue tracker and triage label vocabulary should have been provided to you. If not, ask the user whether to use GitHub Issues (via` `` `gh` `` `) or a local` `` `docs/issues/` `` `folder, and which labels they triage with.`
 
 In `.claude/skills/misc/code-review/SKILL.md` replace:
-`The issue tracker should have been provided to you. If ` `` `docs/agents/issue-tracker.md` `` ` is missing, tell the user to run ` `` `/setup-matt-pocock-skills` `` `.`
+`The issue tracker should have been provided to you. If` `` `docs/agents/issue-tracker.md` `` ` is missing, tell the user to run ` `` `/setup-matt-pocock-skills` `` `.`
 with:
-`The issue tracker should have been provided to you. If ` `` `docs/agents/issue-tracker.md` `` ` is missing, ask the user whether to use GitHub Issues (via ` `` `gh` `` `) or a local ` `` `docs/issues/` `` ` folder.`
+`The issue tracker should have been provided to you. If` `` `docs/agents/issue-tracker.md` `` ` is missing, ask the user whether to use GitHub Issues (via ` `` `gh` `` `) or a local` `` `docs/issues/` `` `folder.`
 
 - [ ] **Step 4: Verify misc is invisible to the manifest**
 
@@ -448,9 +485,11 @@ Co-Authored-By: Claude Fable 5 <noreply@anthropic.com>"
 ### Task 9: `ask-lorenzo` router skill
 
 **Files:**
+
 - Create: `.claude/skills/engineering/ask-lorenzo/SKILL.md`
 
 **Interfaces:**
+
 - Produces: 14th promoted skill; the routing map later tasks (CLAUDE.md rule) reference by name.
 
 - [ ] **Step 1: Write the skill** (full content)
@@ -516,10 +555,12 @@ Co-Authored-By: Claude Fable 5 <noreply@anthropic.com>"
 ### Task 10: `CONTEXT.md` + repo `CLAUDE.md` conventions
 
 **Files:**
+
 - Create: `CONTEXT.md`
 - Modify: `CLAUDE.md` (directory map + new conventions; hand-edits stay OUTSIDE the AUTOGEN markers)
 
 **Interfaces:**
+
 - Produces: the vocabulary `domain-modeling` maintains; the CLAUDE.md rules future sessions follow.
 
 - [ ] **Step 1: Write `CONTEXT.md`** (full content)
@@ -543,8 +584,10 @@ The vocabulary used in code, commits, and conversation here. Maintained by the `
 - [ ] **Step 2: Update `CLAUDE.md`**
 
 Outside the AUTOGEN blocks:
+
 1. In the directory map, change the `.claude/skills/` line to: `` .claude/skills/<bucket>/<name>/SKILL.md  # engineering|productivity ship; misc|in-progress|deprecated don't ``
 2. Add after the directory map:
+
 ```markdown
 ## Skill buckets
 
@@ -567,9 +610,11 @@ Co-Authored-By: Claude Fable 5 <noreply@anthropic.com>"
 ### Task 11: Bucket READMEs
 
 **Files:**
+
 - Create: `.claude/skills/engineering/README.md`, `.claude/skills/productivity/README.md`, `.claude/skills/misc/README.md`
 
 **Interfaces:**
+
 - Consumes: all skills placed (Tasks 5–9). Names/descriptions must match the SKILL.md frontmatter exactly.
 
 - [ ] **Step 1: Write the three READMEs**
@@ -609,9 +654,11 @@ Co-Authored-By: Claude Fable 5 <noreply@anthropic.com>"
 ### Task 12: skill-activator rules for the model-invoked ports
 
 **Files:**
+
 - Modify: `.claude/hooks/skill-rules.json` (append to the `skills` array)
 
 **Interfaces:**
+
 - Consumes: existing entry shape `{ name, priority, keywords, patterns, directories, intents }` (see the `api-development` entry).
 
 - [ ] **Step 1: Append six entries**
@@ -641,9 +688,11 @@ Co-Authored-By: Claude Fable 5 <noreply@anthropic.com>"
 ### Task 13: CLI install respects promoted buckets
 
 **Files:**
+
 - Modify: `bin/cli.js` (`componentsToCopy` in `install()`, `components` in `doctor()`)
 
 **Interfaces:**
+
 - Consumes: bucket layout; PROMOTED buckets `engineering`, `productivity`.
 - Produces: `lcc install` copies promoted skills flattened to `~/.claude/skills/<name>/`; `misc/` never installs.
 
@@ -698,6 +747,7 @@ claude plugin validate . --strict
 python3 -c "import json; d=json.load(open('.claude-plugin/plugin.json')); s=[x['path'] for x in d['skills']]; assert len(s)==14, len(s); assert all('/misc/' not in p and '/in-progress/' not in p for p in s); print('plugin.json: 14 promoted, none leaked')"
 npm pack --dry-run 2>&1 | grep -c "SKILL.md"
 ```
+
 Expected: all green; the pack listing includes the SKILL.md files (if 0, add `.claude/skills` to package.json `files` and re-run). If `claude plugin validate` flags the skills array shape, read its message — fix the manifest builder, not the validator.
 
 - [ ] **Step 2: Run integration smoke tests**
