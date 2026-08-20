@@ -32,10 +32,10 @@
     {
       "name": "database-operations",
       "priority": 0,
-      "keywords": ["database", "schema", "migration", "query", "sql", "prisma", "drizzle", "supabase", "postgres", "mysql", "table", "column", "index"],
-      "patterns": ["schema\\.prisma", "\\.sql$", "migration", "\\bSELECT\\b", "\\bINSERT\\b", "\\bUPDATE\\b", "\\bDELETE\\b"],
+      "keywords": ["database", "schema", "migration", "query", "sql", "prisma", "drizzle", "supabase", "postgres", "mysql", "table", "column", "index", "rls", "policy", "row level security"],
+      "patterns": ["schema\\.prisma", "\\.sql$", "migration", "\\bSELECT\\b", "\\bINSERT\\b", "\\bUPDATE\\b", "\\bDELETE\\b", "\\brls\\b", "row[- ]level[- ]security"],
       "directories": ["prisma/", "drizzle/", "supabase/", "migrations/", "db/", "database/"],
-      "intents": ["create.*table", "add.*migration", "query.*", "update.*schema", "add.*column", "create.*index"]
+      "intents": ["create.*table", "add.*migration", "query.*", "update.*schema", "add.*column", "create.*index", "(add|create|write).*polic", "(add|enable).*rls"]
     },
     {
       "name": "background-automation",

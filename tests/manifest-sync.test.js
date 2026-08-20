@@ -255,6 +255,38 @@ test('sync-manifest --check passes against committed state', () => {
   execFileSync('node', ['scripts/sync-manifest.js', '--check'], { cwd: repoRoot, stdio: 'pipe' })
 })
 
+// A skill can advertise a capability the activator has no coverage for, and
+// nothing notices: the prompt just scores too low and the skill never loads.
+// That happened to RLS — database-operations calls it non-negotiable and the
+// plugin ships /rls-new, yet an RLS prompt scored 4, below even "suggest".
+// Assert the behaviour, not the keyword list, so a rules refactor can't quietly
+// undo it.
+function activatedSkills(prompt) {
+  const out = execFileSync('node', ['hooks/skill-activator.js'], {
+    cwd: path.join(__dirname, '..'),
+    input: JSON.stringify({ prompt }),
+    encoding: 'utf8',
+  })
+  return [...out.matchAll(/name="([^"]+)" confidence="\d+" status="activate"/g)].map(m => m[1])
+}
+
+test('RLS prompts activate database-operations', () => {
+  for (const prompt of [
+    'add an RLS policy to the posts table in Supabase',
+    'write a row level security policy',
+    'enable RLS on the users table',
+  ]) {
+    assert.ok(
+      activatedSkills(prompt).includes('database-operations'),
+      `"${prompt}" should activate database-operations`
+    )
+  }
+})
+
+test('the activator stays quiet on unrelated prompts', () => {
+  assert.ok(!activatedSkills('make this button accessible').includes('database-operations'))
+})
+
 test('toPluginPath returns the ./-prefixed skill DIRECTORY, not the SKILL.md file', () => {
   // Directory entries are the only kind Claude Code honours, so the SKILL.md
   // suffix must always come off.

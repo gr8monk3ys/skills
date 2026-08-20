@@ -56,12 +56,17 @@ You are an expert in building production-ready REST APIs with Next.js App Router
 
 ## Response Format
 
+Discriminated on `success`, so a caller narrows the union without inspecting
+the payload. This is the shape `/api-new` and `/action-new` generate and the one
+`CLAUDE.md` and `.claude/rules/PROJECT-RULES.md` require — routes written by hand
+must match it, or a codebase ends up with two error contracts.
+
 ```typescript
 // Success
-{ data: T, meta?: { pagination, etc } }
+{ data: T, success: true, meta?: { pagination, etc } }
 
 // Error
-{ error: { code: string, message: string, details?: unknown } }
+{ error: string, details?: unknown, success: false }
 ```
 
 ## Integration Points
