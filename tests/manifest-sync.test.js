@@ -239,39 +239,6 @@ test('scanSkills throws on a stray flat .md file dropped directly in a bucket', 
   )
 })
 
-test('updateMarketplaceJson rewrites the count prefix and features, preserving key order and other fields', () => {
-  const input = {
-    description: 'top-level description, untouched',
-    name: 'lorenzos-claude-code',
-    plugins: [
-      {
-        author: { name: 'Lorenzo' },
-        description: '17 commands, 6 agents, 4 skills, 14 hooks, 2 monitors. Scaffolds Next.js + React + Supabase code.',
-        features: { agents: 6, commands: 17, hooks: 14, mcpServers: 4, monitors: 2, skills: 4 },
-        name: 'lorenzos-claude-code',
-      },
-    ],
-  }
-  const out = manifest.updateMarketplaceJson(input, {
-    commands: 17,
-    agents: 6,
-    skills: 14,
-    hooks: 14,
-    monitors: 2,
-  })
-  const plugin = out.plugins[0]
-  assert.deepEqual(plugin.features, { agents: 6, commands: 17, hooks: 14, mcpServers: 4, monitors: 2, skills: 14 })
-  assert.deepEqual(Object.keys(plugin.features), ['agents', 'commands', 'hooks', 'mcpServers', 'monitors', 'skills'])
-  assert.equal(
-    plugin.description,
-    '17 commands, 6 agents, 14 skills, 14 hooks, 2 monitors. Scaffolds Next.js + React + Supabase code.'
-  )
-  assert.equal(out.description, 'top-level description, untouched')
-  assert.equal(plugin.author.name, 'Lorenzo')
-  // Original input is not mutated.
-  assert.equal(input.plugins[0].features.skills, 4)
-})
-
 const { execFileSync } = require('node:child_process')
 
 test('sync-manifest --check passes against committed state', () => {
@@ -301,4 +268,11 @@ test('buildPluginJson emits path strings, not objects', () => {
   assert.deepEqual(next.commands, ['./commands/api/c.md'])
   assert.deepEqual(next.agents, ['./agents/a.md'])
   assert.deepEqual(next.skills, ['./skills/engineering/s'])
+})
+
+test('updateMarketplaceJson rewrites the count prefix and leaves no features block', () => {
+  const parsed = { plugins: [{ name: 'p', description: '1 commands, 1 agents, 1 skills, 1 hooks, 1 monitors. Tail text.' }] }
+  const next = manifest.updateMarketplaceJson(parsed, { commands: 17, agents: 6, skills: 14, hooks: 14, monitors: 2 })
+  assert.equal(next.plugins[0].description, '17 commands, 6 agents, 14 skills, 14 hooks, 2 monitors. Tail text.')
+  assert.ok(!('features' in next.plugins[0]), 'features must not be reintroduced')
 })

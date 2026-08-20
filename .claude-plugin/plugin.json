@@ -9,7 +9,6 @@
   "license": "GPL-3.0",
   "repository": "https://github.com/gr8monk3ys/skills",
   "homepage": "https://github.com/gr8monk3ys/skills#readme",
-  "npm": "@gr8monk3ys/claude-code-plugin",
   "keywords": [
     "claude-code",
     "claude",
@@ -23,9 +22,6 @@
     "skills",
     "hooks"
   ],
-  "profiles": {
-    "minimal": ".claude/profiles/mcp-minimal.json"
-  },
   "mcpServers": {
     "context7": {
       "command": "npx",

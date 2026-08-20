@@ -176,13 +176,6 @@ function updateMarketplaceJson(parsed, counts) {
   const next = JSON.parse(JSON.stringify(parsed))
   const countPrefix = `${commands} commands, ${agents} agents, ${skills} skills, ${hooks} hooks, ${monitors} monitors`
   for (const plugin of Array.isArray(next.plugins) ? next.plugins : []) {
-    if (plugin.features && typeof plugin.features === 'object') {
-      if ('commands' in plugin.features) plugin.features.commands = commands
-      if ('agents' in plugin.features) plugin.features.agents = agents
-      if ('skills' in plugin.features) plugin.features.skills = skills
-      if ('hooks' in plugin.features) plugin.features.hooks = hooks
-      if ('monitors' in plugin.features) plugin.features.monitors = monitors
-    }
     if (typeof plugin.description === 'string') {
       plugin.description = plugin.description.replace(
         /^\d+ commands, \d+ agents, \d+ skills, \d+ hooks, \d+ monitors\b/,
