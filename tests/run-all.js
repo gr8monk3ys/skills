@@ -6,6 +6,7 @@
 
 const fs = require("fs");
 const path = require("path");
+const { PROMOTED_BUCKETS } = require("../scripts/lib/manifest");
 
 const colors = {
   reset: "\x1b[0m",
@@ -166,8 +167,7 @@ test("frontend-architect has code examples", () => {
 console.log("\nSkills:");
 const skillsDir = path.join(__dirname, "..", ".claude", "skills");
 const skillFiles = [];
-const buckets = ["engineering", "productivity"];
-for (const bucket of buckets) {
+for (const bucket of PROMOTED_BUCKETS) {
   const bucketDir = path.join(skillsDir, bucket);
   if (fs.existsSync(bucketDir)) {
     const subdirs = fs.readdirSync(bucketDir);

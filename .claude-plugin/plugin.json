@@ -229,7 +229,7 @@
     {
       "name": "resolving-merge-conflicts",
       "path": ".claude/skills/engineering/resolving-merge-conflicts/SKILL.md",
-      "description": "\"Use when you need to resolve an in-progress git merge/rebase conflict.\""
+      "description": "Use when you need to resolve an in-progress git merge/rebase conflict."
     },
     {
       "name": "to-questionnaire",

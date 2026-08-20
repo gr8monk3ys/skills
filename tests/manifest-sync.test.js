@@ -10,6 +10,12 @@ test('manifest module exports required helpers', () => {
   assert.equal(typeof manifest.buildPluginJson, 'function')
   assert.equal(typeof manifest.replaceMarker, 'function')
   assert.equal(typeof manifest.renderTable, 'function')
+  assert.equal(typeof manifest.scanSkills, 'function')
+  assert.equal(typeof manifest.updateMarketplaceJson, 'function')
+})
+
+test('PROMOTED_BUCKETS is exported and is the single source of truth for shipped skill buckets', () => {
+  assert.deepEqual(manifest.PROMOTED_BUCKETS, ['engineering', 'productivity'])
 })
 
 test('parseFrontmatter extracts name and single-line description', () => {
@@ -41,6 +47,36 @@ Body.`
 
 test('parseFrontmatter throws when frontmatter block is missing', () => {
   assert.throws(() => manifest.parseFrontmatter('no frontmatter here\n'), /frontmatter/i)
+})
+
+test('parseFrontmatter strips a single matching pair of surrounding double quotes', () => {
+  const content = `---
+name: resolving-merge-conflicts
+description: "Use when you need to resolve an in-progress git merge/rebase conflict."
+---
+
+Body.
+`
+  const fm = manifest.parseFrontmatter(content)
+  assert.equal(fm.description, 'Use when you need to resolve an in-progress git merge/rebase conflict.')
+})
+
+test('parseFrontmatter strips a single matching pair of surrounding single quotes', () => {
+  const content = `---
+name: x
+description: 'hello world'
+---
+Body.`
+  const fm = manifest.parseFrontmatter(content)
+  assert.equal(fm.description, 'hello world')
+})
+
+test('parseFrontmatter leaves unquoted and unmatched-quote scalars alone', () => {
+  const unquoted = manifest.parseFrontmatter(`---\nname: x\ndescription: plain text\n---\nBody.`)
+  assert.equal(unquoted.description, 'plain text')
+
+  const unmatched = manifest.parseFrontmatter(`---\nname: y\ndescription: "opens but never closes\n---\nBody.`)
+  assert.equal(unmatched.description, '"opens but never closes')
 })
 
 const path = require('node:path')
@@ -193,6 +229,49 @@ test('scanSkills tolerates a missing bucket directory', () => {
   const fixtures = path.join(__dirname, 'fixtures/manifest/skills')
   const entries = manifest.scanSkills(fixtures, ['engineering', 'does-not-exist'])
   assert.deepEqual(entries.map(e => e.name), ['alpha'])
+})
+
+test('scanSkills throws on a stray flat .md file dropped directly in a bucket', () => {
+  // Separate fixture tree from tests/fixtures/manifest/skills/ so the tests
+  // above (asserting on that tree's exact contents) keep passing unchanged.
+  const fixtures = path.join(__dirname, 'fixtures/manifest/skills-invalid')
+  assert.throws(
+    () => manifest.scanSkills(fixtures, ['engineering', 'productivity']),
+    /SKILL\.md/
+  )
+})
+
+test('updateMarketplaceJson rewrites the count prefix and features, preserving key order and other fields', () => {
+  const input = {
+    description: 'top-level description, untouched',
+    name: 'lorenzos-claude-code',
+    plugins: [
+      {
+        author: { name: 'Lorenzo' },
+        description: '17 commands, 6 agents, 4 skills, 14 hooks, 2 monitors. Scaffolds Next.js + React + Supabase code.',
+        features: { agents: 6, commands: 17, hooks: 14, mcpServers: 4, monitors: 2, skills: 4 },
+        name: 'lorenzos-claude-code',
+      },
+    ],
+  }
+  const out = manifest.updateMarketplaceJson(input, {
+    commands: 17,
+    agents: 6,
+    skills: 14,
+    hooks: 14,
+    monitors: 2,
+  })
+  const plugin = out.plugins[0]
+  assert.deepEqual(plugin.features, { agents: 6, commands: 17, hooks: 14, mcpServers: 4, monitors: 2, skills: 14 })
+  assert.deepEqual(Object.keys(plugin.features), ['agents', 'commands', 'hooks', 'mcpServers', 'monitors', 'skills'])
+  assert.equal(
+    plugin.description,
+    '17 commands, 6 agents, 14 skills, 14 hooks, 2 monitors. Scaffolds Next.js + React + Supabase code.'
+  )
+  assert.equal(out.description, 'top-level description, untouched')
+  assert.equal(plugin.author.name, 'Lorenzo')
+  // Original input is not mutated.
+  assert.equal(input.plugins[0].features.skills, 4)
 })
 
 const { execFileSync } = require('node:child_process')

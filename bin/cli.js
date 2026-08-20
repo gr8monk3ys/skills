@@ -14,6 +14,7 @@
 const fs = require("fs");
 const path = require("path");
 const os = require("os");
+const { PROMOTED_BUCKETS } = require("../scripts/lib/manifest");
 
 const CLAUDE_DIR = path.join(os.homedir(), ".claude");
 const PLUGIN_SOURCE = path.join(__dirname, "..");
@@ -163,7 +164,6 @@ function install() {
   }
 
   // Skills ship from promoted buckets only, flattened to ~/.claude/skills/<name>/
-  const PROMOTED_BUCKETS = ["engineering", "productivity"];
   for (const bucket of PROMOTED_BUCKETS) {
     const bucketDir = path.join(sourceClaude, "skills", bucket);
     if (!fs.existsSync(bucketDir)) continue;
