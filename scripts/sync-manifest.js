@@ -28,10 +28,10 @@ function main() {
   const pkg = readJson(PACKAGE_JSON)
   const basePlugin = readJson(PLUGIN_JSON)
 
-  const commands = m.scanCategory(path.join(REPO_ROOT, '.claude/commands'))
-  const agents = m.scanCategory(path.join(REPO_ROOT, '.claude/agents'))
-  const skills = m.scanSkills(path.join(REPO_ROOT, '.claude/skills'), PROMOTED)
-  const hooks = m.scanHooks(path.join(REPO_ROOT, '.claude/hooks'))
+  const commands = m.scanCategory(path.join(REPO_ROOT, 'commands'))
+  const agents = m.scanCategory(path.join(REPO_ROOT, 'agents'))
+  const skills = m.scanSkills(path.join(REPO_ROOT, 'skills'), PROMOTED)
+  const hooks = m.scanHooks(path.join(REPO_ROOT, 'hooks'))
   const monitors = m.scanMonitors(path.join(REPO_ROOT, '.claude/monitors'))
 
   const next = m.buildPluginJson({

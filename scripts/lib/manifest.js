@@ -95,18 +95,18 @@ function scanMonitors(dir) {
   out.sort((a, b) => a.name.localeCompare(b.name))
   return out
 }
+function toPluginPath(repoRoot, filePath, { stripSkillFile = false } = {}) {
+  let rel = path.relative(repoRoot, filePath).split(path.sep).join('/')
+  if (stripSkillFile) rel = rel.replace(/\/SKILL\.md$/, '')
+  return './' + rel
+}
 function buildPluginJson({ base, version, commands, agents, skills, repoRoot }) {
-  const toEntry = item => ({
-    name: item.name,
-    path: path.relative(repoRoot, item.path).split(path.sep).join('/'),
-    description: item.description,
-  })
   return {
     ...base,
     version,
-    commands: commands.map(toEntry),
-    agents: agents.map(toEntry),
-    skills: skills.map(toEntry),
+    commands: commands.map(i => toPluginPath(repoRoot, i.path)),
+    agents: agents.map(i => toPluginPath(repoRoot, i.path)),
+    skills: skills.map(i => toPluginPath(repoRoot, i.path, { stripSkillFile: true })),
   }
 }
 function replaceMarker(content, name, replacement) {
@@ -199,6 +199,7 @@ module.exports = {
   scanCategory,
   scanHooks,
   scanMonitors,
+  toPluginPath,
   buildPluginJson,
   replaceMarker,
   renderTable,

@@ -184,13 +184,13 @@ test('buildPluginJson assembles a manifest with arrays and preserves mcpServers'
     },
     version: '4.0.0',
     commands: [
-      { name: 'api-new', description: 'Create API', path: '/abs/.claude/commands/api/api-new.md' },
+      { name: 'api-new', description: 'Create API', path: '/abs/commands/api/api-new.md' },
     ],
     agents: [
-      { name: 'code-reviewer', description: 'Reviews', path: '/abs/.claude/agents/code-reviewer.md' },
+      { name: 'code-reviewer', description: 'Reviews', path: '/abs/agents/code-reviewer.md' },
     ],
     skills: [
-      { name: 'api-development', description: 'API patterns', path: '/abs/.claude/skills/api-development.md' },
+      { name: 'api-development', description: 'API patterns', path: '/abs/skills/engineering/api-development/SKILL.md' },
     ],
     repoRoot: '/abs',
   }
@@ -198,11 +198,9 @@ test('buildPluginJson assembles a manifest with arrays and preserves mcpServers'
   assert.equal(out.name, 'lorenzos-claude-code')
   assert.equal(out.version, '4.0.0')
   assert.equal(out.commands.length, 1)
-  assert.equal(out.commands[0].name, 'api-new')
-  assert.equal(out.commands[0].path, '.claude/commands/api/api-new.md')
-  assert.equal(out.commands[0].description, 'Create API')
-  assert.equal(out.agents[0].name, 'code-reviewer')
-  assert.equal(out.skills[0].name, 'api-development')
+  assert.deepEqual(out.commands, ['./commands/api/api-new.md'])
+  assert.deepEqual(out.agents, ['./agents/code-reviewer.md'])
+  assert.deepEqual(out.skills, ['./skills/engineering/api-development'])
   assert.deepEqual(out.mcpServers, { context7: { command: 'npx', args: [] } })
   assert.deepEqual(out.profiles, { minimal: '.claude/profiles/mcp-minimal.json' })
 })
@@ -279,4 +277,28 @@ const { execFileSync } = require('node:child_process')
 test('sync-manifest --check passes against committed state', () => {
   const repoRoot = path.join(__dirname, '..')
   execFileSync('node', ['scripts/sync-manifest.js', '--check'], { cwd: repoRoot, stdio: 'pipe' })
+})
+
+test('toPluginPath returns a ./-prefixed repo-relative path', () => {
+  const p = manifest.toPluginPath('/repo', '/repo/commands/nextjs/api-new.md')
+  assert.equal(p, './commands/nextjs/api-new.md')
+})
+
+test('toPluginPath strips the SKILL.md suffix for skills', () => {
+  const p = manifest.toPluginPath('/repo', '/repo/skills/engineering/wizard/SKILL.md', { stripSkillFile: true })
+  assert.equal(p, './skills/engineering/wizard')
+})
+
+test('buildPluginJson emits path strings, not objects', () => {
+  const next = manifest.buildPluginJson({
+    base: { name: 'p' },
+    version: '1.0.0',
+    commands: [{ name: 'c', description: 'd', path: '/repo/commands/api/c.md' }],
+    agents: [{ name: 'a', description: 'd', path: '/repo/agents/a.md' }],
+    skills: [{ name: 's', description: 'd', path: '/repo/skills/engineering/s/SKILL.md' }],
+    repoRoot: '/repo',
+  })
+  assert.deepEqual(next.commands, ['./commands/api/c.md'])
+  assert.deepEqual(next.agents, ['./agents/a.md'])
+  assert.deepEqual(next.skills, ['./skills/engineering/s'])
 })
