@@ -41,41 +41,6 @@
   },
 
   "hooks": {
-    "PreToolUse": [
-      {
-        "matcher": "Write|Edit",
-        "hooks": [
-          {
-            "type": "command",
-            "command": ".claude/hooks/block-sensitive-files.sh"
-          }
-        ]
-      },
-      {
-        "matcher": "Write",
-        "hooks": [
-          {
-            "type": "command",
-            "command": ".claude/hooks/validate-json.sh"
-          }
-        ]
-      }
-    ],
-    "PostToolUse": [
-      {
-        "matcher": "Write|Edit",
-        "hooks": [
-          {
-            "type": "command",
-            "command": ".claude/hooks/auto-format.sh"
-          },
-          {
-            "type": "command",
-            "command": ".claude/hooks/typecheck.sh"
-          }
-        ]
-      }
-    ],
     "Stop": [
       {
         "hooks": [

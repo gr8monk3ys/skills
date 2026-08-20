@@ -64,28 +64,6 @@
 
   "hooks": {
     "_comment": "See .claude/hooks/ for available hook scripts",
-    "PreToolUse": [
-      {
-        "matcher": "Write|Edit",
-        "hooks": [
-          {
-            "type": "command",
-            "command": ".claude/hooks/block-sensitive-files.sh"
-          }
-        ]
-      }
-    ],
-    "PostToolUse": [
-      {
-        "matcher": "Write|Edit",
-        "hooks": [
-          {
-            "type": "command",
-            "command": ".claude/hooks/auto-format.sh"
-          }
-        ]
-      }
-    ],
     "Stop": [
       {
         "hooks": [

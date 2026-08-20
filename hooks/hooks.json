@@ -1,84 +1,98 @@
 {
-  "hooks": [
-    {
-      "event": "Setup",
-      "command": "node ./.claude/hooks/setup.js",
-      "description": "One-time initialization on first session"
-    },
-    {
-      "event": "SessionStart",
-      "command": "node ./.claude/hooks/session-start.js",
-      "description": "Restores previous context when sessions begin"
-    },
-    {
-      "event": "PreToolUse",
-      "matcher": {
-        "tool_name": ["Edit", "Write"]
+  "hooks": {
+    "Setup": [
+      {
+        "hooks": [
+          { "type": "command", "command": "node \"${CLAUDE_PLUGIN_ROOT}/hooks/setup.js\"" }
+        ]
+      }
+    ],
+    "SessionStart": [
+      {
+        "hooks": [
+          { "type": "command", "command": "node \"${CLAUDE_PLUGIN_ROOT}/hooks/session-start.js\"" }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          { "type": "command", "command": "node \"${CLAUDE_PLUGIN_ROOT}/hooks/block-sensitive-files.js\"" }
+        ]
       },
-      "command": "node ./.claude/hooks/block-sensitive-files.js",
-      "description": "Prevents editing .env, credentials, and secret files"
-    },
-    {
-      "event": "PreToolUse",
-      "matcher": {
-        "tool_name": ["Write"]
-      },
-      "command": "node ./.claude/hooks/validate-json.js",
-      "description": "Validates JSON syntax before writing"
-    },
-    {
-      "event": "PostToolUse",
-      "matcher": {
-        "tool_name": ["Edit", "Write"]
-      },
-      "command": "node ./.claude/hooks/auto-format.js",
-      "description": "Auto-formats code with Prettier/Biome/ESLint"
-    },
-    {
-      "event": "PreCompact",
-      "command": "node ./.claude/hooks/pre-compact.js",
-      "description": "Saves critical context before compaction"
-    },
-    {
-      "event": "Stop",
-      "command": "node ./.claude/hooks/session-end.js",
-      "description": "Persists session state when sessions complete"
-    },
-    {
-      "event": "Stop",
-      "command": "node ./.claude/hooks/notify-completion.js",
-      "description": "Desktop notification on completion"
-    },
-    {
-      "event": "UserPromptSubmit",
-      "command": "node ./.claude/hooks/skill-activator.js",
-      "description": "Injects skill activation hints based on context"
-    },
-    {
-      "event": "PostToolUseFailure",
-      "matcher": ".*",
-      "command": "node ./.claude/hooks/post-tool-failure.js",
-      "description": "Logs tool failures and tracks failure patterns"
-    },
-    {
-      "event": "SubagentStart",
-      "command": "node ./.claude/hooks/subagent-start.js",
-      "description": "Tracks when subagents are spawned"
-    },
-    {
-      "event": "SubagentStop",
-      "command": "node ./.claude/hooks/subagent-stop.js",
-      "description": "Tracks subagent completion and duration"
-    },
-    {
-      "event": "PermissionRequest",
-      "command": "node ./.claude/hooks/permission-request.js",
-      "description": "Audit logs permission requests with auto-allow support"
-    },
-    {
-      "event": "Notification",
-      "command": "node ./.claude/hooks/status-line.js",
-      "description": "Displays token usage, cache rates, and context capacity"
-    }
-  ]
+      {
+        "matcher": "Write",
+        "hooks": [
+          { "type": "command", "command": "node \"${CLAUDE_PLUGIN_ROOT}/hooks/validate-json.js\"" }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          { "type": "command", "command": "node \"${CLAUDE_PLUGIN_ROOT}/hooks/auto-format.js\"" }
+        ]
+      }
+    ],
+    "PreCompact": [
+      {
+        "hooks": [
+          { "type": "command", "command": "node \"${CLAUDE_PLUGIN_ROOT}/hooks/pre-compact.js\"" }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          { "type": "command", "command": "node \"${CLAUDE_PLUGIN_ROOT}/hooks/session-end.js\"" },
+          { "type": "command", "command": "node \"${CLAUDE_PLUGIN_ROOT}/hooks/notify-completion.js\"" }
+        ]
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          { "type": "command", "command": "node \"${CLAUDE_PLUGIN_ROOT}/hooks/skill-activator.js\"" }
+        ]
+      }
+    ],
+    "PostToolUseFailure": [
+      {
+        "matcher": ".*",
+        "hooks": [
+          { "type": "command", "command": "node \"${CLAUDE_PLUGIN_ROOT}/hooks/post-tool-failure.js\"" }
+        ]
+      }
+    ],
+    "SubagentStart": [
+      {
+        "hooks": [
+          { "type": "command", "command": "node \"${CLAUDE_PLUGIN_ROOT}/hooks/subagent-start.js\"" }
+        ]
+      }
+    ],
+    "SubagentStop": [
+      {
+        "hooks": [
+          { "type": "command", "command": "node \"${CLAUDE_PLUGIN_ROOT}/hooks/subagent-stop.js\"" }
+        ]
+      }
+    ],
+    "PermissionRequest": [
+      {
+        "hooks": [
+          { "type": "command", "command": "node \"${CLAUDE_PLUGIN_ROOT}/hooks/permission-request.js\"" }
+        ]
+      }
+    ],
+    "Notification": [
+      {
+        "hooks": [
+          { "type": "command", "command": "node \"${CLAUDE_PLUGIN_ROOT}/hooks/status-line.js\"" }
+        ]
+      }
+    ]
+  }
 }
