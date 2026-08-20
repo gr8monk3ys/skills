@@ -63,27 +63,7 @@
   },
 
   "hooks": {
-    "_comment": "See .claude/hooks/ for available hook scripts",
-    "Stop": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": ".claude/hooks/session-end.sh"
-          }
-        ]
-      }
-    ],
-    "SessionStart": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": ".claude/hooks/session-start.sh"
-          }
-        ]
-      }
-    ]
+    "_comment": "See .claude/hooks/ for available hook scripts"
   },
 
   "enableAllProjectMcpServers": false,

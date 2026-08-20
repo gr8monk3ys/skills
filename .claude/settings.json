@@ -40,28 +40,7 @@
     "pr": "This PR was generated with assistance from Claude Code."
   },
 
-  "hooks": {
-    "Stop": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": ".claude/hooks/session-end.sh"
-          }
-        ]
-      }
-    ],
-    "SessionStart": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": ".claude/hooks/session-start.sh"
-          }
-        ]
-      }
-    ]
-  },
+  "hooks": {},
 
   "enableAllProjectMcpServers": false,
   "enabledMcpjsonServers": ["context7", "memory", "playwright", "github"]
