@@ -47,7 +47,7 @@
     },
     {
       "name": "wizard",
-      "priority": 1,
+      "priority": 0,
       "keywords": ["credentials", "secrets", "provision", "dashboard", "onboarding", "setup wizard", "cutover", "migration"],
       "patterns": ["\\.env\\b", "gh secret", "gh variable"],
       "directories": [],
@@ -55,7 +55,7 @@
     },
     {
       "name": "resolving-merge-conflicts",
-      "priority": 1,
+      "priority": 0,
       "keywords": ["merge conflict", "rebase conflict", "conflict markers", "ours", "theirs"],
       "patterns": ["<<<<<<<", ">>>>>>>", "CONFLICT \\("],
       "directories": [],
@@ -63,7 +63,7 @@
     },
     {
       "name": "prototype",
-      "priority": 1,
+      "priority": 0,
       "keywords": ["prototype", "throwaway", "mockup", "spike", "proof of concept", "poc"],
       "patterns": [],
       "directories": [],
@@ -71,7 +71,7 @@
     },
     {
       "name": "research",
-      "priority": 1,
+      "priority": 0,
       "keywords": ["research", "investigate", "primary sources", "cited", "find out whether"],
       "patterns": [],
       "directories": [],
@@ -79,7 +79,7 @@
     },
     {
       "name": "domain-modeling",
-      "priority": 1,
+      "priority": 0,
       "keywords": ["context.md", "glossary", "vocabulary", "domain model", "adr", "terminology", "jargon"],
       "patterns": ["CONTEXT\\.md", "ADR-\\d+"],
       "directories": [],
@@ -87,7 +87,7 @@
     },
     {
       "name": "writing-for-agents",
-      "priority": 1,
+      "priority": 0,
       "keywords": ["skill.md", "claude.md", "agents.md", "write a skill", "agent docs"],
       "patterns": ["SKILL\\.md", "CLAUDE\\.md", "AGENTS\\.md"],
       "directories": [".claude/skills"],
