@@ -14,7 +14,7 @@ git push -u origin main
 
 # 3. Share with others
 # Installation commands:
-# /plugin marketplace add gr8monk3ys/lorenzos-claude-code
+# /plugin marketplace add gr8monk3ys/skills
 # /plugin install lorenzos-claude-code
 ```
 
@@ -42,14 +42,14 @@ git push -u origin main
 1. **Read PUBLISHING.md** - Full step-by-step guide
 2. **Create GitHub Repo** - <https://github.com/new>
 3. **Push Code** - See commands above
-4. **Test Installation** - `/plugin install gr8monk3ys/lorenzos-claude-code`
+4. **Test Installation** - `/plugin install gr8monk3ys/skills`
 5. **Share** - Post on social media, submit to marketplaces
 
 ## Installation Commands (for users)
 
 ```bash
 # Step 1: Add marketplace
-/plugin marketplace add gr8monk3ys/lorenzos-claude-code
+/plugin marketplace add gr8monk3ys/skills
 
 # Step 2: Install plugin
 /plugin install lorenzos-claude-code

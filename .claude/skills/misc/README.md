@@ -1,6 +1,6 @@
 # misc/ — kept, not shipped
 
-Ports from mattpocock/skills that duplicate superpowers. They stay out of the plugin so skill-activator routing stays unambiguous. To ship one, move it to a promoted bucket and run `npm run sync`.
+Ports from mattpocock/skills that duplicate superpowers. They stay out of the plugin so skill-activator routing stays unambiguous. To ship one: move it to a promoted bucket, add a `.claude/hooks/skill-rules.json` entry if it's model-invoked, update the `ask-lorenzo` router map, then run `npm run sync`.
 
 | Skill | Overlaps |
 | --- | --- |
