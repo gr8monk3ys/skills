@@ -77,13 +77,13 @@ Three failure modes worth naming, and what in here answers each.
 
 You have decided on the component, the route, the table policy. What stands between you and it is twenty minutes of boilerplate that comes out slightly different every time — a different error shape here, validation skipped there, and a codebase that reads like four people wrote it.
 
-The `-new` commands take that pass off you: `/component-new`, `/hook-new` and `/page-new` for the React side, `/api-new`, `/action-new` and `/edge-function-new` for endpoints, `/rls-new` and `/types-gen` for Supabase, `/test-new` for the tests. Behind them sit four skills the agent reaches for on its own when your prompt or your file paths say it should — [api-development](docs/engineering/api-development.md), [frontend-development](docs/engineering/frontend-development.md), [database-operations](docs/engineering/database-operations.md), and [background-automation](docs/engineering/background-automation.md). The commands give you the file; the skills are why the tenth file matches the first.
+The `-new` commands take that pass off you: `/component-new`, `/hook-new` and `/page-new` for the React side, `/api-new`, `/action-new` and `/edge-function-new` for endpoints, `/rls-new` and `/types-gen` for Supabase, `/test-new` for the tests. Behind them sit three skills the agent reaches for on its own when your prompt or your file paths say it should — [api-development](docs/engineering/api-development.md), [frontend-development](docs/engineering/frontend-development.md), and [database-operations](docs/engineering/database-operations.md). The commands give you the file; the skills are why the tenth file matches the first.
 
 ### The code works on your machine and nowhere else
 
 The demo went fine. CI is red, and now you are reading a log to find out which of six things broke.
 
-`/verify` runs the whole gauntlet in one go — build, types, lint, tests, security, and a read of your own diff — so the answer arrives before the push instead of after it. `/review` is the gate you run before calling something done. When CI does go red anyway, `/babysit` watches the PR and fixes failures as they land, `/fixissue` takes a GitHub issue from fetch to merged branch, and `/automerge` validates, merges, and cleans up behind itself.
+`/verify` runs the whole gauntlet in one go — build, types, lint, tests, security, and a read of your own diff — so the answer arrives before the push instead of after it. `/review` is the gate you run before calling something done. When CI does go red anyway, `/babysit` watches the PR and fixes failures as they land, `/fixissue` takes a GitHub issue from fetch to merged branch, and `/automerge` validates, merges, and cleans up behind itself. [background-automation](docs/engineering/background-automation.md) is the skill underneath that work — it is what the agent reaches for when something needs watching on a loop rather than doing once.
 
 ### A step needs a human, and explaining it again every time is the cost
 
