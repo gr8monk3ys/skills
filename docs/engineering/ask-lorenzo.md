@@ -7,9 +7,9 @@ to do; it names the one command or skill that fits, says why, and hands off.
 
 It never does the work. That constraint is what makes it cheap to ask — the
 answer is a pointer, not a half-finished attempt at your task, so a wrong
-answer costs you a sentence. It is also the only skill here the agent will
-never fire on its own, which is deliberate: a router that volunteered itself
-would sit in front of every request.
+answer costs you a sentence. The agent is also barred from firing it, which for
+a router is the point: one that volunteered itself would sit in front of every
+request, adding a hop to work the agent could already have started.
 
 ## When to reach for it
 
@@ -47,8 +47,13 @@ primitives underneath are [background-automation](./background-automation.md).
 [prototype](./prototype.md) to answer a design question with throwaway code,
 [research](./research.md) to investigate against primary sources,
 [domain-modeling](./domain-modeling.md) to sharpen the project's vocabulary,
-plus the productivity skills for ending a session, re-pitching a message that
-didn't land, and handing a decision to someone else.
+and [writing-for-agents](../productivity/writing-for-agents.md) when the thing
+you're writing is itself read by an agent. Alongside those sit the rest of the
+productivity set — [handoff](../productivity/handoff.md) to end a session
+another agent can continue, [wait-what](../productivity/wait-what.md) when a
+message didn't land, and
+[to-questionnaire](../productivity/to-questionnaire.md) for a decision only
+someone else can make.
 
 Process discipline — brainstorming, TDD, systematic debugging, writing plans,
 code review — is not here. The superpowers plugin owns it, and the router sends

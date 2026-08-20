@@ -18,11 +18,16 @@ preference.
 
 It activates on its own. A `UserPromptSubmit` hook scores each prompt against
 `hooks/skill-rules.json` and loads the skill when the score clears its
-threshold — `schema.prisma`, a `.sql` file, a `migrations/` path, or the words
-migration, index, or RLS will do it.
+threshold. A path does it comfortably — "update `prisma/schema.prisma`" scores
+23 — and so does a clear intent: "add a migration" scores 9. The word
+*migration* by itself scores 5, which is a suggestion rather than an
+activation, and "add an index" doesn't reach even that.
 
-Type `/database-operations` when you want it for something the hook won't
-score, such as reviewing indexes on a schema you haven't mentioned by name.
+The gap worth knowing is RLS. Despite being this skill's central rule, *RLS*
+appears in none of its keywords, patterns, or intents, so "add an RLS policy to
+the posts table in Supabase" scores 4 — below the suggestion threshold, let
+alone activation. Type `/database-operations` for policy work, and for anything
+else the hook won't score, like reviewing indexes on a schema you haven't named.
 
 ## What it makes the agent good at
 

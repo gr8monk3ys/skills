@@ -32,7 +32,7 @@ two answers produce completely different artifacts:
 | The question | What you get |
 | --- | --- |
 | "Does this logic or state model feel right?" | One self-contained HTML file — free-play buttons plus tabbed guided walkthroughs — that anyone can double-click and drive |
-| "What should this look like?" | Three radically different UI variations on a single route, switchable from a floating bottom bar and a `?variant=` URL param |
+| "What should this look like?" | Radically different UI variations on a single route — three by default, five at most — switchable from a floating bottom bar and a `?variant=` URL param |
 
 When the question is genuinely ambiguous and you aren't around to ask, it
 defaults on the surrounding code — a backend module gets the logic branch, a

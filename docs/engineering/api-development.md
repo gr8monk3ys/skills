@@ -16,13 +16,15 @@ afterwards, including the ones no command scaffolded.
 It activates on its own. A `UserPromptSubmit` hook scores your prompt against
 `hooks/skill-rules.json` — keywords, regex patterns, file paths, directories,
 and intent phrasings, each weighted — and at a confidence of 8 or more it tells
-the agent to load this skill; between 5 and 8 it suggests it. Mentioning
-`app/api/route.ts`, or asking for an endpoint, clears the bar without you doing
-anything.
+the agent to load this skill; between 5 and 8 it only suggests it.
 
-You can still type `/api-development` when the scoring misses — a rename, a
-refactor across handlers, a review pass on routes you didn't just describe in
-words the hook recognises.
+Prose alone rarely gets there. "Add an endpoint" scores 6, which is a
+suggestion; naming the file it goes in, "add an endpoint to
+`app/api/users/route.ts`", scores 30, because the path matches a directory rule,
+a filename pattern, and two keywords at once. This is the general shape of the
+scoring, and the reason to type `/api-development` explicitly for work the
+words won't carry: a rename, a refactor across handlers, a review pass over
+routes you never described in prose at all.
 
 ## What it makes the agent good at
 
@@ -37,10 +39,30 @@ The bar it applies to a route handler:
 | Rate limiting | Upstash Redis, sliding or fixed window, keyed by IP or user, degrading gracefully |
 | Tests | Route unit tests with mocked externals, covering the edge cases |
 
-The response format is the part worth internalising, because it is the one that
-compounds. Two handlers that disagree about their error shape force every caller
-to special-case, and the cost shows up in the client months later — so the skill
-treats the shape as fixed rather than per-route taste.
+## The response shape is the one that compounds
+
+Most of that table is ordinary good practice, applied consistently. One entry is
+different in kind, and it's the one to argue about if you're going to argue
+about any of them.
+
+An API's error format is a contract with every caller at once. Handlers that
+each invent their own — a string here, `{ message }` there, a bare status code
+somewhere else — don't cost anything at the moment they're written. The cost
+lands in the client, where handling a failure means knowing which endpoint
+produced it, and it lands again in every new client after that. By the time it
+hurts, the shape is load-bearing in a dozen places and nobody can change it.
+
+Fixing the envelope up front makes the failure path writable once: a single
+function that turns any error response into something the UI can show, and
+error codes stable enough for a caller to branch on without parsing prose. The
+`details` field is where per-route specificity goes — usually the Zod issues
+from the validation that rejected the request — so a route can be specific
+without inventing a new envelope to be specific in.
+
+That is also why validation sits at the entry point rather than a few lines
+into the handler. Everything past the schema can assume its input is the type it
+claims to be, which is what keeps the handler body free of defensive checks and
+`any`.
 
 ## Commands it pairs with
 
@@ -58,12 +80,15 @@ the client calling it is [frontend-development](./frontend-development.md).
 
 ## Common questions
 
-**I never asked for this skill — why is it in play?**
+**Which response format actually wins — this one or the repo's?**
 
-Because the prompt hook scored your request above its activation threshold. It
-is meant to be invisible: the point of an auto-activated standards skill is that
-the tenth endpoint is written to the same rules as the first, without you
-remembering to ask.
+They disagree, and it's worth knowing before you cite either. The skill
+specifies `{ data, meta? }` and `{ error: { code, message, details? } }`, while
+this repo's own `CLAUDE.md` and `.claude/rules/PROJECT-RULES.md` specify
+`{ data, success: true }` and `{ error, success: false }`. This page documents
+the skill, because that is what the skill applies. If you are working in a
+codebase, the answer is whichever shape it already uses — consistency is the
+whole value, and the worst outcome is a codebase containing both.
 
 **I'm not on Next.js App Router — is any of it useful?**
 
@@ -80,12 +105,15 @@ public route that deliberately has neither.
 
 ## It's working if
 
-- Every handler validates its input with Zod before touching a database or an
-  external service.
-- Success and failure come back in the same shape from every route in the
-  codebase, and error codes are stable enough to switch on.
-- No handler contains `any`.
-- Protected routes are protected at the middleware layer, not by a check
-  copy-pasted into each handler.
-- New endpoints arrive with tests that cover a failure case, not only the happy
-  path.
+- The client handles a failure from any endpoint with one function, and adding
+  an endpoint doesn't require touching it.
+- A malformed request comes back saying which field was wrong, without anyone
+  having written that message by hand.
+- Changing the shape of a request means editing one schema, and the type errors
+  that follow lead you to every line that needed updating.
+- You can answer "which routes are authenticated?" by reading the middleware,
+  rather than by opening every handler.
+- Handler bodies are short, because the defensive checks that would pad them are
+  already covered by the schema above.
+- The tests that exist are the ones for cases you'd otherwise have to reproduce
+  by hand in a client.

@@ -8,17 +8,22 @@ according to what kind of state it is.
 
 Its governing default is that a component is a Server Component until something
 forces otherwise. `'use client'` is a cost to be justified, not the starting
-point, and the skill's second default follows from the first: accessible markup
-is what gets written the first time, because semantic HTML and keyboard
-behaviour are far cheaper to write than to retrofit.
+point.
+
+A second default runs independently of the first: accessibility is written in,
+not passed over afterwards. Semantic elements, keyboard paths, and managed focus
+are decisions made while the markup is being written, because each of them is
+cheap then and expensive to retrofit once the component is in use.
 
 ## When to reach for it
 
 It activates on its own. A `UserPromptSubmit` hook scores each prompt against
 `hooks/skill-rules.json` and loads the skill when the score clears its
-threshold — a `page.tsx` path, a `className=`, the word component, or an intent
-like "make this responsive" is enough. You never invoke it for a normal UI
-task.
+threshold. Signals add up rather than firing individually: "create a component"
+on its own scores 6 — enough to be suggested, not to activate — while the same
+request with a path in it, "create a component in `src/components/Card.tsx`",
+scores 20, because a file path under a known directory is weighted far above any
+single word. Saying where the work goes is what reliably tips it.
 
 Type `/frontend-development` when you want it for something the hook won't
 catch, such as an accessibility pass over components you aren't describing in
@@ -56,17 +61,11 @@ primitives, organised by feature rather than by file type.
 - [`/test-new`](../../commands/test-new.md) — component tests.
 
 When you want to see options rather than build one design, that's
-[prototype](./prototype.md), which puts three structurally different variants
+[prototype](./prototype.md), which puts several structurally different variants
 on the route and lets you flip between them. Data fetched by these components
 comes from [api-development](./api-development.md).
 
 ## Common questions
-
-**I didn't invoke it — why is it active?**
-
-Because your prompt scored above the activation threshold in the prompt hook.
-That's the design: the standards apply to every component, including the ones
-written in the middle of some other task.
 
 **We're on Vue, or Svelte, or plain React with Vite. Is it useful?**
 

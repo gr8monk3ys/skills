@@ -93,10 +93,11 @@ subscriptions too, so nothing keeps waking the session afterwards.
 
 **Do these primitives exist everywhere?**
 
-Not uniformly — availability varies by environment, which is why the skill is
-written to use whichever the current environment exposes rather than assuming
-all four. If subscriptions aren't available, the same job runs as a loop with a
-shorter heartbeat, at higher cost.
+Not necessarily. The `/babysit` command is written to use whichever of the three
+the current environment exposes, rather than assuming all of them — so treat
+availability as something to check rather than rely on. Where subscriptions
+aren't offered, the same job still runs as a loop with a shorter heartbeat, at
+higher cost per result.
 
 **Can I watch something that isn't CI?**
 
