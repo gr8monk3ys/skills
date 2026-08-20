@@ -48,10 +48,16 @@ The four Claude Code plugin primitives move from `.claude/` to the repo root:
 
 ```
 skills/<bucket>/<name>/SKILL.md     (was .claude/skills/...)
-commands/<category>/<name>.md       (was .claude/commands/...)
+commands/<name>.md                  (was .claude/commands/<category>/...)
 agents/<name>.md                    (was .claude/agents/...)
 hooks/<name>.js + hooks.json + skill-rules.json   (was .claude/hooks/...)
 ```
+
+Commands are flat, with no category subdirectory. The 9 category
+subdirectories (`api/`, `devops/`, `generation/`, `nextjs/`, `quality/`,
+`supabase/`, `testing/`, `ui/`, `workflow/`) were removed because Claude
+Code's command auto-discovery only scans `commands/` itself, not its
+subdirectories — see §1.2's "How this was established".
 
 `.claude/` retains only what is this repo's own configuration and non-primitive extras: `settings.json`, `settings.template.json`, `plugin-settings.json`, `plugin-settings.schema.json`, `rules/`, `memory/`, `monitors/`, `profiles/`, `scripts/`, `docs/`, `handoffs/`, `logs/`.
 
@@ -59,17 +65,55 @@ The resulting split is meaningful and should be stated in `CONTEXT.md`: **repo r
 
 This mirrors both reference plugins: `superpowers` ships `skills/` and `hooks/` at its root, and `mattpocock/skills` ships `skills/<bucket>/<name>/` at its root.
 
-## 1.2 Manifest: emit path strings
+## 1.2 Manifest: only directory-path entries are honoured
 
-`scripts/sync-manifest.js` and `scripts/lib/manifest.js` change what they emit into `plugin.json`:
+Claude Code honours **only directory-path entries** in `plugin.json`'s
+component arrays. A `skills` entry (`"./skills/engineering/wizard"`, a
+directory) resolves. A `commands` or `agents` entry (a **file** path,
+e.g. `"./commands/api-new.md"` or `"./agents/code-reviewer.md"`) is
+silently ignored, whether it is declared explicitly or the array is
+absent — `claude plugin details` reports the component as `0` either way,
+with no error and no warning from `claude plugin validate`.
 
-- `skills`: **directory** paths, e.g. `"./skills/engineering/wizard"` (no `/SKILL.md` suffix) — matching mattpocock's manifest.
-- `commands`: **file** paths, e.g. `"./commands/nextjs/api-new.md"`.
-- `agents`: **file** paths, e.g. `"./agents/code-reviewer.md"`.
+`scripts/sync-manifest.js` and `scripts/lib/manifest.js` therefore emit
+into `plugin.json`:
 
-Skills stay explicitly declared. Convention-based discovery finds `skills/<name>/SKILL.md` only one level deep, and ours are bucketed two levels deep; this is precisely why mattpocock declares his explicitly rather than relying on convention.
+- `skills`: **directory** paths, e.g. `"./skills/engineering/wizard"` (no `/SKILL.md` suffix) — matching mattpocock's manifest. Explicitly declared, because convention-based discovery finds `skills/<name>/SKILL.md` only one level deep, and ours are bucketed two levels deep; this is precisely why mattpocock declares his explicitly rather than relying on convention.
+- `commands`: **not declared at all.** Found by convention at `commands/<name>.md`. Convention-based discovery of `commands/` is flat only — it does not recurse into subdirectories — so this requires commands to sit directly in `commands/`, not in a category subdirectory.
+- `agents`: **not declared at all.** Found by convention at `agents/<name>.md`, which is already flat, so no directory change was needed for agents.
 
-The name and description that the arrays currently carry are still needed for the README/CLAUDE.md AUTOGEN tables, so the scanners keep returning full objects internally. Only the *serialisation into plugin.json* changes to strings.
+The name and description that the arrays currently carry are still needed for the README/CLAUDE.md AUTOGEN tables, so the scanners keep returning full objects internally for all three types and still walk `commands/` and `agents/` recursively for that purpose. Only the *serialisation into plugin.json* is affected: `skills` is emitted as strings, `commands` and `agents` are omitted from the manifest entirely.
+
+### How this was established
+
+Verified empirically (isolated `CLAUDE_CONFIG_DIR` installs of this repo
+as a local marketplace, cross-checked against two real Anthropic-authored
+plugins, and a two-file minimal reproduction with no shared code) rather
+than assumed from the schema. `claude plugin details` never displays a
+"Commands" line for any plugin — auto-discovered commands are instead
+folded into its "Skills" bucket, which is the only way to observe command
+discovery at all; this was confirmed by inspecting the on-disk
+`commands/*.md` files of two real installed plugins and finding their
+names inside the reported `Skills` list. Four configurations of this
+repo's own `commands/` and `agents/` were installed and inspected against
+that observable:
+
+| Commands layout | Commands array in plugin.json | Result |
+| --- | --- | --- |
+| Nested (`commands/<category>/<name>.md`) | Present | Skills stays at 14 (no commands folded in) |
+| Nested (`commands/<category>/<name>.md`) | Absent | Skills stays at 14 (no commands folded in) |
+| Flat (`commands/<name>.md`) | Absent | Skills becomes 31 (14 skills + 17 commands, all named correctly) |
+
+| Agents array in plugin.json | Result |
+| --- | --- |
+| Present (`"./agents/<name>.md"` file paths) | `Agents (0)` |
+| Absent | `Agents (6)`, all named correctly |
+
+Agents are flat on disk in both rows, so the agents result isolates the
+manifest-array variable alone; the commands rows isolate both variables
+(array presence and directory nesting) and show that nesting, not array
+presence, is what determines discovery — declaring the array makes no
+observable difference in either direction.
 
 ### Fields to remove
 
@@ -77,6 +121,8 @@ The name and description that the arrays currently carry are still needed for th
 | --- | --- | --- |
 | `plugin.json` | `npm` | Remove. The npm package name already lives in `package.json` and the README. |
 | `plugin.json` | `profiles` | Remove the manifest field. `.claude/profiles/mcp-minimal.json` stays on disk and is documented in the README; nothing in the codebase reads the manifest field. |
+| `plugin.json` | `commands` | Remove. File-path entries are silently ignored by Claude Code; commands are found by convention at `commands/<name>.md` instead (requires the flat layout in §1.1). |
+| `plugin.json` | `agents` | Remove. File-path entries are silently ignored by Claude Code; agents are found by convention at `agents/<name>.md` instead (already flat). |
 | `marketplace.json` plugin entry | `features` | Remove. The counts survive in the `description` prefix, which the sync already regenerates. |
 | `marketplace.json` plugin entry | `highlights` | Remove. Its content moves into the README. |
 | `marketplace.json` plugin entry | `npm` | Remove. |
