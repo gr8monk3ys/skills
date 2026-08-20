@@ -157,7 +157,7 @@ The `skill-activator` hook scores prompts across five dimensions with weighted c
 | Directories | 5 |
 | Intents | 4 |
 
-At ≥8 points the matching skill is auto-activated; at ≥5 points it is suggested. Rules live in `.claude/hooks/skill-rules.json`. The activator surfaces both this plugin's stack skills and any superpowers skills that match — one routing layer for the whole toolkit.
+At ≥8 points the matching skill is auto-activated; at ≥5 points it is suggested. Rules live in `hooks/skill-rules.json`. The activator surfaces both this plugin's stack skills and any superpowers skills that match — one routing layer for the whole toolkit.
 
 ---
 

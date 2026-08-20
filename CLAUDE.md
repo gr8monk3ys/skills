@@ -78,20 +78,36 @@ A Claude Code plugin that scaffolds Next.js + React + Supabase code, distributed
 
 ## Directory map
 
+**Repo root is what ships to users; `.claude/` is how this repo itself runs.**
+
 ```
+commands/<name>.md             # Slash commands — FLAT, never nested (see below)
+agents/<name>.md               # Subagent personas — FLAT, never nested
+skills/<bucket>/<name>/SKILL.md  # engineering|productivity ship; misc|in-progress|deprecated don't
+hooks/                         # Lifecycle hooks (.js scripts + hooks.json + skill-rules.json)
 .claude-plugin/plugin.json     # Generated — DO NOT hand-edit
-.claude/commands/              # Slash commands (.md with frontmatter)
-.claude/agents/                # Subagent personas (.md with frontmatter)
-.claude/skills/<bucket>/<name>/SKILL.md  # engineering|productivity ship; misc|in-progress|deprecated don't
-.claude/hooks/                 # Lifecycle hooks (.js scripts + hooks.json + skill-rules.json)
 .claude/monitors/              # Background watchers (monitors.json) — counted by sync
-.claude/scripts/               # Plugin-internal helpers
+.claude/scripts/               # Repo-internal helpers (not shipped)
+.claude/{settings,rules,memory,profiles,docs}  # This repo's own config
 scripts/sync-manifest.js       # Regenerates plugin.json + AUTOGEN blocks
 scripts/lib/manifest.js        # Pure helpers used by sync-manifest
 tests/manifest-sync.test.js    # node:test unit tests for sync logic
 tests/run-all.js               # Integration smoke tests
 bin/cli.js                     # `lorenzo-claude` / `lcc` CLI installer
 ```
+
+## How Claude Code finds these (learned the hard way)
+
+Only **directory-path** entries in `plugin.json` are honoured. `skills` is
+declared there as directory paths and works, because bucketed skills sit two
+levels deep where convention cannot reach them.
+
+`commands` and `agents` are **not declared at all** — declaring them as file
+paths is silently ignored. They are auto-discovered from the repo root, and
+that discovery **does not recurse**. A command in a subdirectory is counted by
+the sync and listed in the tables below while being invisible to every
+installed user. `tests/run-all.js` and CI both fail on a nested file; do not
+"organise" these into folders.
 
 ## Skill buckets
 

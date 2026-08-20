@@ -132,6 +132,22 @@ test("All commands have frontmatter", () => {
   }
 });
 
+// Claude Code auto-discovers commands and agents from the plugin root without
+// recursing. A nested file is counted here and listed in the README while being
+// invisible to every installed user, so the layout itself has to be asserted.
+test("commands/ and agents/ are flat (auto-discovery does not recurse)", () => {
+  for (const dir of [commandsDir, path.join(__dirname, "..", "agents")]) {
+    for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+      if (entry.isDirectory()) {
+        throw new Error(
+          `${path.basename(dir)}/${entry.name}/ is a subdirectory; ` +
+            `commands and agents must be flat or installed users never see them`,
+        );
+      }
+    }
+  }
+});
+
 // Test: Agents
 console.log("\nAgents:");
 const agentsDir = path.join(__dirname, "..", "agents");

@@ -28,10 +28,19 @@ function main() {
   const pkg = readJson(PACKAGE_JSON)
   const basePlugin = readJson(PLUGIN_JSON)
 
-  const commands = m.scanCategory(path.join(REPO_ROOT, 'commands'))
-  const agents = m.scanCategory(path.join(REPO_ROOT, 'agents'))
-  const skills = m.scanSkills(path.join(REPO_ROOT, 'skills'), PROMOTED)
-  const hooks = m.scanHooks(path.join(REPO_ROOT, 'hooks'))
+  // Resolving through ROOT_PRIMITIVES keeps this file and bin/cli.js from
+  // disagreeing about where a primitive lives, and rejects a typo outright
+  // instead of silently scanning a directory that does not exist.
+  const rootDir = name => {
+    if (!m.ROOT_PRIMITIVES.includes(name)) {
+      throw new Error(`"${name}" is not a root primitive (expected one of: ${m.ROOT_PRIMITIVES.join(', ')})`)
+    }
+    return path.join(REPO_ROOT, name)
+  }
+  const commands = m.scanCategory(rootDir('commands'))
+  const agents = m.scanCategory(rootDir('agents'))
+  const skills = m.scanSkills(rootDir('skills'), PROMOTED)
+  const hooks = m.scanHooks(rootDir('hooks'))
   const monitors = m.scanMonitors(path.join(REPO_ROOT, '.claude/monitors'))
 
   const next = m.buildPluginJson({
@@ -46,8 +55,6 @@ function main() {
       mcpServers: basePlugin.mcpServers,
     },
     version: pkg.version,
-    commands,
-    agents,
     skills,
     repoRoot: REPO_ROOT,
   })

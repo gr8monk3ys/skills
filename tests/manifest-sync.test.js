@@ -255,13 +255,10 @@ test('sync-manifest --check passes against committed state', () => {
   execFileSync('node', ['scripts/sync-manifest.js', '--check'], { cwd: repoRoot, stdio: 'pipe' })
 })
 
-test('toPluginPath returns a ./-prefixed repo-relative path', () => {
-  const p = manifest.toPluginPath('/repo', '/repo/commands/nextjs/api-new.md')
-  assert.equal(p, './commands/nextjs/api-new.md')
-})
-
-test('toPluginPath strips the SKILL.md suffix for skills', () => {
-  const p = manifest.toPluginPath('/repo', '/repo/skills/engineering/wizard/SKILL.md', { stripSkillFile: true })
+test('toPluginPath returns the ./-prefixed skill DIRECTORY, not the SKILL.md file', () => {
+  // Directory entries are the only kind Claude Code honours, so the SKILL.md
+  // suffix must always come off.
+  const p = manifest.toPluginPath('/repo', '/repo/skills/engineering/wizard/SKILL.md')
   assert.equal(p, './skills/engineering/wizard')
 })
 
@@ -269,6 +266,9 @@ test('buildPluginJson emits skills as path strings and carries no commands/agent
   const next = manifest.buildPluginJson({
     base: { name: 'p' },
     version: '1.0.0',
+    // Passed deliberately: even when a caller hands these over, they must not
+    // reach plugin.json. Claude Code ignores file-path entries, so declaring
+    // them would be a silent no-op that looks like it works.
     commands: [{ name: 'c', description: 'd', path: '/repo/commands/c.md' }],
     agents: [{ name: 'a', description: 'd', path: '/repo/agents/a.md' }],
     skills: [{ name: 's', description: 'd', path: '/repo/skills/engineering/s/SKILL.md' }],

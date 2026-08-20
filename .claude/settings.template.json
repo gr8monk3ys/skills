@@ -63,7 +63,7 @@
   },
 
   "hooks": {
-    "_comment": "See .claude/hooks/ for available hook scripts"
+    "_comment": "See hooks/ at the repo root for available hook scripts"
   },
 
   "enableAllProjectMcpServers": false,

@@ -9,6 +9,13 @@ const path = require('node:path')
 // their own copy of the list.
 const PROMOTED_BUCKETS = ['engineering', 'productivity']
 
+// The four Claude Code plugin primitives, which live at the REPO ROOT because
+// that is where Claude Code discovers them. Everything else the plugin carries
+// stays under `.claude/`, which is this repo's own configuration rather than
+// what ships. sync-manifest.js and bin/cli.js both import this so "where does a
+// primitive live" is answered once — the same reason PROMOTED_BUCKETS exists.
+const ROOT_PRIMITIVES = ['commands', 'agents', 'skills', 'hooks']
+
 function unquote(value) {
   if (value.length >= 2) {
     const first = value[0]
@@ -95,10 +102,9 @@ function scanMonitors(dir) {
   out.sort((a, b) => a.name.localeCompare(b.name))
   return out
 }
-function toPluginPath(repoRoot, filePath, { stripSkillFile = false } = {}) {
-  let rel = path.relative(repoRoot, filePath).split(path.sep).join('/')
-  if (stripSkillFile) rel = rel.replace(/\/SKILL\.md$/, '')
-  return './' + rel
+function toPluginPath(repoRoot, skillFilePath) {
+  const rel = path.relative(repoRoot, skillFilePath).split(path.sep).join('/')
+  return './' + rel.replace(/\/SKILL\.md$/, '')
 }
 // Claude Code only honours directory-path manifest entries: `skills` entries
 // (./skills/<bucket>/<name>, a directory) resolve; `commands`/`agents`
@@ -109,17 +115,13 @@ function toPluginPath(repoRoot, filePath, { stripSkillFile = false } = {}) {
 // discovery once the array is removed). So plugin.json carries `skills`
 // only; `commands` and `agents` are left to convention-based auto-discovery
 // from the (flat) `commands/` and `agents/` directories at the plugin root.
-// The `commands`/`agents` params are still accepted here (and still scanned
-// by sync-manifest.js) because the README/CLAUDE.md AUTOGEN tables and the
-// count line need them — only plugin.json's own serialization of the two
-// arrays goes away.
-function buildPluginJson({ base, version, commands, agents, skills, repoRoot }) {
-  void commands
-  void agents
+// sync-manifest.js still scans those two — the AUTOGEN tables and the count
+// line are built from its own scan results, not from here.
+function buildPluginJson({ base, version, skills, repoRoot }) {
   return {
     ...base,
     version,
-    skills: skills.map(i => toPluginPath(repoRoot, i.path, { stripSkillFile: true })),
+    skills: skills.map(i => toPluginPath(repoRoot, i.path)),
   }
 }
 function replaceMarker(content, name, replacement) {
@@ -201,6 +203,7 @@ function updateMarketplaceJson(parsed, counts) {
 
 module.exports = {
   PROMOTED_BUCKETS,
+  ROOT_PRIMITIVES,
   parseFrontmatter,
   scanCategory,
   scanHooks,
