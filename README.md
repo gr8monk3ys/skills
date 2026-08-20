@@ -58,10 +58,12 @@ Two honest caveats. This is third-party tooling, and we have not run this route 
 <summary><strong>npm</strong> — the <code>lcc</code> CLI</summary>
 
 ```bash
-npm install -g @gr8monk3ys/claude-code-plugin
+npm install -g github:gr8monk3ys/skills
 lcc install
 lcc doctor
 ```
+
+Installing from GitHub rather than the registry is deliberate: `@gr8monk3ys/claude-code-plugin` is not published yet, so `npm install -g @gr8monk3ys/claude-code-plugin` returns a 404. The GitHub form installs the same package and the same `lcc` binary.
 
 `lcc install` writes the commands, agents, skills, and hooks into your Claude Code configuration. Run `lcc doctor` afterwards rather than assuming: a half-landed install looks exactly like a working one right up to the first time you need a hook that isn't there.
 
