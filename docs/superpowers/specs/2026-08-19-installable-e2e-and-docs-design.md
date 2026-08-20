@@ -74,7 +74,7 @@ The name and description that the arrays currently carry are still needed for th
 ### Fields to remove
 
 | File | Field | Disposition |
-|---|---|---|
+| --- | --- | --- |
 | `plugin.json` | `npm` | Remove. The npm package name already lives in `package.json` and the README. |
 | `plugin.json` | `profiles` | Remove the manifest field. `.claude/profiles/mcp-minimal.json` stays on disk and is documented in the README; nothing in the codebase reads the manifest field. |
 | `marketplace.json` plugin entry | `features` | Remove. The counts survive in the `description` prefix, which the sync already regenerates. |

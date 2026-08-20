@@ -27,12 +27,14 @@
 ### Task 1: Move the four plugin primitives to the repo root
 
 **Files:**
+
 - Move: `.claude/commands/` → `commands/` (9 category dirs: api, devops, generation, nextjs, quality, supabase, testing, ui, workflow)
 - Move: `.claude/agents/` → `agents/`
 - Move: `.claude/skills/` → `skills/`
 - Move: `.claude/hooks/` → `hooks/`
 
 **Interfaces:**
+
 - Produces: primitives at repo root. Later tasks point every consumer at these paths. `.claude/` retains `settings.json`, `settings.template.json`, `plugin-settings.json`, `plugin-settings.schema.json`, `rules/`, `memory/`, `monitors/`, `profiles/`, `scripts/`, `docs/`, `handoffs/`, `logs/`.
 
 - [ ] **Step 1: Create the feature branch, then record the pre-move inventory**
@@ -48,6 +50,7 @@ echo "agents:   $(find .claude/agents -name '*.md' | wc -l)"
 echo "skills:   $(find .claude/skills -name 'SKILL.md' | wc -l)"
 echo "hookjs:   $(ls .claude/hooks/*.js | wc -l)"
 ```
+
 Expected: `17`, `6`, `20` (14 promoted + 6 in `misc/`), `14`. Write these numbers into your report; Step 3 re-checks them.
 
 - [ ] **Step 2: Move with git mv**
@@ -66,8 +69,9 @@ echo "commands: $(find commands -name '*.md' | wc -l)"
 echo "agents:   $(find agents -name '*.md' | wc -l)"
 echo "skills:   $(find skills -name 'SKILL.md' | wc -l)"
 echo "hookjs:   $(ls hooks/*.js | wc -l)"
-git status --porcelain | grep -c '^R' 
+git status --porcelain | grep -c '^R'
 ```
+
 Expected: same four numbers as Step 1, and a non-zero rename count. If any count differs, STOP and report.
 
 - [ ] **Step 4: Commit**
@@ -84,11 +88,13 @@ Co-Authored-By: Claude Fable 5 <noreply@anthropic.com>"
 ### Task 2: Scan the new roots and emit path strings (TDD)
 
 **Files:**
+
 - Modify: `scripts/sync-manifest.js` (the five `scanX` calls)
 - Modify: `scripts/lib/manifest.js` (`buildPluginJson`, add `toPluginPath`, export it)
 - Test: `tests/manifest-sync.test.js`
 
 **Interfaces:**
+
 - Produces: `toPluginPath(repoRoot, filePath, opts)` → string, exported from `scripts/lib/manifest.js`. `buildPluginJson` returns `commands`/`agents`/`skills` as arrays of strings. Task 3 depends on this shape; Task 5 depends on the root directory names.
 
 - [ ] **Step 1: Write the failing tests** (append to `tests/manifest-sync.test.js`)
@@ -185,6 +191,7 @@ print('manifest OK:', d['skills'][0], '|', d['commands'][0])
 "
 npm run sync:check
 ```
+
 Expected: tests green, `manifest OK: ...`, `sync:check` exit 0.
 
 - [ ] **Step 8: Commit**
@@ -199,12 +206,14 @@ Co-Authored-By: Claude Fable 5 <noreply@anthropic.com>"
 ### Task 3: Drop the unknown manifest fields so `--strict` passes
 
 **Files:**
+
 - Modify: `scripts/sync-manifest.js` (the `base` object)
 - Modify: `scripts/lib/manifest.js` (`updateMarketplaceJson`)
 - Modify: `.claude-plugin/marketplace.json` (remove three keys from the plugin entry)
 - Test: `tests/manifest-sync.test.js`
 
 **Interfaces:**
+
 - Consumes: string-emitting `buildPluginJson` from Task 2.
 - Produces: `claude plugin validate . --strict` passing. Task 6 re-asserts this.
 
@@ -268,6 +277,7 @@ npm test
 npm run sync:check
 claude plugin validate . --strict
 ```
+
 Expected: `✔ Validation passed` with no errors and no warnings. If any warning remains, name the field it reports and remove that field too, then re-run.
 
 - [ ] **Step 7: Commit**
@@ -282,10 +292,12 @@ Co-Authored-By: Claude Fable 5 <noreply@anthropic.com>"
 ### Task 4: Repoint hooks at the plugin root, and delete dead settings
 
 **Files:**
+
 - Modify: `hooks/hooks.json` (every `command` value)
 - Modify: `.claude/settings.json`, `.claude/settings.template.json`
 
 **Interfaces:**
+
 - Consumes: `hooks/` at the repo root from Task 1.
 - Produces: hook commands resolvable when installed. Task 6's install test surfaces the hook count.
 
@@ -313,6 +325,7 @@ assert not missing, missing
 print(len(cmds),'hook commands, all repointed, all target files exist')
 "
 ```
+
 Expected: the count printed, zero stale `.claude/hooks` references, and no missing target file.
 
 - [ ] **Step 3: Fix this repo's own hook registrations**
@@ -329,6 +342,7 @@ python3 -m json.tool .claude/settings.template.json > /dev/null && echo "templat
 grep -c '\.sh"' .claude/settings.json .claude/settings.template.json || echo "no .sh registrations remain"
 npm test && npm run sync:check
 ```
+
 Expected: both valid, no `.sh` registrations, tests green.
 
 - [ ] **Step 5: Commit**
@@ -343,11 +357,13 @@ Co-Authored-By: Claude Fable 5 <noreply@anthropic.com>"
 ### Task 5: Update the npm distribution path (CLI + package files)
 
 **Files:**
+
 - Modify: `bin/cli.js` (`install()` sources, `PROMOTED_BUCKETS` skills loop, `uninstall()`, `doctor()`)
 - Modify: `package.json` (`files`)
 - Modify: `tests/run-all.js` (path expectations)
 
 **Interfaces:**
+
 - Consumes: root primitives (Task 1), `PROMOTED_BUCKETS` from `scripts/lib/manifest.js`.
 - Produces: a working `lcc install`. Task 6 re-runs it as part of the gauntlet.
 
@@ -399,6 +415,7 @@ TMP=$(mktemp -d) && HOME="$TMP" node bin/cli.js install >/dev/null 2>&1 \
 npm pack --dry-run 2>&1 | grep -c "SKILL.md"
 npm pack --dry-run 2>&1 | grep -ci "LICENSES/"
 ```
+
 Expected: `installed skills: 14`, `misc excluded`, `wizard present`, `primitives installed`, doctor without errors, a non-zero SKILL.md count, and a non-zero LICENSES count.
 
 - [ ] **Step 5: Commit**
@@ -415,6 +432,7 @@ Co-Authored-By: Claude Fable 5 <noreply@anthropic.com>"
 **Files:** none modified unless a defect is found.
 
 **Interfaces:**
+
 - Consumes: everything from Tasks 1–5.
 
 - [ ] **Step 1: Hermetic install test — the gate for this whole phase**
@@ -442,6 +460,7 @@ rm -rf "$CLAUDE_CONFIG_DIR"
 unset CLAUDE_CONFIG_DIR
 claude plugin list 2>&1 | head -3
 ```
+
 Expected: the real config is intact and unchanged (it lists the user's actual plugins again).
 
 - [ ] **Step 3: Full gauntlet**
@@ -460,6 +479,7 @@ print('plugin.json final shape OK')
 "
 git status --porcelain
 ```
+
 Expected: all green, `plugin.json final shape OK`, and a clean working tree.
 
 - [ ] **Step 4: Push and open the PR (NOT a draft)**

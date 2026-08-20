@@ -39,8 +39,13 @@ repos:
     hooks:
       - id: validate-plugin-paths
         name: Validate plugin.json paths
+        # plugin.json's arrays are bare path strings (not {path: ...}
+        # objects) since the schema-string-emitting fix — Claude Code only
+        # honours directory-path entries, so only `skills` is emitted here
+        # at all (commands/agents are convention-discovered and
+        # intentionally absent from plugin.json; see scripts/lib/manifest.js).
         entry: >-
-          node -e "const p=JSON.parse(require('fs').readFileSync('.claude-plugin/plugin.json','utf8'));const fs=require('fs');let ok=true;for(const k of ['commands','agents','skills']){for(const x of (p[k]||[])){if(!fs.existsSync(x.path)){console.error('Missing:',x.path);ok=false;}}};process.exit(ok?0:1);"
+          node -e "const p=JSON.parse(require('fs').readFileSync('.claude-plugin/plugin.json','utf8'));const fs=require('fs');let ok=true;for(const k of ['skills']){for(const x of (p[k]||[])){if(!fs.existsSync(x)){console.error('Missing:',x);ok=false;}}};process.exit(ok?0:1);"
         language: system
         files: ^\.claude-plugin/plugin\.json$
         pass_filenames: false
@@ -48,5 +53,5 @@ repos:
         name: Verify manifest is in sync with disk
         entry: node scripts/sync-manifest.js --check
         language: system
-        files: ^(\.claude/(commands|agents|skills|hooks)/.*|\.claude-plugin/plugin\.json|package\.json|README\.md|CLAUDE\.md)$
+        files: ^((commands|agents|skills|hooks)/.*|\.claude-plugin/plugin\.json|package\.json|README\.md|CLAUDE\.md)$
         pass_filenames: false
