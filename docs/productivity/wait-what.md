@@ -49,9 +49,9 @@ writes that file.
 **Why not just say "explain that again"?**
 
 Because that usually returns the same register at greater length, and length is
-rarely what was wrong. The named constraints change the register instead: the
-re-pitch is shorter than the message it replaces, which is the signal that it
-was rebuilt rather than restated.
+rarely what was wrong. The named constraints change the register instead —
+approved vocabulary, one idea per sentence, the project's own nouns — which
+forces the explanation to be rebuilt rather than restated.
 
 **Does it undo or change what the agent was doing?**
 
@@ -76,7 +76,6 @@ later that you approved something you never understood.
 
 ## It's working if
 
-- The re-pitch is shorter than what it replaces.
 - It opens with the context you were missing, not with an apology.
 - Each sentence carries one idea, in the active voice.
 - One name per concept, and those names match `CONTEXT.md`.

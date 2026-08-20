@@ -7,11 +7,11 @@ Markdown file that a fresh agent can read to carry the work on — what is in
 flight, what is next, and which skills the next agent should reach for.
 
 The file is written to your operating system's temporary directory, never into
-the workspace. That one placement decision is the skill: a handoff is a transit
-document with a short life, not an artifact you keep and maintain. The same rule
-runs through the content — specs, plans, ADRs, issues, commits and diffs are
-referenced by path or URL rather than copied, so the settled detail stays in the
-one place that owns it and the handoff carries only the live thread.
+the workspace: a handoff is a transit document with a short life, not an
+artifact you keep and maintain. The same rule runs through the content — specs,
+plans, ADRs, issues, commits and diffs are referenced by path or URL rather than
+copied, so the settled detail stays in the one place that owns it and the
+handoff carries only the live thread.
 
 ## When to reach for it
 
@@ -30,9 +30,8 @@ nothing behind you is worth keeping.
 
 | Goes in | Stays out |
 | --- | --- |
-| The state of the work in flight and why | Anything already written down elsewhere |
-| What the next agent should do first | Narration of how the session got here |
-| A suggested-skills section naming what to call | Keys, tokens, passwords, personal data |
+| The state of the work in flight, and why | Narration of how the session got here |
+| What the next agent should do first | Keys, tokens, passwords, personal data |
 
 The suggested-skills section is the part most easily skipped and the part that
 saves the most: a fresh agent has no memory of the routine you settled into, so
@@ -52,8 +51,7 @@ The file is not a better summary; it is a portable one.
 
 Point the new session at the path and tell it to read the file first. Point,
 don't paste — a summary shoved into a shell argument gets mangled by backticks
-and `$(...)`, and the usual result is silent truncation rather than an error, so
-the next agent starts from a quietly incomplete brief.
+and `$(...)`, which your shell expands before the agent ever sees them.
 
 **Where did the file go, and will it still be there tomorrow?**
 
@@ -96,6 +94,4 @@ is a `CLAUDE.md` problem wearing a handoff costume.
 - The fresh agent starts working instead of asking you to re-explain the setup.
 - The suggested-skills section names the skill you would have reached for
   yourself.
-- In the parallel case, your original session is untouched when you return to
-  it.
 - Nothing in the file is a credential.

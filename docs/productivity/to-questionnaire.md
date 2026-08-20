@@ -48,12 +48,8 @@ gives a deadline and a rough effort estimate.
 ## What a good question looks like
 
 Ordered most-important-first, because async means you may only get one pass and
-the last third may never be reached. Grouped under `##` themes once there are
-more than a handful. One idea per question — a compound question gets a compound
-answer that resolves neither half — with a blockquote stub directly beneath for
-the reply to land in, and a single *why this matters* line only where the
-question could be misread or would otherwise draw a throwaway answer. The
-document ends on a catch-all: anything we didn't ask that we should have.
+the last third may never be reached. One idea per question — a compound question
+gets a compound answer that resolves neither half.
 
 ## Common questions
 

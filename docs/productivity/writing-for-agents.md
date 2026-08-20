@@ -11,9 +11,9 @@ producing the same output. That reframes every editing decision, because the
 test for a line stops being "is this clear?" and becomes "does this change
 behaviour versus what the model already does by default?" A sentence that reads
 well and instructs the model to do what it was going to do anyway is a no-op:
-it costs context on every turn and buys nothing. Most of this skill is the set
-of levers that survive that test, and the habits of pruning that find the lines
-that don't.
+it costs context on every turn and buys nothing. The skill is the full set of
+levers that survive that test plus the pruning habits that find the lines that
+don't; this page carries the ones that pay off soonest.
 
 ## When to reach for it
 
@@ -37,9 +37,8 @@ Every document, and every pointer to one, spends one of two budgets:
   line in `CLAUDE.md`, a model-invoked skill's description. It spends tokens and
   attention on every single turn, whether or not it ever fires.
 - **Cognitive load** — the cost on you: knowing which documents exist and when
-  to reach for each. This one is not to be minimised. It is the price of human
-  agency, and the call is where to spend it — on the decisions where your
-  judgement matters — and where to remove it.
+  to reach for each. Not a thing to minimise — it is the price of human agency,
+  so spend it where your judgement matters and remove it where it doesn't.
 
 Material behind a pointer escapes context load for the price of the pointer's
 own line. Material with no pointer at all rides entirely on you. When
@@ -62,27 +61,28 @@ on, ranked by how immediately the agent needs it:
 
 **Progressive disclosure** is the move down that ladder, and branching is the
 cleanest test for it: inline what every branch needs, push behind a pointer what
-only some branches reach. Get it wrong in either direction and it hurts — push
-too little and the top bloats, push too much and you have hidden material the
-agent needed. When a document has steps, undisclosed reference buries them and
-turns attending to them into a coin flip.
+only some branches reach. Push too little and the top bloats; push too much and
+you have hidden material the agent needed. When a document has steps,
+undisclosed reference buries them and turns attending to them into a coin flip.
 
-Two failure modes live beside this. **Sprawl** is a document simply too long
-even when every line is live: attention thins across the excess. And where the
-ladder decides how far down a piece sits, **co-location** decides what sits
-beside it — a concept's definition, rules, and caveats under one heading, so
-reading one part brings its neighbours along.
+Two failure modes sit beside this. **Sprawl** is a document simply too long even
+when every line is live — attention thins across the excess. **Co-location** is
+the within-file companion: a concept's definition, rules and caveats under one
+heading, so reading one part brings its neighbours along.
 
-## The levers that change how it runs
+## Three levers that change how it runs
 
 **Completion criteria.** Every step ends on a condition that tells the agent it
 is done, and two properties of that condition do the work. *Clarity* — can it
-tell done from not-done? A fuzzy bound invites premature completion, the agent's
-attention sliding toward being finished while visible later steps pull it
-forward. *Demand* — how much the condition requires. "Every modified model
-accounted for" forces digging that "produce a change list" does not, and demand
-is not step-bound: "every rule applied" holds a flat body of reference to the
-same bar.
+tell done from not-done? A fuzzy bound invites premature completion, attention
+sliding toward being finished while the visible later steps pull it forward.
+Sharpen the bound first; only if it is irreducibly fuzzy *and* you observe the
+rush, split the sequence to hide those later steps — and hiding works only
+across a real context boundary such as a hand-off or a subagent dispatch, since
+an inline call leaves them in context and clears nothing. *Demand* — how much
+the condition requires. "Every modified model accounted for" forces digging that
+"produce a change list" does not, and demand is not step-bound: "every rule
+applied" holds a flat body of reference to the same bar.
 
 **Leading words.** A leading word is a compact concept the model already holds
 from pretraining — *lesson*, *fog of war*, *tracer bullets* — repeated as a
