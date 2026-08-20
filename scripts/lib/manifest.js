@@ -100,12 +100,25 @@ function toPluginPath(repoRoot, filePath, { stripSkillFile = false } = {}) {
   if (stripSkillFile) rel = rel.replace(/\/SKILL\.md$/, '')
   return './' + rel
 }
+// Claude Code only honours directory-path manifest entries: `skills` entries
+// (./skills/<bucket>/<name>, a directory) resolve; `commands`/`agents`
+// entries (./commands/<name>.md, ./agents/<name>.md — file paths) are
+// silently ignored whether declared or not, verified empirically against
+// CLI 2.1.237 (`claude plugin details` reports the true installed count for
+// skills but 0 for an explicitly-declared agents array, matching auto-
+// discovery once the array is removed). So plugin.json carries `skills`
+// only; `commands` and `agents` are left to convention-based auto-discovery
+// from the (flat) `commands/` and `agents/` directories at the plugin root.
+// The `commands`/`agents` params are still accepted here (and still scanned
+// by sync-manifest.js) because the README/CLAUDE.md AUTOGEN tables and the
+// count line need them — only plugin.json's own serialization of the two
+// arrays goes away.
 function buildPluginJson({ base, version, commands, agents, skills, repoRoot }) {
+  void commands
+  void agents
   return {
     ...base,
     version,
-    commands: commands.map(i => toPluginPath(repoRoot, i.path)),
-    agents: agents.map(i => toPluginPath(repoRoot, i.path)),
     skills: skills.map(i => toPluginPath(repoRoot, i.path, { stripSkillFile: true })),
   }
 }

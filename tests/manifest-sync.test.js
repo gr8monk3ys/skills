@@ -174,7 +174,17 @@ test('renderTable escapes pipe characters in descriptions', () => {
   assert.match(out, /a \\\| b/)
 })
 
-test('buildPluginJson assembles a manifest with arrays and preserves mcpServers', () => {
+test('buildPluginJson assembles a manifest with a skills array, preserves mcpServers, and omits commands/agents', () => {
+  // Claude Code only honours directory-path manifest entries: `skills`
+  // (a directory) resolves; `commands`/`agents` (file paths) are silently
+  // ignored whether declared or not — verified empirically against CLI
+  // 2.1.237 (`claude plugin details` reported the true count for skills but
+  // 0 for an explicitly-declared `agents` array of file paths, and matched
+  // auto-discovery once the array was removed). commands/agents are still
+  // passed in (sync-manifest.js needs them for the README/CLAUDE.md AUTOGEN
+  // tables and counts) but must not appear in plugin.json's own output —
+  // this is the exact thing that silently breaks the install again if
+  // someone "helpfully" re-adds them.
   const inputs = {
     base: {
       name: 'lorenzos-claude-code',
@@ -184,7 +194,7 @@ test('buildPluginJson assembles a manifest with arrays and preserves mcpServers'
     },
     version: '4.0.0',
     commands: [
-      { name: 'api-new', description: 'Create API', path: '/abs/commands/api/api-new.md' },
+      { name: 'api-new', description: 'Create API', path: '/abs/commands/api-new.md' },
     ],
     agents: [
       { name: 'code-reviewer', description: 'Reviews', path: '/abs/agents/code-reviewer.md' },
@@ -197,12 +207,11 @@ test('buildPluginJson assembles a manifest with arrays and preserves mcpServers'
   const out = manifest.buildPluginJson(inputs)
   assert.equal(out.name, 'lorenzos-claude-code')
   assert.equal(out.version, '4.0.0')
-  assert.equal(out.commands.length, 1)
-  assert.deepEqual(out.commands, ['./commands/api/api-new.md'])
-  assert.deepEqual(out.agents, ['./agents/code-reviewer.md'])
   assert.deepEqual(out.skills, ['./skills/engineering/api-development'])
   assert.deepEqual(out.mcpServers, { context7: { command: 'npx', args: [] } })
   assert.deepEqual(out.profiles, { minimal: '.claude/profiles/mcp-minimal.json' })
+  assert.ok(!('commands' in out), 'plugin.json must not carry a commands array — Claude Code ignores it and it silently breaks command discovery')
+  assert.ok(!('agents' in out), 'plugin.json must not carry an agents array — Claude Code ignores it (proven: reported 0 of 6 real agents)')
 })
 
 test('scanSkills returns only promoted-bucket skills, reading SKILL.md only', () => {
@@ -256,18 +265,17 @@ test('toPluginPath strips the SKILL.md suffix for skills', () => {
   assert.equal(p, './skills/engineering/wizard')
 })
 
-test('buildPluginJson emits path strings, not objects', () => {
+test('buildPluginJson emits skills as path strings and carries no commands/agents keys at all', () => {
   const next = manifest.buildPluginJson({
     base: { name: 'p' },
     version: '1.0.0',
-    commands: [{ name: 'c', description: 'd', path: '/repo/commands/api/c.md' }],
+    commands: [{ name: 'c', description: 'd', path: '/repo/commands/c.md' }],
     agents: [{ name: 'a', description: 'd', path: '/repo/agents/a.md' }],
     skills: [{ name: 's', description: 'd', path: '/repo/skills/engineering/s/SKILL.md' }],
     repoRoot: '/repo',
   })
-  assert.deepEqual(next.commands, ['./commands/api/c.md'])
-  assert.deepEqual(next.agents, ['./agents/a.md'])
   assert.deepEqual(next.skills, ['./skills/engineering/s'])
+  assert.deepEqual(Object.keys(next).sort(), ['name', 'skills', 'version'])
 })
 
 test('updateMarketplaceJson rewrites the count prefix and leaves no features block', () => {

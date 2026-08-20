@@ -57,33 +57,6 @@
     }
   },
   "version": "4.1.0",
-  "commands": [
-    "./commands/nextjs/action-new.md",
-    "./commands/api/api-new.md",
-    "./commands/api/api-test.md",
-    "./commands/workflow/automerge.md",
-    "./commands/workflow/babysit.md",
-    "./commands/ui/component-new.md",
-    "./commands/devops/deploy.md",
-    "./commands/supabase/edge-function-new.md",
-    "./commands/workflow/fixissue.md",
-    "./commands/generation/hook-new.md",
-    "./commands/quality/lint.md",
-    "./commands/ui/page-new.md",
-    "./commands/quality/review.md",
-    "./commands/supabase/rls-new.md",
-    "./commands/testing/test-new.md",
-    "./commands/supabase/types-gen.md",
-    "./commands/testing/verify.md"
-  ],
-  "agents": [
-    "./agents/backend-architect.md",
-    "./agents/build-error-resolver.md",
-    "./agents/code-reviewer.md",
-    "./agents/devops-engineer.md",
-    "./agents/frontend-architect.md",
-    "./agents/test-strategist.md"
-  ],
   "skills": [
     "./skills/engineering/api-development",
     "./skills/engineering/ask-lorenzo",
