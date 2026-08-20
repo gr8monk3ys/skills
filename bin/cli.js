@@ -249,6 +249,35 @@ function uninstall() {
 }
 
 /**
+ * Count installed units for a component's health check. "skills" installs
+ * flat under ~/.claude/skills/<name>/ (see install() above), so counting
+ * every .md/.json/.js/.sh file recursively also counts each skill's support
+ * files — a real install reports "20 files found" against an expectation of
+ * 14. Count actual skills (directories containing SKILL.md) instead; other
+ * components keep the recursive file count.
+ */
+function countInstalledUnits(componentPath, name) {
+  if (name === "skills") {
+    return fs
+      .readdirSync(componentPath, { withFileTypes: true })
+      .filter(
+        (entry) =>
+          entry.isDirectory() &&
+          fs.existsSync(path.join(componentPath, entry.name, "SKILL.md")),
+      ).length;
+  }
+  return fs
+    .readdirSync(componentPath, { recursive: true })
+    .filter(
+      (f) =>
+        f.endsWith(".md") ||
+        f.endsWith(".json") ||
+        f.endsWith(".js") ||
+        f.endsWith(".sh"),
+    ).length;
+}
+
+/**
  * Verify installation and check dependencies
  */
 function doctor() {
@@ -284,21 +313,13 @@ function doctor() {
   for (const component of components) {
     const componentPath = path.join(CLAUDE_DIR, component.name);
     if (fs.existsSync(componentPath)) {
-      const files = fs
-        .readdirSync(componentPath, { recursive: true })
-        .filter(
-          (f) =>
-            f.endsWith(".md") ||
-            f.endsWith(".json") ||
-            f.endsWith(".js") ||
-            f.endsWith(".sh"),
-        );
+      const count = countInstalledUnits(componentPath, component.name);
 
-      if (files.length >= component.expected * 0.5) {
-        success(`${component.name}: ${files.length} files found`);
+      if (count >= component.expected * 0.5) {
+        success(`${component.name}: ${count} files found`);
       } else {
         warn(
-          `${component.name}: Only ${files.length} files (expected ~${component.expected})`,
+          `${component.name}: Only ${count} files (expected ~${component.expected})`,
         );
       }
     } else {
