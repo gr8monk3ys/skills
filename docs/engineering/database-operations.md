@@ -23,11 +23,13 @@ threshold. A path does it comfortably — "update `prisma/schema.prisma`" scores
 *migration* by itself scores 5, which is a suggestion rather than an
 activation, and "add an index" doesn't reach even that.
 
-The gap worth knowing is RLS. Despite being this skill's central rule, *RLS*
-appears in none of its keywords, patterns, or intents, so "add an RLS policy to
-the posts table in Supabase" scores 4 — below the suggestion threshold, let
-alone activation. Type `/database-operations` for policy work, and for anything
-else the hook won't score, like reviewing indexes on a schema you haven't named.
+Policy work scores too: "add an RLS policy to the posts table in Supabase" is
+19, and the bare phrasings "write a row level security policy" and "enable RLS
+on the users table" are 11 each. That was a gap until recently — *RLS* appeared
+in none of the rule's keywords, patterns, or intents, so policy prompts scored 4
+and the skill never loaded for the thing its own Security section calls
+non-negotiable. Type `/database-operations` for anything the hook still won't
+score, like reviewing indexes on a schema you haven't named.
 
 ## What it makes the agent good at
 

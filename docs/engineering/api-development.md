@@ -33,7 +33,7 @@ The bar it applies to a route handler:
 | Concern | The default it enforces |
 | --- | --- |
 | Input | A Zod schema at the route entry point, before anything else runs |
-| Output | `{ data, meta? }` on success, `{ error: { code, message, details? } }` on failure |
+| Output | `{ data, success: true, meta? }` on success, `{ error, details?, success: false }` on failure |
 | Types | Request and response typed; `any` is not available |
 | Auth | JWT or session via middleware, RBAC where roles exist, API keys for machine callers |
 | Rate limiting | Upstash Redis, sliding or fixed window, keyed by IP or user, degrading gracefully |
@@ -80,15 +80,16 @@ the client calling it is [frontend-development](./frontend-development.md).
 
 ## Common questions
 
-**Which response format actually wins — this one or the repo's?**
+**Which response format actually wins?**
 
-They disagree, and it's worth knowing before you cite either. The skill
-specifies `{ data, meta? }` and `{ error: { code, message, details? } }`, while
-this repo's own `CLAUDE.md` and `.claude/rules/PROJECT-RULES.md` specify
-`{ data, success: true }` and `{ error, success: false }`. This page documents
-the skill, because that is what the skill applies. If you are working in a
-codebase, the answer is whichever shape it already uses — consistency is the
-whole value, and the worst outcome is a codebase containing both.
+One shape, everywhere: `{ data, success: true }` and
+`{ error, details?, success: false }`. It is what `/api-new` and `/action-new`
+generate, what `CLAUDE.md` and `.claude/rules/PROJECT-RULES.md` require, and what
+this skill now applies to routes you write by hand. The skill used to specify a
+nested `{ error: { code, message } }` instead, which meant a generated route and
+a hand-written one could disagree inside the same codebase; that was a defect and
+is fixed. If you are working in an existing codebase that uses something else,
+match the codebase — the value is one contract, not this particular one.
 
 **I'm not on Next.js App Router — is any of it useful?**
 
