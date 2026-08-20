@@ -29,7 +29,7 @@ Once the GitHub repository is created, run these commands:
 cd ~/Documents/GitHub/lorenzos-claude-code
 
 # Add the GitHub remote
-git remote add origin https://github.com/gr8monk3ys/lorenzos-claude-code.git
+git remote add origin https://github.com/gr8monk3ys/skills.git
 
 # Push your code
 git push -u origin main
@@ -46,7 +46,7 @@ Test that your plugin can be installed:
 
 ```bash
 # Install from your GitHub repo
-/plugin install gr8monk3ys/lorenzos-claude-code
+/plugin install gr8monk3ys/skills
 
 # Verify commands are available
 /code-explain
@@ -70,7 +70,7 @@ Your README already includes your GitHub username `gr8monk3ys`, so users can cop
 Share this command with others:
 
 ```bash
-/plugin install gr8monk3ys/lorenzos-claude-code
+/plugin install gr8monk3ys/skills
 ```
 
 ### Option B: Submit to Community Marketplaces
@@ -91,7 +91,7 @@ Share this command with others:
 ```json
 {
   "name": "lorenzos-claude-code",
-  "source": "gr8monk3ys/lorenzos-claude-code",
+  "source": "gr8monk3ys/skills",
   "description": "Personal Claude Code configuration with 14 productivity commands and 11 specialized AI agents for modern web development",
   "version": "1.0.0",
   "author": "Lorenzo",
@@ -115,7 +115,7 @@ Example post:
 14 slash commands + 11 specialized AI agents for productive web development
 
 Install with:
-/plugin install gr8monk3ys/lorenzos-claude-code
+/plugin install gr8monk3ys/skills
 
 Features:
 ✅ API scaffolding (/api-new)
@@ -127,7 +127,7 @@ Features:
 
 Perfect for Next.js, React, TypeScript, and Supabase projects!
 
-GitHub: https://github.com/gr8monk3ys/lorenzos-claude-code
+GitHub: https://github.com/gr8monk3ys/skills
 ```
 
 ## Step 5: Maintain Your Plugin
@@ -196,7 +196,7 @@ Check:
 
 For major versions, create GitHub releases:
 
-1. Go to your repo: <https://github.com/gr8monk3ys/lorenzos-claude-code>
+1. Go to your repo: <https://github.com/gr8monk3ys/skills>
 2. Click "Releases" → "Create a new release"
 3. Tag version: `v1.0.0`
 4. Release title: `v1.0.0 - Initial Release`
@@ -206,7 +206,7 @@ For major versions, create GitHub releases:
 Users can install specific versions:
 
 ```bash
-/plugin install gr8monk3ys/lorenzos-claude-code@v1.0.0
+/plugin install gr8monk3ys/skills@v1.0.0
 ```
 
 ## Success Metrics

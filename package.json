@@ -23,12 +23,12 @@
   "license": "GPL-3.0",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/gr8monk3ys/lorenzos-claude-code.git"
+    "url": "git+https://github.com/gr8monk3ys/skills.git"
   },
   "bugs": {
-    "url": "https://github.com/gr8monk3ys/lorenzos-claude-code/issues"
+    "url": "https://github.com/gr8monk3ys/skills/issues"
   },
-  "homepage": "https://github.com/gr8monk3ys/lorenzos-claude-code#readme",
+  "homepage": "https://github.com/gr8monk3ys/skills#readme",
   "main": "scripts/install.js",
   "bin": {
     "lorenzo-claude": "./bin/cli.js",
@@ -40,7 +40,8 @@
     ".claude/",
     ".claude-plugin/",
     "README.md",
-    "LICENSE"
+    "LICENSE",
+    "LICENSES/"
   ],
   "engines": {
     "node": ">=18.0.0"

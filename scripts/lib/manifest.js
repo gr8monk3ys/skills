@@ -3,6 +3,22 @@
 const fs = require('node:fs')
 const path = require('node:path')
 
+// Single source of truth for which skill buckets ship in plugin.json, the
+// README/CLAUDE.md AUTOGEN tables, and `lcc install`. sync-manifest.js,
+// bin/cli.js, and tests/run-all.js all import this instead of hardcoding
+// their own copy of the list.
+const PROMOTED_BUCKETS = ['engineering', 'productivity']
+
+function unquote(value) {
+  if (value.length >= 2) {
+    const first = value[0]
+    const last = value[value.length - 1]
+    if ((first === '"' && last === '"') || (first === "'" && last === "'")) {
+      return value.slice(1, -1)
+    }
+  }
+  return value
+}
 function parseFrontmatter(content) {
   const match = content.match(/^---\r?\n([\s\S]*?)\r?\n---/)
   if (!match) {
@@ -25,7 +41,7 @@ function parseFrontmatter(content) {
         if (stripped) { value = stripped; break }
       }
     }
-    out[key] = value.trim()
+    out[key] = unquote(value.trim())
   }
   return out
 }
@@ -117,5 +133,75 @@ function renderTable(rows) {
   }
   return lines.join('\n')
 }
+function scanSkills(dir, buckets) {
+  const out = []
+  // Best-effort display prefix (e.g. ".claude/skills") for error messages.
+  // Purely cosmetic — falls back gracefully for shorter fixture paths.
+  const displayRoot = dir.split(path.sep).slice(-2).join('/')
+  for (const bucket of buckets) {
+    const bucketDir = path.join(dir, bucket)
+    if (!fs.existsSync(bucketDir)) continue
+    for (const entry of fs.readdirSync(bucketDir, { withFileTypes: true })) {
+      if (entry.isFile()) {
+        // A directory without SKILL.md is a legitimate support dir and is
+        // skipped silently below. A *flat* .md file dropped directly into a
+        // bucket is not — it would otherwise vanish with no message anywhere.
+        if (entry.name.endsWith('.md') && entry.name !== 'README.md') {
+          const skillName = path.basename(entry.name, '.md')
+          const found = `${displayRoot}/${bucket}/${entry.name}`
+          const expected = `${displayRoot}/${bucket}/${skillName}/SKILL.md`
+          throw new Error(
+            `Skill files live at <bucket>/<name>/SKILL.md — found a flat file: ${found} (expected ${expected})`
+          )
+        }
+        continue
+      }
+      if (!entry.isDirectory()) continue
+      const skillFile = path.join(bucketDir, entry.name, 'SKILL.md')
+      if (!fs.existsSync(skillFile)) continue
+      const fm = parseFrontmatter(fs.readFileSync(skillFile, 'utf8'))
+      out.push({
+        name: fm.name || entry.name,
+        description: fm.description || '',
+        path: skillFile,
+        bucket,
+      })
+    }
+  }
+  out.sort((a, b) => a.name.localeCompare(b.name))
+  return out
+}
+function updateMarketplaceJson(parsed, counts) {
+  const { commands, agents, skills, hooks, monitors } = counts
+  const next = JSON.parse(JSON.stringify(parsed))
+  const countPrefix = `${commands} commands, ${agents} agents, ${skills} skills, ${hooks} hooks, ${monitors} monitors`
+  for (const plugin of Array.isArray(next.plugins) ? next.plugins : []) {
+    if (plugin.features && typeof plugin.features === 'object') {
+      if ('commands' in plugin.features) plugin.features.commands = commands
+      if ('agents' in plugin.features) plugin.features.agents = agents
+      if ('skills' in plugin.features) plugin.features.skills = skills
+      if ('hooks' in plugin.features) plugin.features.hooks = hooks
+      if ('monitors' in plugin.features) plugin.features.monitors = monitors
+    }
+    if (typeof plugin.description === 'string') {
+      plugin.description = plugin.description.replace(
+        /^\d+ commands, \d+ agents, \d+ skills, \d+ hooks, \d+ monitors\b/,
+        countPrefix
+      )
+    }
+  }
+  return next
+}
 
-module.exports = { parseFrontmatter, scanCategory, scanHooks, scanMonitors, buildPluginJson, replaceMarker, renderTable }
+module.exports = {
+  PROMOTED_BUCKETS,
+  parseFrontmatter,
+  scanCategory,
+  scanHooks,
+  scanMonitors,
+  buildPluginJson,
+  replaceMarker,
+  renderTable,
+  scanSkills,
+  updateMarketplaceJson,
+}

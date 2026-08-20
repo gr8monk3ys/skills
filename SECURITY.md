@@ -41,4 +41,4 @@ When we receive a security bug report, we will:
 3. Prepare fixes for all releases still under maintenance
 4. Release new security fix versions as soon as possible
 
-For private disclosure, use GitHub Security Advisories: [https://github.com/gr8monk3ys/lorenzos-claude-code/security/advisories](https://github.com/gr8monk3ys/lorenzos-claude-code/security/advisories).
+For private disclosure, use GitHub Security Advisories: [https://github.com/gr8monk3ys/skills/security/advisories](https://github.com/gr8monk3ys/skills/security/advisories).

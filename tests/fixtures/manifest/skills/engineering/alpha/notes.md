@@ -1,0 +1,1 @@
+Support file without frontmatter.

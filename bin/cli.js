@@ -14,6 +14,7 @@
 const fs = require("fs");
 const path = require("path");
 const os = require("os");
+const { PROMOTED_BUCKETS } = require("../scripts/lib/manifest");
 
 const CLAUDE_DIR = path.join(os.homedir(), ".claude");
 const PLUGIN_SOURCE = path.join(__dirname, "..");
@@ -149,7 +150,6 @@ function install() {
   const componentsToCopy = [
     { name: "commands", src: path.join(sourceClaude, "commands") },
     { name: "agents", src: path.join(sourceClaude, "agents") },
-    { name: "skills", src: path.join(sourceClaude, "skills") },
     { name: "hooks", src: path.join(sourceClaude, "hooks") },
     { name: "rules", src: path.join(sourceClaude, "rules") },
     { name: "memory", src: path.join(sourceClaude, "memory") },
@@ -161,6 +161,20 @@ function install() {
       copyDirSync(component.src, path.join(CLAUDE_DIR, component.name));
       success(`Installed ${component.name}`);
     }
+  }
+
+  // Skills ship from promoted buckets only, flattened to ~/.claude/skills/<name>/
+  for (const bucket of PROMOTED_BUCKETS) {
+    const bucketDir = path.join(sourceClaude, "skills", bucket);
+    if (!fs.existsSync(bucketDir)) continue;
+    for (const entry of fs.readdirSync(bucketDir, { withFileTypes: true })) {
+      if (!entry.isDirectory()) continue;
+      copyDirSync(
+        path.join(bucketDir, entry.name),
+        path.join(CLAUDE_DIR, "skills", entry.name),
+      );
+    }
+    success(`Installed skills (${bucket})`);
   }
 
   // Copy plugin manifest
@@ -235,6 +249,35 @@ function uninstall() {
 }
 
 /**
+ * Count installed units for a component's health check. "skills" installs
+ * flat under ~/.claude/skills/<name>/ (see install() above), so counting
+ * every .md/.json/.js/.sh file recursively also counts each skill's support
+ * files — a real install reports "20 files found" against an expectation of
+ * 14. Count actual skills (directories containing SKILL.md) instead; other
+ * components keep the recursive file count.
+ */
+function countInstalledUnits(componentPath, name) {
+  if (name === "skills") {
+    return fs
+      .readdirSync(componentPath, { withFileTypes: true })
+      .filter(
+        (entry) =>
+          entry.isDirectory() &&
+          fs.existsSync(path.join(componentPath, entry.name, "SKILL.md")),
+      ).length;
+  }
+  return fs
+    .readdirSync(componentPath, { recursive: true })
+    .filter(
+      (f) =>
+        f.endsWith(".md") ||
+        f.endsWith(".json") ||
+        f.endsWith(".js") ||
+        f.endsWith(".sh"),
+    ).length;
+}
+
+/**
  * Verify installation and check dependencies
  */
 function doctor() {
@@ -261,30 +304,22 @@ function doctor() {
 
   // Check components
   const components = [
-    { name: "commands", expected: 14 },
+    { name: "commands", expected: 17 },
     { name: "agents", expected: 6 },
-    { name: "skills", expected: 3 },
+    { name: "skills", expected: 14 },
     { name: "hooks", expected: 15 }, // hooks.json + 14 hook scripts
   ];
 
   for (const component of components) {
     const componentPath = path.join(CLAUDE_DIR, component.name);
     if (fs.existsSync(componentPath)) {
-      const files = fs
-        .readdirSync(componentPath, { recursive: true })
-        .filter(
-          (f) =>
-            f.endsWith(".md") ||
-            f.endsWith(".json") ||
-            f.endsWith(".js") ||
-            f.endsWith(".sh"),
-        );
+      const count = countInstalledUnits(componentPath, component.name);
 
-      if (files.length >= component.expected * 0.5) {
-        success(`${component.name}: ${files.length} files found`);
+      if (count >= component.expected * 0.5) {
+        success(`${component.name}: ${count} files found`);
       } else {
         warn(
-          `${component.name}: Only ${files.length} files (expected ~${component.expected})`,
+          `${component.name}: Only ${count} files (expected ~${component.expected})`,
         );
       }
     } else {

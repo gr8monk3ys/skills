@@ -44,6 +44,54 @@
       "patterns": ["\\bevery \\d+\\s*(s|m|h|d|min|hour)", "/loop\\b", "monitors\\.json", "run_in_background", "subscribe.*pr"],
       "directories": ["monitors/", ".claude/monitors/"],
       "intents": ["watch.*ci", "watch.*deploy", "babysit.*pr", "keep.*running", "run.*background", "check.*every", "monitor.*for", "poll.*until"]
+    },
+    {
+      "name": "wizard",
+      "priority": 0,
+      "keywords": ["credentials", "secrets", "provision", "dashboard", "onboarding", "setup wizard", "cutover", "migration"],
+      "patterns": ["\\.env\\b", "gh secret", "gh variable"],
+      "directories": [],
+      "intents": ["set.*up.*(secret|credential|env)", "walk.*through.*setup", "provision.*infra"]
+    },
+    {
+      "name": "resolving-merge-conflicts",
+      "priority": 0,
+      "keywords": ["merge conflict", "rebase conflict", "conflict markers", "ours", "theirs"],
+      "patterns": ["<<<<<<<", ">>>>>>>", "CONFLICT \\("],
+      "directories": [],
+      "intents": ["resolve.*conflict", "fix.*merge", "finish.*rebase"]
+    },
+    {
+      "name": "prototype",
+      "priority": 0,
+      "keywords": ["prototype", "throwaway", "mockup", "spike", "proof of concept", "poc"],
+      "patterns": [],
+      "directories": [],
+      "intents": ["prototype.*", "try.*variations", "compare.*designs", "answer.*design question"]
+    },
+    {
+      "name": "research",
+      "priority": 0,
+      "keywords": ["research", "investigate", "primary sources", "cited", "find out whether"],
+      "patterns": [],
+      "directories": [],
+      "intents": ["research.*", "investigate.*question", "compare.*(libraries|approaches|vendors)"]
+    },
+    {
+      "name": "domain-modeling",
+      "priority": 0,
+      "keywords": ["context.md", "glossary", "vocabulary", "domain model", "adr", "terminology", "jargon"],
+      "patterns": ["CONTEXT\\.md", "ADR-\\d+"],
+      "directories": [],
+      "intents": ["update.*context", "define.*term", "record.*decision", "write.*adr"]
+    },
+    {
+      "name": "writing-for-agents",
+      "priority": 0,
+      "keywords": ["skill.md", "claude.md", "agents.md", "write a skill", "agent docs"],
+      "patterns": ["SKILL\\.md", "CLAUDE\\.md", "AGENTS\\.md"],
+      "directories": [".claude/skills"],
+      "intents": ["write.*skill", "improve.*(claude|agents)\\.md", "document.*for.*agent"]
     }
   ]
 }

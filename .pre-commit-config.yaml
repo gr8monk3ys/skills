@@ -10,11 +10,16 @@ repos:
         files: \.(json)$
         # .vscode/ holds JSONC (with comments) which is not parseable as JSON
         exclude: ^\.vscode/
-      - id: pretty-format-json
-        args: [--autofix, --indent, "2"]
-        # Only marketplace.json — plugin.json is owned by sync-manifest
-        # which writes its own deterministic key order
-        files: ^\.claude-plugin/marketplace\.json$
+      # pretty-format-json removed: its files: regex matched only
+      # marketplace.json, and marketplace.json is now owned by sync-manifest
+      # (same reasoning that already excluded plugin.json here: "plugin.json
+      # is owned by sync-manifest which writes its own deterministic key
+      # order" — marketplace.json now has that same owner). With no other
+      # target left, re-scoping would exclude everything, so the hook is
+      # removed outright rather than kept pointed at nothing. This is not a
+      # loss of coverage: check-json above still validates JSON syntax, and
+      # formatting is guaranteed by the deterministic generator plus the
+      # sync-manifest-check drift gate below.
       - id: end-of-file-fixer
       - id: trailing-whitespace
         args: [--markdown-linebreak-ext=md]

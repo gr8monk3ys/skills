@@ -6,6 +6,7 @@
 
 const fs = require("fs");
 const path = require("path");
+const { PROMOTED_BUCKETS } = require("../scripts/lib/manifest");
 
 const colors = {
   reset: "\x1b[0m",
@@ -165,7 +166,19 @@ test("frontend-architect has code examples", () => {
 // Test: Skills
 console.log("\nSkills:");
 const skillsDir = path.join(__dirname, "..", ".claude", "skills");
-const skillFiles = fs.readdirSync(skillsDir).filter((f) => f.endsWith(".md"));
+const skillFiles = [];
+for (const bucket of PROMOTED_BUCKETS) {
+  const bucketDir = path.join(skillsDir, bucket);
+  if (fs.existsSync(bucketDir)) {
+    const subdirs = fs.readdirSync(bucketDir);
+    for (const subdir of subdirs) {
+      const skillFile = path.join(bucketDir, subdir, "SKILL.md");
+      if (fs.existsSync(skillFile)) {
+        skillFiles.push(skillFile);
+      }
+    }
+  }
+}
 
 test(`Found ${skillFiles.length} skill files`, () => {
   if (skillFiles.length < 3) {

@@ -12,7 +12,7 @@ npx create-next-app@latest my-app --typescript --tailwind --eslint --app --src-d
 cd my-app
 
 # 3. Install the plugin in Claude Code
-/plugin install gr8monk3ys/lorenzos-claude-code
+/plugin install gr8monk3ys/skills
 
 # 4. Start building with slash commands!
 ```
@@ -170,4 +170,4 @@ This plugin includes 6 MCP servers:
 
 - Check the [main README](../../README.md) for command reference
 - See [MCP-SERVERS.md](../../.claude-plugin/MCP-SERVERS.md) for server configuration
-- Report issues at <https://github.com/gr8monk3ys/lorenzos-claude-code/issues>
+- Report issues at <https://github.com/gr8monk3ys/skills/issues>
