@@ -5,6 +5,29 @@ All notable changes to Lorenzo's Claude Code plugin will be documented in this f
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 1.0.0 (2026-08-20)
+
+
+### Features
+
+* **agents:** add architecture, review, and testing subagents ([c9f43a0](https://github.com/gr8monk3ys/skills/commit/c9f43a0167c6c555b5338d8723a974e2dcc8d4bc))
+* bucket skill layout, 15 ported skills, ask-lorenzo router, CONTEXT.md ([#39](https://github.com/gr8monk3ys/skills/issues/39)) ([a687a7d](https://github.com/gr8monk3ys/skills/commit/a687a7d4b12a77547e0ca04ffd221bc49cb107a5))
+* **cli:** add install/update/doctor CLI and project detection ([3a07a04](https://github.com/gr8monk3ys/skills/commit/3a07a04af3177e88ebef42d8189e9803430fa637))
+* **commands:** add babysit, automerge, and fixissue workflow commands ([7a8ebf5](https://github.com/gr8monk3ys/skills/commit/7a8ebf569de9a662d7b2d1c70fc2676c4babfbad))
+* **commands:** add lint, review, test, verify, and deploy commands ([adc8844](https://github.com/gr8monk3ys/skills/commit/adc884402dc18a83160b0f8ae55b06c06a8e99ba))
+* **commands:** add Next.js, React, and API route scaffolders ([02721e4](https://github.com/gr8monk3ys/skills/commit/02721e448d77ac38b0e93fe5df6c659f3d0d9364))
+* **commands:** add Supabase types, RLS, and Edge Function scaffolders ([63c7519](https://github.com/gr8monk3ys/skills/commit/63c75197a2caea116a009a89a56b5d64a35da09f))
+* configure MCP servers and background monitors ([a7f10b1](https://github.com/gr8monk3ys/skills/commit/a7f10b17c7196a0f76a294c7132cb367b7f69535))
+* **hooks:** add lifecycle hooks for formatting, secret-blocking, and skill routing ([41e139f](https://github.com/gr8monk3ys/skills/commit/41e139f8eaac44d588ca2d22590e5145918375aa))
+* **plugin:** define plugin manifest and marketplace metadata ([f254167](https://github.com/gr8monk3ys/skills/commit/f2541677ee383388aa29caa98b8510138797633e))
+* **skills:** add API, frontend, database, and automation skills with routing rules ([7d1e79c](https://github.com/gr8monk3ys/skills/commit/7d1e79c4ef755b173a75b70a71ad9b35978ec31a))
+
+
+### Bug Fixes
+
+* make the plugin installable via /plugin install ([#40](https://github.com/gr8monk3ys/skills/issues/40)) ([8edf990](https://github.com/gr8monk3ys/skills/commit/8edf990613555496bfbef275c451f5f5b4688a42))
+* make the plugin's own standards agree with each other ([#42](https://github.com/gr8monk3ys/skills/issues/42)) ([7904186](https://github.com/gr8monk3ys/skills/commit/7904186589b8aef4e1380024724921b4c96fde3f))
+
 ## [4.1.0] - 2026-06-18
 
 Modernizes the plugin for mid-2026 Claude Code: current model IDs, background-automation
