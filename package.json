@@ -1,6 +1,6 @@
 {
   "name": "@gr8monk3ys/claude-code-plugin",
-  "version": "4.1.0",
+  "version": "1.0.0",
   "description": "Stack-focused Claude Code plugin for Next.js + React + Supabase. Scaffolds components, API routes, hooks, Supabase types, and Edge Functions. Composes with superpowers.",
   "keywords": [
     "claude-code",
