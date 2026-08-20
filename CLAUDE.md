@@ -115,6 +115,12 @@ installed user. `tests/run-all.js` and CI both fail on a nested file; do not
 
 `ask-lorenzo` is the router. When you add, rename, remove, or change the behaviour of a user-reachable command or promoted skill, re-read its SKILL.md and update the map — a router that lies is worse than none.
 
+Every promoted skill also has a docs page at `docs/<bucket>/<skill>.md`, written
+for the human choosing whether to reach for it. Adding, renaming, or changing a
+promoted skill means creating or re-syncing that page — see
+[.agents/writing-docs.md](.agents/writing-docs.md). `npm test` fails when pages
+and promoted skills disagree.
+
 `CONTEXT.md` holds this repo's shared vocabulary; use its terms and keep it current (the `domain-modeling` skill maintains it).
 
 ## Workflow
