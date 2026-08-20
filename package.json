@@ -40,7 +40,8 @@
     ".claude/",
     ".claude-plugin/",
     "README.md",
-    "LICENSE"
+    "LICENSE",
+    "LICENSES/"
   ],
   "engines": {
     "node": ">=18.0.0"
