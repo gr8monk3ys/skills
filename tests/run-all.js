@@ -202,6 +202,41 @@ test(`Found ${skillFiles.length} skill files`, () => {
   }
 });
 
+// Every promoted skill needs a human-facing docs page, and no non-promoted one
+// may have a stale page left behind. A missing page is a silent omission
+// otherwise — nothing else in the repo notices.
+test("every promoted skill has a docs page, and only those do", () => {
+  const repoRoot = path.join(__dirname, "..");
+  const expected = new Set();
+  for (const bucket of PROMOTED_BUCKETS) {
+    const bucketDir = path.join(repoRoot, "skills", bucket);
+    for (const entry of fs.readdirSync(bucketDir, { withFileTypes: true })) {
+      if (!entry.isDirectory()) continue;
+      if (!fs.existsSync(path.join(bucketDir, entry.name, "SKILL.md"))) continue;
+      expected.add(`${bucket}/${entry.name}`);
+    }
+  }
+
+  const found = new Set();
+  for (const bucket of PROMOTED_BUCKETS) {
+    const docsDir = path.join(repoRoot, "docs", bucket);
+    if (!fs.existsSync(docsDir)) continue;
+    for (const file of fs.readdirSync(docsDir)) {
+      if (file.endsWith(".md")) found.add(`${bucket}/${file.replace(/\.md$/, "")}`);
+    }
+  }
+
+  const missing = [...expected].filter((s) => !found.has(s)).sort();
+  const extra = [...found].filter((s) => !expected.has(s)).sort();
+  if (missing.length || extra.length) {
+    throw new Error(
+      `docs pages out of sync with promoted skills.\n` +
+        `  missing page: ${missing.join(", ") || "(none)"}\n` +
+        `  page with no promoted skill: ${extra.join(", ") || "(none)"}`,
+    );
+  }
+});
+
 // Test: Hooks
 console.log("\nHooks:");
 const hooksDir = path.join(__dirname, "..", "hooks");
