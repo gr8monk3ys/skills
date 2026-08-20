@@ -14,7 +14,7 @@
 const fs = require("fs");
 const path = require("path");
 const os = require("os");
-const { PROMOTED_BUCKETS } = require("../scripts/lib/manifest");
+const { PROMOTED_BUCKETS, ROOT_PRIMITIVES } = require("../scripts/lib/manifest");
 
 const CLAUDE_DIR = path.join(os.homedir(), ".claude");
 const PLUGIN_SOURCE = path.join(__dirname, "..");
@@ -147,10 +147,14 @@ function install() {
   // Copy plugin files
   info("Installing commands, agents, skills, and hooks...");
 
+  // Plugin primitives ship from the package root; the rest is this repo's own
+  // config under .claude/. ROOT_PRIMITIVES is the shared source of that split
+  // (skills are handled separately below, since they need bucket flattening).
   const componentsToCopy = [
-    { name: "commands", src: path.join(sourceClaude, "commands") },
-    { name: "agents", src: path.join(sourceClaude, "agents") },
-    { name: "hooks", src: path.join(sourceClaude, "hooks") },
+    ...ROOT_PRIMITIVES.filter((p) => p !== "skills").map((name) => ({
+      name,
+      src: path.join(PLUGIN_SOURCE, name),
+    })),
     { name: "rules", src: path.join(sourceClaude, "rules") },
     { name: "memory", src: path.join(sourceClaude, "memory") },
     { name: "profiles", src: path.join(sourceClaude, "profiles") },
@@ -165,7 +169,7 @@ function install() {
 
   // Skills ship from promoted buckets only, flattened to ~/.claude/skills/<name>/
   for (const bucket of PROMOTED_BUCKETS) {
-    const bucketDir = path.join(sourceClaude, "skills", bucket);
+    const bucketDir = path.join(PLUGIN_SOURCE, "skills", bucket);
     if (!fs.existsSync(bucketDir)) continue;
     for (const entry of fs.readdirSync(bucketDir, { withFileTypes: true })) {
       if (!entry.isDirectory()) continue;

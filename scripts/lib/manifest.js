@@ -9,6 +9,13 @@ const path = require('node:path')
 // their own copy of the list.
 const PROMOTED_BUCKETS = ['engineering', 'productivity']
 
+// The four Claude Code plugin primitives, which live at the REPO ROOT because
+// that is where Claude Code discovers them. Everything else the plugin carries
+// stays under `.claude/`, which is this repo's own configuration rather than
+// what ships. sync-manifest.js and bin/cli.js both import this so "where does a
+// primitive live" is answered once — the same reason PROMOTED_BUCKETS exists.
+const ROOT_PRIMITIVES = ['commands', 'agents', 'skills', 'hooks']
+
 function unquote(value) {
   if (value.length >= 2) {
     const first = value[0]
@@ -95,18 +102,26 @@ function scanMonitors(dir) {
   out.sort((a, b) => a.name.localeCompare(b.name))
   return out
 }
-function buildPluginJson({ base, version, commands, agents, skills, repoRoot }) {
-  const toEntry = item => ({
-    name: item.name,
-    path: path.relative(repoRoot, item.path).split(path.sep).join('/'),
-    description: item.description,
-  })
+function toPluginPath(repoRoot, skillFilePath) {
+  const rel = path.relative(repoRoot, skillFilePath).split(path.sep).join('/')
+  return './' + rel.replace(/\/SKILL\.md$/, '')
+}
+// Claude Code only honours directory-path manifest entries: `skills` entries
+// (./skills/<bucket>/<name>, a directory) resolve; `commands`/`agents`
+// entries (./commands/<name>.md, ./agents/<name>.md — file paths) are
+// silently ignored whether declared or not, verified empirically against
+// CLI 2.1.237 (`claude plugin details` reports the true installed count for
+// skills but 0 for an explicitly-declared agents array, matching auto-
+// discovery once the array is removed). So plugin.json carries `skills`
+// only; `commands` and `agents` are left to convention-based auto-discovery
+// from the (flat) `commands/` and `agents/` directories at the plugin root.
+// sync-manifest.js still scans those two — the AUTOGEN tables and the count
+// line are built from its own scan results, not from here.
+function buildPluginJson({ base, version, skills, repoRoot }) {
   return {
     ...base,
     version,
-    commands: commands.map(toEntry),
-    agents: agents.map(toEntry),
-    skills: skills.map(toEntry),
+    skills: skills.map(i => toPluginPath(repoRoot, i.path)),
   }
 }
 function replaceMarker(content, name, replacement) {
@@ -176,13 +191,6 @@ function updateMarketplaceJson(parsed, counts) {
   const next = JSON.parse(JSON.stringify(parsed))
   const countPrefix = `${commands} commands, ${agents} agents, ${skills} skills, ${hooks} hooks, ${monitors} monitors`
   for (const plugin of Array.isArray(next.plugins) ? next.plugins : []) {
-    if (plugin.features && typeof plugin.features === 'object') {
-      if ('commands' in plugin.features) plugin.features.commands = commands
-      if ('agents' in plugin.features) plugin.features.agents = agents
-      if ('skills' in plugin.features) plugin.features.skills = skills
-      if ('hooks' in plugin.features) plugin.features.hooks = hooks
-      if ('monitors' in plugin.features) plugin.features.monitors = monitors
-    }
     if (typeof plugin.description === 'string') {
       plugin.description = plugin.description.replace(
         /^\d+ commands, \d+ agents, \d+ skills, \d+ hooks, \d+ monitors\b/,
@@ -195,10 +203,12 @@ function updateMarketplaceJson(parsed, counts) {
 
 module.exports = {
   PROMOTED_BUCKETS,
+  ROOT_PRIMITIVES,
   parseFrontmatter,
   scanCategory,
   scanHooks,
   scanMonitors,
+  toPluginPath,
   buildPluginJson,
   replaceMarker,
   renderTable,

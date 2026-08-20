@@ -32,7 +32,7 @@ jobs:
           ERRORS=0
 
           # Check required directories
-          REQUIRED_DIRS=".claude/commands .claude/agents .claude/skills .claude/hooks .claude/docs"
+          REQUIRED_DIRS="commands agents skills hooks .claude/docs"
           for dir in $REQUIRED_DIRS; do
             if [ -d "$dir" ]; then
               COUNT=$(find "$dir" -type f | wc -l)
@@ -98,19 +98,21 @@ jobs:
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "## Command Categories" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "| Category | Count |" >> $GITHUB_STEP_SUMMARY
-          echo "|----------|-------|" >> $GITHUB_STEP_SUMMARY
+          # Commands are flat at the repo root (auto-discovery does not recurse),
+          # so there are no category directories to group by any more.
+          echo "| Component | Count |" >> $GITHUB_STEP_SUMMARY
+          echo "|-----------|-------|" >> $GITHUB_STEP_SUMMARY
 
-          TOTAL=0
-          for dir in .claude/commands/*/; do
-            if [ -d "$dir" ]; then
-              CATEGORY=$(basename "$dir")
-              COUNT=$(find "$dir" -name "*.md" -type f | wc -l)
-              TOTAL=$((TOTAL + COUNT))
-              echo "| $CATEGORY | $COUNT |" >> $GITHUB_STEP_SUMMARY
-            fi
-          done
+          COMMANDS=$(find commands -name "*.md" -type f | wc -l | tr -d ' ')
+          AGENTS=$(find agents -name "*.md" -type f | wc -l | tr -d ' ')
+          SKILLS=$(find skills -name "SKILL.md" -type f | wc -l | tr -d ' ')
+          HOOKS=$(find hooks -name "*.js" -type f | wc -l | tr -d ' ')
+          TOTAL=$((COMMANDS + AGENTS + SKILLS + HOOKS))
 
+          echo "| commands | $COMMANDS |" >> $GITHUB_STEP_SUMMARY
+          echo "| agents | $AGENTS |" >> $GITHUB_STEP_SUMMARY
+          echo "| skills | $SKILLS |" >> $GITHUB_STEP_SUMMARY
+          echo "| hooks | $HOOKS |" >> $GITHUB_STEP_SUMMARY
           echo "| **Total** | **$TOTAL** |" >> $GITHUB_STEP_SUMMARY
 
       - name: Check for common issues
@@ -122,7 +124,7 @@ jobs:
           ISSUES=0
 
           # Check for TODO comments in code
-          TODO_COUNT=$(grep -r "TODO" .claude/commands .claude/agents .claude/skills --include="*.md" 2>/dev/null | wc -l || echo "0")
+          TODO_COUNT=$(grep -r "TODO" commands agents skills --include="*.md" 2>/dev/null | wc -l || echo "0")
           if [ "$TODO_COUNT" -gt 0 ]; then
             echo "- ⚠️ Found $TODO_COUNT TODO comments" >> $GITHUB_STEP_SUMMARY
           else
@@ -130,7 +132,7 @@ jobs:
           fi
 
           # Check for empty files
-          EMPTY_COUNT=$(find .claude/commands .claude/agents .claude/skills -name "*.md" -empty 2>/dev/null | wc -l || echo "0")
+          EMPTY_COUNT=$(find commands agents skills -name "*.md" -empty 2>/dev/null | wc -l || echo "0")
           if [ "$EMPTY_COUNT" -gt 0 ]; then
             echo "- ⚠️ Found $EMPTY_COUNT empty files" >> $GITHUB_STEP_SUMMARY
             ISSUES=$((ISSUES + EMPTY_COUNT))
@@ -139,7 +141,7 @@ jobs:
           fi
 
           # Check for duplicate command names
-          DUPES=$(find .claude/commands -name "*.md" -type f -exec basename {} .md \; | sort | uniq -d | wc -l || echo "0")
+          DUPES=$(find commands -name "*.md" -type f -exec basename {} .md \; | sort | uniq -d | wc -l || echo "0")
           if [ "$DUPES" -gt 0 ]; then
             echo "- ⚠️ Found $DUPES duplicate command names" >> $GITHUB_STEP_SUMMARY
             ISSUES=$((ISSUES + DUPES))

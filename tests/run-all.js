@@ -98,7 +98,7 @@ test("marketplace.json is valid JSON", () => {
 
 // Test: Commands
 console.log("\nCommands:");
-const commandsDir = path.join(__dirname, "..", ".claude", "commands");
+const commandsDir = path.join(__dirname, "..", "commands");
 const commandFiles = [];
 
 function findMarkdownFiles(dir) {
@@ -132,9 +132,25 @@ test("All commands have frontmatter", () => {
   }
 });
 
+// Claude Code auto-discovers commands and agents from the plugin root without
+// recursing. A nested file is counted here and listed in the README while being
+// invisible to every installed user, so the layout itself has to be asserted.
+test("commands/ and agents/ are flat (auto-discovery does not recurse)", () => {
+  for (const dir of [commandsDir, path.join(__dirname, "..", "agents")]) {
+    for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+      if (entry.isDirectory()) {
+        throw new Error(
+          `${path.basename(dir)}/${entry.name}/ is a subdirectory; ` +
+            `commands and agents must be flat or installed users never see them`,
+        );
+      }
+    }
+  }
+});
+
 // Test: Agents
 console.log("\nAgents:");
-const agentsDir = path.join(__dirname, "..", ".claude", "agents");
+const agentsDir = path.join(__dirname, "..", "agents");
 const agentFiles = fs.readdirSync(agentsDir).filter((f) => f.endsWith(".md"));
 
 test(`Found ${agentFiles.length} agent files`, () => {
@@ -165,7 +181,7 @@ test("frontend-architect has code examples", () => {
 
 // Test: Skills
 console.log("\nSkills:");
-const skillsDir = path.join(__dirname, "..", ".claude", "skills");
+const skillsDir = path.join(__dirname, "..", "skills");
 const skillFiles = [];
 for (const bucket of PROMOTED_BUCKETS) {
   const bucketDir = path.join(skillsDir, bucket);
@@ -188,7 +204,7 @@ test(`Found ${skillFiles.length} skill files`, () => {
 
 // Test: Hooks
 console.log("\nHooks:");
-const hooksDir = path.join(__dirname, "..", ".claude", "hooks");
+const hooksDir = path.join(__dirname, "..", "hooks");
 
 test("hooks.json exists", () => {
   assertExists(path.join(hooksDir, "hooks.json"));

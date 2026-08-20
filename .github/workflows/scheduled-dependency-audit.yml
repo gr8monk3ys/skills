@@ -91,7 +91,7 @@ jobs:
           echo "" >> $GITHUB_STEP_SUMMARY
 
           ISSUES=0
-          for hook in .claude/hooks/*.sh; do
+          for hook in hooks/*.js; do
             if [ -f "$hook" ]; then
               if [ ! -x "$hook" ]; then
                 echo "::warning file=$hook::Hook script is not executable"

@@ -31,10 +31,10 @@ jobs:
       - name: Count components
         id: count
         run: |
-          COMMANDS=$(find .claude/commands -name "*.md" -type f | wc -l)
-          AGENTS=$(find .claude/agents -name "*.md" -type f | wc -l)
-          SKILLS=$(find .claude/skills -name "*.md" -type f | wc -l)
-          HOOKS=$(find .claude/hooks -name "*.sh" -type f | wc -l)
+          COMMANDS=$(find commands -name "*.md" -type f | wc -l)
+          AGENTS=$(find agents -name "*.md" -type f | wc -l)
+          SKILLS=$(find skills -name "*.md" -type f | wc -l)
+          HOOKS=$(find hooks -name "*.js" -type f | wc -l)
 
           echo "commands=$COMMANDS" >> $GITHUB_OUTPUT
           echo "agents=$AGENTS" >> $GITHUB_OUTPUT
@@ -65,7 +65,7 @@ jobs:
         run: |
           echo "## Validating Commands" >> $GITHUB_STEP_SUMMARY
           ERRORS=0
-          for file in .claude/commands/**/*.md; do
+          for file in commands/*.md; do
             if [ -f "$file" ]; then
               # Check for required frontmatter
               if ! grep -q "^---" "$file"; then
@@ -90,7 +90,7 @@ jobs:
         run: |
           echo "## Validating Agents" >> $GITHUB_STEP_SUMMARY
           ERRORS=0
-          for file in .claude/agents/*.md; do
+          for file in agents/*.md; do
             if [ -f "$file" ]; then
               if ! grep -q "^---" "$file"; then
                 echo "::error file=$file::Missing frontmatter"

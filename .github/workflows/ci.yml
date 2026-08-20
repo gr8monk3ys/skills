@@ -69,39 +69,59 @@ jobs:
 
       - name: Validate plugin structure
         run: |
-          echo "Checking required files..."
-          test -f .claude-plugin/plugin.json && echo "plugin.json exists"
-          test -f package.json && echo "package.json exists"
-          test -f CLAUDE.md && echo "CLAUDE.md exists"
-          test -d .claude/commands && echo "commands directory exists"
-          test -d .claude/agents && echo "agents directory exists"
-          test -d .claude/skills && echo "skills directory exists"
-          test -d .claude/hooks && echo "hooks directory exists"
-          test -f bin/cli.js && echo "CLI exists"
+          # Each check must FAIL the step when it fails. `test -d X && echo`
+          # succeeds overall even when the test fails, which is how these
+          # checks kept reporting green after the primitives moved to root.
+          for f in .claude-plugin/plugin.json package.json CLAUDE.md bin/cli.js; do
+            test -f "$f" || { echo "MISSING FILE: $f"; exit 1; }
+            echo "ok: $f"
+          done
+          for d in commands agents skills hooks; do
+            test -d "$d" || { echo "MISSING DIR: $d (plugin primitives live at the repo root)"; exit 1; }
+            echo "ok: $d/"
+          done
           echo "All required files present!"
+
+      - name: Enforce flat commands and agents
+        run: |
+          # Claude Code auto-discovers commands and agents from the plugin root
+          # and does NOT recurse. A file in a subdirectory is silently invisible
+          # to every installed user while still being counted by the sync and
+          # listed in the README, so this must fail the build.
+          nested=$(find commands agents -mindepth 2 -name '*.md')
+          if [ -n "$nested" ]; then
+            echo "FAIL: these must be flat, not nested — auto-discovery will never find them:"
+            echo "$nested"
+            exit 1
+          fi
+          echo "commands/ and agents/ are flat"
 
       - name: Count components
         run: |
           echo ""
           echo "Plugin Component Summary"
           echo "========================"
-          echo "Commands: $(find .claude/commands -name '*.md' | wc -l | tr -d ' ')"
-          echo "Agents: $(find .claude/agents -name '*.md' | wc -l | tr -d ' ')"
-          echo "Skills: $(find .claude/skills -name '*.md' | wc -l | tr -d ' ')"
-          echo "Hooks: $(find .claude/hooks -name '*.sh' -o -name '*.js' 2>/dev/null | wc -l | tr -d ' ')"
+          echo "Commands: $(find commands -name '*.md' | wc -l | tr -d ' ')"
+          echo "Agents: $(find agents -name '*.md' | wc -l | tr -d ' ')"
+          echo "Skills: $(find skills -name 'SKILL.md' | wc -l | tr -d ' ')"
+          echo "Hooks: $(find hooks -name '*.js' | wc -l | tr -d ' ')"
 
       - name: Validate frontmatter
         run: |
           echo "Checking command frontmatter..."
-          for file in $(find .claude/commands -name '*.md'); do
+          count=0
+          for file in $(find commands -name '*.md'); do
             if head -1 "$file" | grep -q '^---$'; then
               echo "OK: $file"
+              count=$((count + 1))
             else
               echo "FAIL: $file missing frontmatter"
               exit 1
             fi
           done
-          echo "All commands have valid frontmatter!"
+          # A vacuous pass is the failure mode this whole job exists to prevent.
+          test "$count" -gt 0 || { echo "FAIL: no command files found at all"; exit 1; }
+          echo "All $count commands have valid frontmatter!"
 
       - name: Check package.json validity
         run: npm pkg fix --dry-run

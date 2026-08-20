@@ -9,7 +9,6 @@
   "license": "GPL-3.0",
   "repository": "https://github.com/gr8monk3ys/skills",
   "homepage": "https://github.com/gr8monk3ys/skills#readme",
-  "npm": "@gr8monk3ys/claude-code-plugin",
   "keywords": [
     "claude-code",
     "claude",
@@ -23,9 +22,6 @@
     "skills",
     "hooks"
   ],
-  "profiles": {
-    "minimal": ".claude/profiles/mcp-minimal.json"
-  },
   "mcpServers": {
     "context7": {
       "command": "npx",
@@ -61,195 +57,20 @@
     }
   },
   "version": "4.1.0",
-  "commands": [
-    {
-      "name": "action-new",
-      "path": ".claude/commands/nextjs/action-new.md",
-      "description": "Scaffold a Next.js 15 Server Action with Zod validation and typed results"
-    },
-    {
-      "name": "api-new",
-      "path": ".claude/commands/api/api-new.md",
-      "description": "Create a new Next.js API route with validation, error handling, and TypeScript"
-    },
-    {
-      "name": "api-test",
-      "path": ".claude/commands/api/api-test.md",
-      "description": "Test API endpoints with automated test generation"
-    },
-    {
-      "name": "automerge",
-      "path": ".claude/commands/workflow/automerge.md",
-      "description": "PR automation - validate, merge, cleanup, and sync"
-    },
-    {
-      "name": "babysit",
-      "path": ".claude/commands/workflow/babysit.md",
-      "description": "Watch a PR in a loop and auto-fix CI failures and review comments"
-    },
-    {
-      "name": "component-new",
-      "path": ".claude/commands/ui/component-new.md",
-      "description": "Create a new React component with TypeScript and modern best practices"
-    },
-    {
-      "name": "deploy",
-      "path": ".claude/commands/devops/deploy.md",
-      "description": "Generate deployment configurations and workflows"
-    },
-    {
-      "name": "edge-function-new",
-      "path": ".claude/commands/supabase/edge-function-new.md",
-      "description": "Create a new Supabase Edge Function with Deno"
-    },
-    {
-      "name": "fixissue",
-      "path": ".claude/commands/workflow/fixissue.md",
-      "description": "End-to-end issue resolution - fetch, branch, fix, test, commit, PR, close"
-    },
-    {
-      "name": "hook-new",
-      "path": ".claude/commands/generation/hook-new.md",
-      "description": "Create custom React hooks with TypeScript and best practices"
-    },
-    {
-      "name": "lint",
-      "path": ".claude/commands/quality/lint.md",
-      "description": "Run linting and fix code quality issues"
-    },
-    {
-      "name": "page-new",
-      "path": ".claude/commands/ui/page-new.md",
-      "description": "Create a new Next.js page with App Router best practices"
-    },
-    {
-      "name": "review",
-      "path": ".claude/commands/quality/review.md",
-      "description": "RIPER Review Phase - Quality gates before considering work complete"
-    },
-    {
-      "name": "rls-new",
-      "path": ".claude/commands/supabase/rls-new.md",
-      "description": "Scaffold Supabase Row Level Security policies from a description, with tests"
-    },
-    {
-      "name": "test-new",
-      "path": ".claude/commands/testing/test-new.md",
-      "description": "Generate test files for Jest, Vitest, or Playwright"
-    },
-    {
-      "name": "types-gen",
-      "path": ".claude/commands/supabase/types-gen.md",
-      "description": "Generate TypeScript types from Supabase database schema"
-    },
-    {
-      "name": "verify",
-      "path": ".claude/commands/testing/verify.md",
-      "description": "Run comprehensive 6-phase verification loop (build, types, lint, tests, security, diff)"
-    }
-  ],
-  "agents": [
-    {
-      "name": "backend-architect",
-      "path": ".claude/agents/backend-architect.md",
-      "description": "Design reliable backend systems with focus on data integrity, security, and fault tolerance"
-    },
-    {
-      "name": "build-error-resolver",
-      "path": ".claude/agents/build-error-resolver.md",
-      "description": "Use when fixing TypeScript errors, build failures, compilation issues, type mismatches, or \"tsc --noEmit\" errors. Activates on build failures, type errors, or compilation problems requiring quick minimal fixes."
-    },
-    {
-      "name": "code-reviewer",
-      "path": ".claude/agents/code-reviewer.md",
-      "description": "Use this agent when reviewing code for quality, performing PR reviews, or analyzing code for security vulnerabilities, performance issues, or style problems. Activates on code review requests or quality assessments."
-    },
-    {
-      "name": "devops-engineer",
-      "path": ".claude/agents/devops-engineer.md",
-      "description": "Design CI/CD pipelines, infrastructure as code, and deployment strategies for reliable software delivery"
-    },
-    {
-      "name": "frontend-architect",
-      "path": ".claude/agents/frontend-architect.md",
-      "description": "Create accessible, performant user interfaces with focus on user experience and modern frameworks"
-    },
-    {
-      "name": "test-strategist",
-      "path": ".claude/agents/test-strategist.md",
-      "description": "Use this agent when planning test strategies, analyzing test coverage, or designing comprehensive testing approaches. Activates on test planning, coverage analysis, or when asking about what to test."
-    }
-  ],
   "skills": [
-    {
-      "name": "api-development",
-      "path": ".claude/skills/engineering/api-development/SKILL.md",
-      "description": "WHEN to auto-invoke: Creating API routes, building endpoints, adding route.ts files, implementing REST/GraphQL APIs, adding authentication to APIs, rate limiting, API validation with Zod, handling HTTP methods (GET/POST/PUT/DELETE)."
-    },
-    {
-      "name": "ask-lorenzo",
-      "path": ".claude/skills/engineering/ask-lorenzo/SKILL.md",
-      "description": "Ask which command or skill in this plugin fits your situation. A router over everything user-reachable — scaffolding, quality gates, delivery, and the ported workflow skills."
-    },
-    {
-      "name": "background-automation",
-      "path": ".claude/skills/engineering/background-automation/SKILL.md",
-      "description": "WHEN to auto-invoke: Setting up recurring or self-paced tasks, watching CI or deploys, babysitting pull requests, configuring monitors, running long jobs in the background, scheduling check-ins, polling for a condition, or wiring Claude Code on the web/cloud sessions and PR activity subscriptions."
-    },
-    {
-      "name": "database-operations",
-      "path": ".claude/skills/engineering/database-operations/SKILL.md",
-      "description": "WHEN to auto-invoke: Database schema design, creating migrations, writing SQL queries, query optimization, Supabase operations, Prisma/Drizzle schema changes, PostgreSQL tasks, RLS policies, indexes."
-    },
-    {
-      "name": "domain-modeling",
-      "path": ".claude/skills/engineering/domain-modeling/SKILL.md",
-      "description": "Build and sharpen a project's domain model. Use when discussing codebase terminology, writing or editing a CONTEXT.md, or recording or editing an ADR."
-    },
-    {
-      "name": "frontend-development",
-      "path": ".claude/skills/engineering/frontend-development/SKILL.md",
-      "description": "WHEN to auto-invoke: Creating UI components, building React/Vue/Svelte components, Next.js pages, styling with Tailwind/CSS, state management setup, form handling, accessibility improvements, client-side interactivity."
-    },
-    {
-      "name": "handoff",
-      "path": ".claude/skills/productivity/handoff/SKILL.md",
-      "description": "Compact the current conversation into a handoff document for another agent to pick up."
-    },
-    {
-      "name": "prototype",
-      "path": ".claude/skills/engineering/prototype/SKILL.md",
-      "description": "Build a throwaway prototype to answer a design question. Use when the user wants to sanity-check whether a state model or logic feels right, or explore what a UI should look like."
-    },
-    {
-      "name": "research",
-      "path": ".claude/skills/engineering/research/SKILL.md",
-      "description": "Investigate a question against high-trust primary sources and capture the findings as a Markdown file in the repo. Use when the user wants a topic researched, docs or API facts gathered, or reading legwork delegated to a background agent."
-    },
-    {
-      "name": "resolving-merge-conflicts",
-      "path": ".claude/skills/engineering/resolving-merge-conflicts/SKILL.md",
-      "description": "Use when you need to resolve an in-progress git merge/rebase conflict."
-    },
-    {
-      "name": "to-questionnaire",
-      "path": ".claude/skills/productivity/to-questionnaire/SKILL.md",
-      "description": "Turn a decision you can't fully answer into a questionnaire for someone else to fill in."
-    },
-    {
-      "name": "wait-what",
-      "path": ".claude/skills/productivity/wait-what/SKILL.md",
-      "description": "Stop. That last message did not land — re-pitch it."
-    },
-    {
-      "name": "wizard",
-      "path": ".claude/skills/engineering/wizard/SKILL.md",
-      "description": "Generate an interactive bash wizard that walks a human through steps only they can perform. Use when provisioning infrastructure, setting up credentials or CI secrets, walking an unfamiliar third-party dashboard, or running a one-off migration or cutover. Don't invoke this for steps the agent can perform itself."
-    },
-    {
-      "name": "writing-for-agents",
-      "path": ".claude/skills/productivity/writing-for-agents/SKILL.md",
-      "description": "Writing documents for agents. Use when creating or editing skills, or modifying AGENTS.md or CLAUDE.md."
-    }
+    "./skills/engineering/api-development",
+    "./skills/engineering/ask-lorenzo",
+    "./skills/engineering/background-automation",
+    "./skills/engineering/database-operations",
+    "./skills/engineering/domain-modeling",
+    "./skills/engineering/frontend-development",
+    "./skills/productivity/handoff",
+    "./skills/engineering/prototype",
+    "./skills/engineering/research",
+    "./skills/engineering/resolving-merge-conflicts",
+    "./skills/productivity/to-questionnaire",
+    "./skills/productivity/wait-what",
+    "./skills/engineering/wizard",
+    "./skills/productivity/writing-for-agents"
   ]
 }
