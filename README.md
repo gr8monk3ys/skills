@@ -9,7 +9,7 @@
 
 **Stack-focused Claude Code plugin for Next.js + React + Supabase.**
 
-Scaffolds components, API routes, hooks, Supabase types, and Edge Functions. Composes with [superpowers](https://github.com/obra/superpowers) — install both for the full toolkit.
+Slash commands that scaffold the code, skills that raise the standard of whatever you write next, and a routing hook that reaches for the right one before you think to ask for it. Composes with [superpowers](https://github.com/obra/superpowers): that plugin owns the process, this one owns the stack.
 
 <!-- AUTOGEN:counts -->
 **17 commands** · **6 agents** · **14 skills** · **14 hooks** · **2 monitors**
@@ -17,17 +17,45 @@ Scaffolds components, API routes, hooks, Supabase types, and Edge Functions. Com
 
 ---
 
-## Pairs with superpowers
-
-This plugin focuses on **stack-specific scaffolding**. Process discipline (TDD, debugging, planning, code review workflows) lives in [superpowers](https://github.com/obra/superpowers). The two compose:
-
-- **superpowers** handles *how* to work — brainstorming, writing plans, executing them, debugging, verifying.
-- **lorenzos-claude-code** handles *what* to build — concrete Next.js / React / Supabase scaffolds.
-- The `skill-activator` hook (in this plugin) scores incoming prompts across keywords, patterns, file paths, directories, and intents, then routes to the right skill — whether that skill lives in this plugin or in superpowers.
-
----
-
 ## Install
+
+> **Pick one.** Installing by more than one route leaves you with every skill twice.
+
+<details>
+<summary><strong>Claude Code plugin</strong> — the fastest way in</summary>
+
+From inside a session:
+
+```text
+/plugin marketplace add gr8monk3ys/skills
+/plugin install lorenzos-claude-code
+```
+
+The two names differ on purpose. `gr8monk3ys/skills` is the repository; `lorenzos-claude-code` is the plugin that lives inside it. Neither is a typo for the other, and neither works in the other's place.
+
+Installing this way subscribes you to the marketplace rather than copying files out of it, so later releases are an update away instead of a re-install.
+
+Working from a local clone instead? The trailing `./` is load-bearing — a bare `.` is rejected:
+
+```bash
+claude plugin marketplace add ./
+```
+
+</details>
+
+<details>
+<summary><strong>Any agent, via the skills installer</strong></summary>
+
+```bash
+npx skills@latest add gr8monk3ys/skills
+```
+
+Two honest caveats. This is third-party tooling, and we have not run this route end to end against this repo — if it misbehaves, the bug is as likely to be ours as theirs, so please open an issue. And it copies skill files into your project as ordinary files you own and edit, which means you are forking rather than subscribing: later releases arrive only when you go and get them.
+
+</details>
+
+<details>
+<summary><strong>npm</strong> — the <code>lcc</code> CLI</summary>
 
 ```bash
 npm install -g @gr8monk3ys/claude-code-plugin
@@ -35,12 +63,45 @@ lcc install
 lcc doctor
 ```
 
-Or, from inside Claude Code:
+`lcc install` writes the commands, agents, skills, and hooks into your Claude Code configuration. Run `lcc doctor` afterwards rather than assuming: a half-landed install looks exactly like a working one right up to the first time you need a hook that isn't there.
 
-```text
-/plugin marketplace add https://github.com/gr8monk3ys/skills
-/plugin install lorenzos-claude-code
-```
+</details>
+
+---
+
+## Why these exist
+
+Three failure modes worth naming, and what in here answers each.
+
+### You know what to build, and hand-scaffolding it is the slow part
+
+You have decided on the component, the route, the table policy. What stands between you and it is twenty minutes of boilerplate that comes out slightly different every time — a different error shape here, validation skipped there, and a codebase that reads like four people wrote it.
+
+The `-new` commands take that pass off you: `/component-new`, `/hook-new` and `/page-new` for the React side, `/api-new`, `/action-new` and `/edge-function-new` for endpoints, `/rls-new` and `/types-gen` for Supabase, `/test-new` for the tests. Behind them sit four skills the agent reaches for on its own when your prompt or your file paths say it should — [api-development](docs/engineering/api-development.md), [frontend-development](docs/engineering/frontend-development.md), [database-operations](docs/engineering/database-operations.md), and [background-automation](docs/engineering/background-automation.md). The commands give you the file; the skills are why the tenth file matches the first.
+
+### The code works on your machine and nowhere else
+
+The demo went fine. CI is red, and now you are reading a log to find out which of six things broke.
+
+`/verify` runs the whole gauntlet in one go — build, types, lint, tests, security, and a read of your own diff — so the answer arrives before the push instead of after it. `/review` is the gate you run before calling something done. When CI does go red anyway, `/babysit` watches the PR and fixes failures as they land, `/fixissue` takes a GitHub issue from fetch to merged branch, and `/automerge` validates, merges, and cleans up behind itself.
+
+### A step needs a human, and explaining it again every time is the cost
+
+Some steps an agent simply cannot take. Minting a key, clicking through a dashboard behind your login, flipping a switch only your account owns. The usual outcome is a numbered list pasted into the chat that you follow by hand, get four steps into, and lose to a scrolled-away terminal.
+
+[wizard](docs/engineering/wizard.md) writes a bash script instead. It opens each URL in turn, says what to click, reads secrets with hidden entry, writes them into `.env` and your CI secrets, and tells you at the end what it could not do and you must finish yourself. Ctrl-C and re-run picks up where you left off. The procedure stops living in someone's head, and stops being re-explained.
+
+---
+
+## Pairs with superpowers
+
+This plugin focuses on **stack-specific scaffolding**. Process discipline — brainstorming, writing plans, executing them, debugging, verifying — lives in [superpowers](https://github.com/obra/superpowers). The two compose:
+
+- **superpowers** handles *how* to work.
+- **lorenzos-claude-code** handles *what* to build: concrete Next.js, React, and Supabase scaffolds.
+- The `skill-activator` hook (in this plugin) scores incoming prompts across keywords, patterns, file paths, directories, and intents, then routes to the right skill — whether that skill lives here or in superpowers.
+
+Skills of ours that would have duplicated a superpowers one are deliberately kept unshipped, so routing never has two right answers.
 
 ---
 
@@ -101,6 +162,20 @@ Or, from inside Claude Code:
 | `wizard` | Generate an interactive bash wizard that walks a human through steps only they can perform. Use when provisioning infrastructure, setting up credentials or CI secrets, walking an unfamiliar third-party dashboard, or running a one-off migration or cutover. Don't invoke this for steps the agent can perform itself. |
 | `writing-for-agents` | Writing documents for agents. Use when creating or editing skills, or modifying AGENTS.md or CLAUDE.md. |
 <!-- /AUTOGEN:skills -->
+
+Each skill has a page written for the human deciding whether to reach for it. They split on one axis: who can invoke them.
+
+**User-invoked.** Nothing will surface these for you, so you type them.
+
+- [ask-lorenzo](docs/engineering/ask-lorenzo.md) — names the one command or skill that fits what you're trying to do, and hands off.
+- [handoff](docs/productivity/handoff.md) — compacts a session into a document the next agent can start from.
+- [to-questionnaire](docs/productivity/to-questionnaire.md) — turns a decision you can't make alone into a document for the person who can.
+- [wait-what](docs/productivity/wait-what.md) — for the moment a message doesn't land: it gets re-pitched with the context you were missing.
+
+**Model-invoked.** You can type these too, but the agent reaches for them on its own when the task fits.
+
+- Four raise the standard of the stack code you write: [api-development](docs/engineering/api-development.md), [frontend-development](docs/engineering/frontend-development.md), [database-operations](docs/engineering/database-operations.md), and [background-automation](docs/engineering/background-automation.md).
+- Six cover the work around the code: [wizard](docs/engineering/wizard.md) for steps only a human can take, [resolving-merge-conflicts](docs/engineering/resolving-merge-conflicts.md) mid-merge, [prototype](docs/engineering/prototype.md) to answer a design question with throwaway code, [research](docs/engineering/research.md) to investigate against primary sources, [domain-modeling](docs/engineering/domain-modeling.md) to sharpen the project's vocabulary, and [writing-for-agents](docs/productivity/writing-for-agents.md) for when the thing you're writing is itself read by an agent.
 
 ## Hooks
 
