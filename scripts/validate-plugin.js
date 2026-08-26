@@ -14,9 +14,11 @@ const fs = require('fs');
 const path = require('path');
 
 const PLUGIN_PATH = '.claude-plugin/plugin.json';
-const COMMANDS_DIR = '.claude/commands';
-const AGENTS_DIR = '.claude/agents';
-const SKILLS_DIR = '.claude/skills';
+const COMMANDS_DIR = 'commands';
+const AGENTS_DIR = 'agents';
+const SKILLS_DIR = 'skills';
+// Only these buckets ship (see scripts/lib/manifest.js). misc/ is kept unshipped on purpose.
+const PROMOTED_BUCKETS = ['engineering', 'productivity'];
 
 // ANSI colors for terminal output
 const colors = {
@@ -105,10 +107,8 @@ function validatePluginJson() {
     warn('agents array in plugin.json is deprecated - agents are auto-discovered from directories');
     warnings.push('Deprecated agents array');
   }
-  if (plugin.skills && Array.isArray(plugin.skills)) {
-    warn('skills array in plugin.json is deprecated - skills are auto-discovered from directories');
-    warnings.push('Deprecated skills array');
-  }
+  // plugin.skills is intentional: Claude Code honours directory-path entries
+  // there, and sync-manifest emits the promoted buckets into it.
 
   return plugin;
 }
@@ -265,10 +265,15 @@ function validateSkills() {
     return 0;
   }
 
-  // Skills are in subdirectories with SKILL.md files
-  const skillDirs = fs.readdirSync(SKILLS_DIR, { withFileTypes: true })
-    .filter(d => d.isDirectory())
-    .map(d => d.name);
+  // Skills live at skills/<bucket>/<skill>/SKILL.md; only promoted buckets ship.
+  const skillDirs = [];
+  for (const bucket of PROMOTED_BUCKETS) {
+    const bucketDir = path.join(SKILLS_DIR, bucket);
+    if (!fs.existsSync(bucketDir)) continue;
+    for (const d of fs.readdirSync(bucketDir, { withFileTypes: true })) {
+      if (d.isDirectory()) skillDirs.push(path.join(bucket, d.name));
+    }
+  }
 
   info(`Found ${skillDirs.length} skill directories`);
 

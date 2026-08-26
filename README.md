@@ -9,7 +9,7 @@
 
 **Stack-focused Claude Code plugin for Next.js + React + Supabase.**
 
-Slash commands that scaffold the code, skills that raise the standard of whatever you write next, and a routing hook that reaches for the right one before you think to ask for it. Composes with [superpowers](https://github.com/obra/superpowers): that plugin owns the process, this one owns the stack.
+Slash commands that scaffold Next.js, React, and Supabase code, skills that hold that code to one set of conventions, and a routing hook that picks the skill from your prompt. Composes with [superpowers](https://github.com/obra/superpowers): that plugin owns the process, this one owns the stack.
 
 <!-- AUTOGEN:counts -->
 **17 commands** · **6 agents** · **14 skills** · **14 hooks** · **2 monitors**
@@ -63,9 +63,9 @@ lcc install
 lcc doctor
 ```
 
-Installing from GitHub rather than the registry is deliberate: `@gr8monk3ys/claude-code-plugin` is not published yet, so `npm install -g @gr8monk3ys/claude-code-plugin` returns a 404. The GitHub form installs the same package and the same `lcc` binary.
+`lcc install` copies the commands, agents, skills, and hooks into `~/.claude/`; `lcc doctor` checks that every piece landed.
 
-`lcc install` writes the commands, agents, skills, and hooks into your Claude Code configuration. Run `lcc doctor` afterwards rather than assuming: a half-landed install looks exactly like a working one right up to the first time you need a hook that isn't there.
+Installing from GitHub rather than the registry is deliberate: `@gr8monk3ys/claude-code-plugin` is not published yet, so `npm install -g @gr8monk3ys/claude-code-plugin` returns a 404. The GitHub form installs the same package and the same `lcc` binary.
 
 </details>
 
@@ -79,7 +79,7 @@ Three failure modes worth naming, and what in here answers each.
 
 You have decided on the component, the route, the table policy. What stands between you and it is twenty minutes of boilerplate that comes out slightly different every time — a different error shape here, validation skipped there, and a codebase that reads like four people wrote it.
 
-The `-new` commands take that pass off you: `/component-new`, `/hook-new` and `/page-new` for the React side, `/api-new`, `/action-new` and `/edge-function-new` for endpoints, `/rls-new` and `/types-gen` for Supabase, `/test-new` for the tests. Behind them sit three skills the agent reaches for on its own when your prompt or your file paths say it should — [api-development](docs/engineering/api-development.md), [frontend-development](docs/engineering/frontend-development.md), and [database-operations](docs/engineering/database-operations.md). The commands give you the file; the skills are why the tenth file matches the first.
+The `-new` commands take that pass off you: `/component-new`, `/hook-new` and `/page-new` for the React side, `/api-new`, `/action-new` and `/edge-function-new` for endpoints, `/rls-new` and `/types-gen` for Supabase, `/test-new` for the tests. Behind them sit three skills the agent reaches for on its own when your prompt or your file paths say it should — [api-development](docs/engineering/api-development.md), [frontend-development](docs/engineering/frontend-development.md), and [database-operations](docs/engineering/database-operations.md). The commands write the file; the skills are the conventions the file follows.
 
 ### The code works on your machine and nowhere else
 
@@ -176,7 +176,7 @@ Each skill has a page written for the human deciding whether to reach for it. Th
 
 **Model-invoked.** You can type these too, but the agent reaches for them on its own when the task fits.
 
-- Four raise the standard of the stack code you write: [api-development](docs/engineering/api-development.md), [frontend-development](docs/engineering/frontend-development.md), [database-operations](docs/engineering/database-operations.md), and [background-automation](docs/engineering/background-automation.md).
+- Four cover the stack code itself: [api-development](docs/engineering/api-development.md), [frontend-development](docs/engineering/frontend-development.md), [database-operations](docs/engineering/database-operations.md), and [background-automation](docs/engineering/background-automation.md).
 - Six cover the work around the code: [wizard](docs/engineering/wizard.md) for steps only a human can take, [resolving-merge-conflicts](docs/engineering/resolving-merge-conflicts.md) mid-merge, [prototype](docs/engineering/prototype.md) to answer a design question with throwaway code, [research](docs/engineering/research.md) to investigate against primary sources, [domain-modeling](docs/engineering/domain-modeling.md) to sharpen the project's vocabulary, and [writing-for-agents](docs/productivity/writing-for-agents.md) for when the thing you're writing is itself read by an agent.
 
 ## Hooks
