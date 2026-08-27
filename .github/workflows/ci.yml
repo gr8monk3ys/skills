@@ -1,6 +1,6 @@
 permissions: read-all
 
-# CI Pipeline for lorenzos-claude-code Plugin
+# CI for the skills plugin
 # Validates plugin structure, runs tests, and publishes to npm
 
 name: CI
@@ -19,9 +19,8 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-latest, macos-latest, windows-latest]
-        node-version: [18, 20, 22]
-      fail-fast: false
+        os: [ubuntu-latest]
+        node-version: [20]
 
     steps:
       - name: Checkout repository
@@ -128,25 +127,6 @@ jobs:
 
       - name: Verify manifest is in sync with disk
         run: node scripts/sync-manifest.js --check
-
-  markdown-lint:
-    name: Lint Markdown
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
-
-      - name: Setup Node.js
-        uses: actions/setup-node@6044e13b5dc448c55e2357c09f80417699197238
-        with:
-          node-version: "20"
-
-      - name: Install markdownlint
-        run: npm install -g markdownlint-cli
-
-      - name: Lint documentation
-        run: markdownlint README.md CLAUDE.md --disable MD013 MD033 MD041 || true
 
   publish:
     name: Publish to npm

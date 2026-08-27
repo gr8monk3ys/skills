@@ -121,8 +121,6 @@ promoted skill means creating or re-syncing that page — see
 [.agents/writing-docs.md](.agents/writing-docs.md). `npm test` fails when pages
 and promoted skills disagree.
 
-`CONTEXT.md` holds this repo's shared vocabulary; use its terms and keep it current (the `domain-modeling` skill maintains it).
-
 ## Workflow
 
 - Edit commands/agents/skills as `.md` files; the manifest regenerates automatically (`npm run sync`).

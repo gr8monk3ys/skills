@@ -23,6 +23,5 @@
   },
   "_profile": "minimal",
   "_contextUsage": "~16K tokens (8% of context)",
-  "_documentation": "See .claude/profiles/ for fullstack and enterprise profiles",
-  "_cliAlternatives": "See .claude/docs/CLI-ALTERNATIVES.md for services available via CLI"
+  "_documentation": "See .claude/profiles/ for fullstack and enterprise profiles"
 }
