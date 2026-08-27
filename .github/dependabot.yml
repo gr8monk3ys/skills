@@ -1,6 +1,7 @@
 version: 2
 updates:
-  # Enable version updates for npm
+  # package.json exists for the `lcc` CLI, but it declares no dependencies.
+  # Keep npm so any future dependency still gets bumped.
   - package-ecosystem: "npm"
     directory: "/"
     schedule:
@@ -12,14 +13,6 @@ updates:
       production-dependencies:
         dependency-type: "production"
 
-  # Enable version updates for pip
-  - package-ecosystem: "pip"
-    directory: "/"
-    schedule:
-      interval: "weekly"
-    open-pull-requests-limit: 10
-
-  # Enable version updates for GitHub Actions
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:

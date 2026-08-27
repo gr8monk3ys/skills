@@ -17,3 +17,11 @@
 # Node
 node_modules/
 package-lock.json
+
+# Session exhaust from AI tooling
+.superpowers/
+docs/superpowers/
+.claude/handoffs/*
+!.claude/handoffs/.gitkeep
+.claude/logs/*
+!.claude/logs/.gitkeep
