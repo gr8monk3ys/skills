@@ -126,3 +126,17 @@ and promoted skills disagree.
 - Edit commands/agents/skills as `.md` files; the manifest regenerates automatically (`npm run sync`).
 - `npm run sync:check` is wired into pre-commit and CI — drift fails the build.
 - See [ROADMAP.md](ROADMAP.md) for upcoming work.
+
+## Agent skills
+
+### Issue tracker
+
+GitHub Issues on `gr8monk3ys/skills`, via the `gh` CLI. See `docs/agents/issue-tracker.md`.
+
+### Triage labels
+
+The five canonical roles, label string equal to role name. See `docs/agents/triage-labels.md`.
+
+### Domain docs
+
+Single-context: `CONTEXT.md` + `docs/adr/` at the repo root. See `docs/agents/domain.md`.
