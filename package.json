@@ -54,7 +54,7 @@
     "node": ">=18.0.0"
   },
   "scripts": {
-    "test": "node tests/run-all.js && node --test tests/manifest-sync.test.js",
+    "test": "node tests/run-all.js && node --test tests/manifest-sync.test.js tests/skill-activator-laya.test.js",
     "sync": "node scripts/sync-manifest.js",
     "sync:check": "node scripts/sync-manifest.js --check",
     "install:local": "node bin/cli.js install",

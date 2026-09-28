@@ -10,7 +10,8 @@
     "pattern": 3,
     "filePath": 4,
     "directory": 5,
-    "intent": 4
+    "intent": 4,
+    "laya": 4
   },
   "skills": [
     {

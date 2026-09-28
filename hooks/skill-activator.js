@@ -127,6 +127,95 @@ function matchIntents(prompt, intents) {
   return matches;
 }
 
+// ---------------------------------------------------------------------------
+// Optional laya dimension
+//
+// laya (https://github.com/NandhaKishorM/laya) is a small decision model served
+// over HTTP by `laya-serve`. Given the prompt and one `choice` question whose
+// options are the skills, it picks the likeliest skill in a single forward pass
+// without generating text. It catches prompts that mean a skill without using
+// any of its keywords.
+//
+// Off unless SKILL_ACTIVATOR_LAYA_URL is set. Its pick adds `weights.laya`
+// points (default 4) to one skill, the same as a single intent match, so it can
+// tip a borderline skill over a threshold but never activates one alone
+// (4 < suggest threshold 5). Laya's accuracy is about 0.7-0.8, so it gets a
+// vote, not the decision. Any failure (timeout, non-2xx, bad body) is ignored.
+// ---------------------------------------------------------------------------
+
+const LAYA_NONE = "none";
+const DEFAULT_LAYA_WEIGHT = 4;
+
+function layaConfig(env = process.env) {
+  const url = (env.SKILL_ACTIVATOR_LAYA_URL || "").trim();
+  if (!url) return null;
+  const base = url.replace(/\/+$/, "");
+  const timeout = Number(env.SKILL_ACTIVATOR_LAYA_TIMEOUT_MS);
+  const minConfidence = Number(env.SKILL_ACTIVATOR_LAYA_MIN_CONFIDENCE);
+  return {
+    endpoint: base.endsWith("/v1/systemone") ? base : `${base}/v1/systemone`,
+    apiKey: (env.SKILL_ACTIVATOR_LAYA_API_KEY || "").trim(),
+    // A UserPromptSubmit hook sits in front of every prompt: keep it short.
+    timeoutMs: Number.isFinite(timeout) && timeout > 0 ? timeout : 800,
+    minConfidence:
+      Number.isFinite(minConfidence) && minConfidence > 0 && minConfidence <= 1
+        ? minConfidence
+        : 0.5,
+  };
+}
+
+// The prompt text itself. Claude Code sends the hook a JSON payload; fall back
+// to the raw input so a plain-text invocation still works.
+function promptText(raw) {
+  try {
+    const parsed = JSON.parse(raw);
+    if (parsed && typeof parsed.prompt === "string") return parsed.prompt;
+  } catch (err) {
+    // not JSON
+  }
+  return raw;
+}
+
+function layaQuestion(skills) {
+  const criteria = {};
+  for (const skill of skills) {
+    criteria[skill.name] =
+      skill.description || (skill.keywords || []).slice(0, 8).join(", ") || skill.name;
+  }
+  criteria[LAYA_NONE] = "none of these; a general question or unrelated task";
+  return {
+    type: "choice",
+    instructions: "Which skill best fits what this request is asking for?",
+    criteria,
+  };
+}
+
+// Returns { skill, confidence } or null.
+async function askLaya(prompt, skills, config, fetchImpl = globalThis.fetch) {
+  if (!config || !prompt.trim() || typeof fetchImpl !== "function") return null;
+  try {
+    const headers = { "content-type": "application/json" };
+    if (config.apiKey) headers.authorization = `Bearer ${config.apiKey}`;
+    const res = await fetchImpl(config.endpoint, {
+      method: "POST",
+      headers,
+      body: JSON.stringify({ state: prompt, questions: { skill: layaQuestion(skills) } }),
+      signal: AbortSignal.timeout(config.timeoutMs),
+    });
+    if (!res.ok) return null;
+    const body = await res.json();
+    const answer = body && body.answers && body.answers.skill;
+    if (!answer || typeof answer.choice !== "string" || answer.choice === LAYA_NONE) return null;
+    if (!skills.some((s) => s.name === answer.choice)) return null;
+    const confidence =
+      typeof answer.answer_confidence === "number" ? answer.answer_confidence : 0;
+    if (confidence < config.minConfidence) return null;
+    return { skill: answer.choice, confidence };
+  } catch (err) {
+    return null;
+  }
+}
+
 // Calculate confidence score for a skill
 function calculateConfidence(skillMatches, weights, priority) {
   let score = 0;
@@ -136,6 +225,9 @@ function calculateConfidence(skillMatches, weights, priority) {
   score += skillMatches.filePaths.length * weights.filePath;
   score += skillMatches.directories.length * weights.directory;
   score += skillMatches.intents.length * weights.intent;
+  if (skillMatches.laya) {
+    score += weights.laya ?? DEFAULT_LAYA_WEIGHT;
+  }
 
   // Add priority bonus for high-priority skills
   if (priority >= 90) {
@@ -163,6 +255,10 @@ function formatMatches(skillMatches, weights) {
   }
   for (const i of skillMatches.intents) {
     details.push(`intent:${i} (+${weights.intent}pts)`);
+  }
+  if (skillMatches.laya) {
+    const p = skillMatches.laya.confidence.toFixed(2);
+    details.push(`laya:p=${p} (+${weights.laya ?? DEFAULT_LAYA_WEIGHT}pts)`);
   }
 
   return details;
@@ -212,11 +308,15 @@ async function main() {
   // Extract file paths from prompt
   const extractedPaths = extractFilePaths(prompt);
 
+  // Optional laya vote (no-op unless SKILL_ACTIVATOR_LAYA_URL is set)
+  const layaPick = await askLaya(promptText(prompt), skills, layaConfig());
+
   // Evaluate each skill
   const evaluations = [];
 
   for (const skill of skills) {
     const skillMatches = {
+      laya: layaPick && layaPick.skill === skill.name ? layaPick : null,
       keywords: matchKeywords(prompt, skill.keywords || []),
       patterns: matchPatterns(prompt, skill.patterns || []),
       filePaths: extractedPaths.filter((p) =>
@@ -302,4 +402,8 @@ async function main() {
   process.exit(0);
 }
 
-main();
+if (require.main === module) {
+  main();
+}
+
+module.exports = { askLaya, calculateConfidence, layaConfig, layaQuestion, promptText };
