@@ -229,8 +229,11 @@ The `skill-activator` hook scores prompts across five dimensions with weighted c
 | File paths | 4 |
 | Directories | 5 |
 | Intents | 4 |
+| laya pick (optional) | 4 |
 
 At ≥8 points the matching skill is auto-activated; at ≥5 points it is suggested. Rules live in `hooks/skill-rules.json`. The activator surfaces both this plugin's stack skills and any superpowers skills that match — one routing layer for the whole toolkit.
+
+The laya row is off by default. Set `SKILL_ACTIVATOR_LAYA_URL` to a [laya-serve](https://github.com/NandhaKishorM/laya) endpoint and the activator asks it, in one forward pass, which skill the prompt is about. That catches prompts that mean a skill without using its keywords. A pick at or above `SKILL_ACTIVATOR_LAYA_MIN_CONFIDENCE` (default 0.5) adds one intent-sized vote. That can tip a borderline skill over a threshold but can never activate one alone. Optional: `SKILL_ACTIVATOR_LAYA_API_KEY` and `SKILL_ACTIVATOR_LAYA_TIMEOUT_MS` (default 800). Timeouts and errors are ignored.
 
 ---
 
