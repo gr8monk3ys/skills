@@ -50,7 +50,15 @@ jobs:
         if: steps.detect.outputs.supported == 'true'
         uses: googleapis/release-please-action@16a9c90856f42705d54a6fda1823352bdc62cf38
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+          # GitHub does not trigger workflows for events raised by
+          # GITHUB_TOKEN. That anti-recursion rule is why #44 sat
+          # MERGEABLE/BLOCKED with four checks passing and neither REQUIRED
+          # one present: CodeQL and Analyze reported (they come from default
+          # setup, outside the rule) while "Test (Node 20, ubuntu-latest)" and
+          # "Validate Plugin" never fired at all. A PAT makes the PR come from
+          # a real user, so the workflows trigger. Falls back to GITHUB_TOKEN,
+          # so releases still get cut before the secret exists.
+          token: ${{ secrets.RELEASE_PLEASE_TOKEN || secrets.GITHUB_TOKEN }}
           release-type: ${{ steps.detect.outputs.release_type }}
 
       - name: Skip release
