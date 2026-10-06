@@ -2,22 +2,22 @@
   "mcpServers": {
     "context7": {
       "command": "npx",
-      "args": ["-y", "@upstash/context7-mcp"],
+      "args": ["-y", "@upstash/context7-mcp@4.1.1"],
       "description": "Up-to-date library documentation lookup (no CLI alternative)"
     },
     "memory": {
       "command": "npx",
-      "args": ["-y", "@modelcontextprotocol/server-memory"],
+      "args": ["-y", "@modelcontextprotocol/server-memory@2026.8.31"],
       "description": "Persistent knowledge graph for cross-session context (no CLI alternative)"
     },
     "playwright": {
       "command": "npx",
-      "args": ["@playwright/mcp@latest"],
+      "args": ["-y", "@playwright/mcp@0.0.83"],
       "description": "Browser automation and E2E testing (MCP preferred over CLI)"
     },
     "github": {
       "command": "npx",
-      "args": ["-y", "@modelcontextprotocol/server-github"],
+      "args": ["-y", "@modelcontextprotocol/server-github@2025.4.8"],
       "description": "GitHub PRs, issues, and repository operations (CLI alternative: gh)"
     }
   },
