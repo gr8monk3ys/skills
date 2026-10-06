@@ -27,7 +27,7 @@
       "command": "npx",
       "args": [
         "-y",
-        "@upstash/context7-mcp"
+        "@upstash/context7-mcp@4.1.1"
       ],
       "description": "Library documentation lookup"
     },
@@ -35,7 +35,7 @@
       "command": "npx",
       "args": [
         "-y",
-        "@modelcontextprotocol/server-memory"
+        "@modelcontextprotocol/server-memory@2026.8.31"
       ],
       "description": "Cross-session memory"
     },
@@ -43,7 +43,7 @@
       "command": "npx",
       "args": [
         "-y",
-        "@anthropic/mcp-server-playwright"
+        "@playwright/mcp@0.0.83"
       ],
       "description": "Browser automation"
     },
@@ -51,7 +51,7 @@
       "command": "npx",
       "args": [
         "-y",
-        "@modelcontextprotocol/server-github"
+        "@modelcontextprotocol/server-github@2025.4.8"
       ],
       "description": "GitHub integration"
     }

@@ -5,6 +5,17 @@ All notable changes to Lorenzo's Claude Code plugin will be documented in this f
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Security
+
+- Pin every MCP server in `.mcp.json`, `.claude/profiles/mcp-minimal.json` and
+  `plugin.json` to an exact version instead of `@latest` / unversioned `npx -y`,
+  so a compromised upstream release can't run on install.
+- `plugin.json` launched `@anthropic/mcp-server-playwright`, a package that does not
+  exist on npm (anyone claiming the name would get code execution). It now uses
+  `@playwright/mcp`, matching `.mcp.json`.
+
 ## [4.1.0] - 2026-06-18
 
 Modernizes the plugin for mid-2026 Claude Code: current model IDs, background-automation
