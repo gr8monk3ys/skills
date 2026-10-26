@@ -39,6 +39,17 @@ You are the router for this plugin. The user tells you what they're trying to do
 - A decision only someone else can make → skill `to-questionnaire`
 - Writing skills or agent-facing docs → skill `writing-for-agents`
 
+**Steer a session in one word**
+
+- Yes to everything you just proposed → skill `do-it-all`
+- What should we add next, benchmarked against the best → skill `what-else`
+- How finished/good is it, honestly → skill `brutal`
+- Code + security + architecture review, then fix it all → skill `full-review`
+- Keep going until a written finish line is met → skill `until-done`
+- Continue work from a paused or other session → skill `pick-up`
+- Split the remaining work into yours and mine, with exact steps → skill `my-steps`
+- Make it look like lscaturchio.xyz → skill `lscat-style`
+
 **Process discipline** (brainstorming, TDD, debugging, plans, code review) → the superpowers plugin owns these; route there, not to `misc/`.
 
 ## Rules

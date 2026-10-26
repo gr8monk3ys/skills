@@ -12,7 +12,7 @@
         "name": "Lorenzo",
         "url": "https://github.com/gr8monk3ys"
       },
-      "description": "17 commands, 6 agents, 14 skills, 14 hooks, 2 monitors. Scaffolds Next.js + React + Supabase code; composes with the superpowers plugin for process discipline.",
+      "description": "17 commands, 6 agents, 22 skills, 14 hooks, 2 monitors. Scaffolds Next.js + React + Supabase code; composes with the superpowers plugin for process discipline.",
       "name": "lorenzos-claude-code",
       "source": "./",
       "tags": [
