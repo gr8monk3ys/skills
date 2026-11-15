@@ -17,3 +17,4 @@ Engineering-focused skills. This is a promoted bucket: everything here ships in 
 - **[prototype](./prototype/SKILL.md)** — Build a throwaway prototype to answer a design question.
 - **[research](./research/SKILL.md)** — Investigate a question against high-trust primary sources and capture the findings as a Markdown file in the repo.
 - **[domain-modeling](./domain-modeling/SKILL.md)** — Build and sharpen a project's domain model.
+- **[codify](./codify/SKILL.md)** — Turn a correction into a deterministic check (lint rule, type, test, boundary, CI validator) instead of prose in CLAUDE.md.

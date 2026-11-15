@@ -8,7 +8,7 @@
 Slash commands that scaffold Next.js, React, and Supabase code, skills that hold that code to one set of conventions, and a routing hook that picks the skill from your prompt. Composes with [superpowers](https://github.com/obra/superpowers): that plugin owns the process, this one owns the stack.
 
 <!-- AUTOGEN:counts -->
-**17 commands** · **6 agents** · **22 skills** · **14 hooks** · **2 monitors**
+**17 commands** · **6 agents** · **23 skills** · **14 hooks** · **2 monitors**
 <!-- /AUTOGEN:counts -->
 
 ---
@@ -149,6 +149,7 @@ Skills of ours that would have duplicated a superpowers one are deliberately kep
 | `ask-lorenzo` | Ask which command or skill in this plugin fits your situation. A router over everything user-reachable — scaffolding, quality gates, delivery, and the ported workflow skills. |
 | `background-automation` | WHEN to auto-invoke: Setting up recurring or self-paced tasks, watching CI or deploys, babysitting pull requests, configuring monitors, running long jobs in the background, scheduling check-ins, polling for a condition, or wiring Claude Code on the web/cloud sessions and PR activity subscriptions. |
 | `brutal` | A brutally honest verdict on how finished and how good something is — percent done, what reads as slop or amateur, and what to fix first. |
+| `codify` | Turn a correction into a deterministic check — lint rule, type constraint, test, dependency boundary, or CI validator — so the mistake cannot recur, instead of another line of prose in CLAUDE.md. Use when the user corrects how you did something in a way that could happen again ("don't use X here", "always go through Y", "we never do Z"), or asks to enforce, ban, or guard against a pattern. |
 | `database-operations` | WHEN to auto-invoke: Database schema design, creating migrations, writing SQL queries, query optimization, Supabase operations, Prisma/Drizzle schema changes, PostgreSQL tasks, RLS policies, indexes. |
 | `do-it-all` | Approve everything you just recommended and carry it all out — decide the open questions yourself, split independent pieces across agents, don't check back. |
 | `domain-modeling` | Build and sharpen a project's domain model. Use when discussing codebase terminology, writing or editing a CONTEXT.md, or recording or editing an ADR. |
@@ -181,7 +182,7 @@ Each skill has a page written for the human deciding whether to reach for it. Th
 **Model-invoked.** You can type these too, but the agent reaches for them on its own when the task fits.
 
 - Four cover the stack code itself: [api-development](docs/engineering/api-development.md), [frontend-development](docs/engineering/frontend-development.md), [database-operations](docs/engineering/database-operations.md), and [background-automation](docs/engineering/background-automation.md).
-- Six cover the work around the code: [wizard](docs/engineering/wizard.md) for steps only a human can take, [resolving-merge-conflicts](docs/engineering/resolving-merge-conflicts.md) mid-merge, [prototype](docs/engineering/prototype.md) to answer a design question with throwaway code, [research](docs/engineering/research.md) to investigate against primary sources, [domain-modeling](docs/engineering/domain-modeling.md) to sharpen the project's vocabulary, and [writing-for-agents](docs/productivity/writing-for-agents.md) for when the thing you're writing is itself read by an agent.
+- Seven cover the work around the code: [wizard](docs/engineering/wizard.md) for steps only a human can take, [codify](docs/engineering/codify.md) to turn a correction into a check that fails the build, [resolving-merge-conflicts](docs/engineering/resolving-merge-conflicts.md) mid-merge, [prototype](docs/engineering/prototype.md) to answer a design question with throwaway code, [research](docs/engineering/research.md) to investigate against primary sources, [domain-modeling](docs/engineering/domain-modeling.md) to sharpen the project's vocabulary, and [writing-for-agents](docs/productivity/writing-for-agents.md) for when the thing you're writing is itself read by an agent.
 
 ## Hooks
 

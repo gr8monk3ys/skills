@@ -21,6 +21,7 @@ You are the router for this plugin. The user tells you what they're trying to do
 **Check or fix quality**
 
 - Lint and autofix → `/lint` · full verification loop → `/verify` · pre-completion quality gates → `/review` · exercise endpoints → `/api-test`
+- Turn a correction you keep repeating into a lint rule, test or CI check → skill `codify`
 
 **Deliver**
 
