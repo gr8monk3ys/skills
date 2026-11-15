@@ -7,7 +7,7 @@ Project memory for Claude when working in this repository.
 A Claude Code plugin that scaffolds Next.js + React + Supabase code, distributed via npm (`@gr8monk3ys/claude-code-plugin`) and the Claude Code plugin marketplace. Designed to compose with the [superpowers](https://github.com/obra/superpowers) plugin — superpowers handles process, this plugin handles stack-specific scaffolding.
 
 <!-- AUTOGEN:counts -->
-**17 commands** · **6 agents** · **22 skills** · **14 hooks** · **2 monitors**
+**17 commands** · **6 agents** · **23 skills** · **14 hooks** · **2 monitors**
 <!-- /AUTOGEN:counts -->
 
 ## Commands
@@ -56,6 +56,7 @@ A Claude Code plugin that scaffolds Next.js + React + Supabase code, distributed
 | `ask-lorenzo` | Ask which command or skill in this plugin fits your situation. A router over everything user-reachable — scaffolding, quality gates, delivery, and the ported workflow skills. |
 | `background-automation` | WHEN to auto-invoke: Setting up recurring or self-paced tasks, watching CI or deploys, babysitting pull requests, configuring monitors, running long jobs in the background, scheduling check-ins, polling for a condition, or wiring Claude Code on the web/cloud sessions and PR activity subscriptions. |
 | `brutal` | A brutally honest verdict on how finished and how good something is — percent done, what reads as slop or amateur, and what to fix first. |
+| `codify` | Turn a correction into a deterministic check — lint rule, type constraint, test, dependency boundary, or CI validator — so the mistake cannot recur, instead of another line of prose in CLAUDE.md. Use when the user corrects how you did something in a way that could happen again ("don't use X here", "always go through Y", "we never do Z"), or asks to enforce, ban, or guard against a pattern. |
 | `database-operations` | WHEN to auto-invoke: Database schema design, creating migrations, writing SQL queries, query optimization, Supabase operations, Prisma/Drizzle schema changes, PostgreSQL tasks, RLS policies, indexes. |
 | `do-it-all` | Approve everything you just recommended and carry it all out — decide the open questions yourself, split independent pieces across agents, don't check back. |
 | `domain-modeling` | Build and sharpen a project's domain model. Use when discussing codebase terminology, writing or editing a CONTEXT.md, or recording or editing an ADR. |

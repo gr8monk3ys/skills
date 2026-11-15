@@ -93,6 +93,14 @@
       "patterns": ["SKILL\\.md", "CLAUDE\\.md", "AGENTS\\.md"],
       "directories": [".claude/skills"],
       "intents": ["write.*skill", "improve.*(claude|agents)\\.md", "document.*for.*agent"]
+    },
+    {
+      "name": "codify",
+      "priority": 0,
+      "keywords": ["codify", "lint rule", "banned-api", "no-restricted-imports", "allowlist", "enforce this", "i told you"],
+      "patterns": ["/codify\\b"],
+      "directories": [],
+      "intents": ["(don't|do not|never|stop).*(use|import|call)", "always (use|go through)", "(enforce|ban|forbid).*(pattern|import|rule)", "add.*lint rule", "make.*(impossible|fail the build)"]
     }
   ]
 }
