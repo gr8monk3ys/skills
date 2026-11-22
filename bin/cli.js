@@ -338,7 +338,7 @@ function doctor() {
     try {
       JSON.parse(fs.readFileSync(hooksJson, "utf8"));
       success("hooks.json is valid JSON");
-    } catch (e) {
+    } catch {
       error("hooks.json is invalid JSON");
       issues++;
     }

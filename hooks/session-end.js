@@ -81,7 +81,7 @@ function getGitBranch() {
       encoding: "utf8",
       stdio: ["pipe", "pipe", "pipe"],
     }).trim();
-  } catch (err) {
+  } catch {
     // Not a git repo - this is normal, don't log as error
     return "";
   }
@@ -98,7 +98,7 @@ function getRecentFiles() {
       },
     );
     return result.trim().split("\n").filter(Boolean).slice(0, 10).join(",");
-  } catch (err) {
+  } catch {
     // No git history - this is normal, don't log as error
     return "";
   }

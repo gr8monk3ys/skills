@@ -31,8 +31,8 @@
   "homepage": "https://github.com/gr8monk3ys/skills#readme",
   "main": "scripts/install.js",
   "bin": {
-    "lorenzo-claude": "./bin/cli.js",
-    "lcc": "./bin/cli.js"
+    "lorenzo-claude": "bin/cli.js",
+    "lcc": "bin/cli.js"
   },
   "files": [
     "bin/",
@@ -55,12 +55,17 @@
   },
   "scripts": {
     "test": "node tests/run-all.js && node --test tests/manifest-sync.test.js tests/skill-activator-laya.test.js",
+    "lint": "eslint .",
+    "check": "npm run lint && npm run sync:check && npm test",
     "sync": "node scripts/sync-manifest.js",
     "sync:check": "node scripts/sync-manifest.js --check",
     "install:local": "node bin/cli.js install",
     "doctor": "node bin/cli.js doctor",
     "prepublishOnly": "npm run sync:check && npm test"
   },
-  "devDependencies": {},
-  "peerDependencies": {}
+  "devDependencies": {
+    "@eslint/js": "^9.39.5",
+    "eslint": "^9.39.5",
+    "globals": "^17.14.0"
+  }
 }

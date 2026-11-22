@@ -32,19 +32,6 @@ function test(name, fn) {
   }
 }
 
-function skip(name) {
-  console.log(
-    `${colors.yellow}  ○${colors.reset} ${name} ${colors.dim}(skipped)${colors.reset}`,
-  );
-  skipped++;
-}
-
-function assertEqual(actual, expected, message = "") {
-  if (actual !== expected) {
-    throw new Error(`Expected ${expected}, got ${actual}. ${message}`);
-  }
-}
-
 function assertExists(filePath) {
   if (!fs.existsSync(filePath)) {
     throw new Error(`File does not exist: ${filePath}`);
@@ -54,7 +41,7 @@ function assertExists(filePath) {
 function assertValidJson(filePath) {
   try {
     JSON.parse(fs.readFileSync(filePath, "utf8"));
-  } catch (err) {
+  } catch {
     throw new Error(`Invalid JSON: ${filePath}`);
   }
 }

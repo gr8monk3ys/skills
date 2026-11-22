@@ -8,9 +8,7 @@
  */
 
 const fs = require('fs');
-const path = require('path');
 
-const AGENTS_DIR = '.claude/agents';
 const PLUGIN_PATH = '.claude-plugin/plugin.json';
 
 // ANSI colors
@@ -43,12 +41,6 @@ function test(description, condition, details = '') {
   }
 }
 
-function skip(description, reason) {
-  totalTests++;
-  skippedTests++;
-  console.log(`  ${colors.yellow}○${colors.reset} ${description} ${colors.dim}(${reason})${colors.reset}`);
-}
-
 function extractFrontmatter(content) {
   const match = content.match(/^---\n([\s\S]*?)\n---/);
   if (!match) return null;
@@ -79,7 +71,6 @@ function testAgentStructure(name, content, frontmatter) {
   console.log(`\n${colors.cyan}Testing: ${name}${colors.reset}`);
 
   const agentContent = getAgentContent(content);
-  const lines = agentContent.split('\n');
   const wordCount = agentContent.split(/\s+/).length;
 
   // Frontmatter tests

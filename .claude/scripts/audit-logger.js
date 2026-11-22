@@ -88,7 +88,7 @@ function readLogEntries(logPath) {
   try {
     const content = fs.readFileSync(logPath, 'utf8')
     return JSON.parse(content)
-  } catch (error) {
+  } catch {
     // If file is corrupted, start fresh
     return []
   }

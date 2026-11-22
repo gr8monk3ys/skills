@@ -85,7 +85,7 @@ function matchPatterns(prompt, patterns) {
       if (regex.test(prompt)) {
         matches.push(pattern);
       }
-    } catch (err) {
+    } catch {
       // Invalid regex, skip
     }
   }
@@ -119,7 +119,7 @@ function matchIntents(prompt, intents) {
       if (regex.test(promptLower)) {
         matches.push(intent);
       }
-    } catch (err) {
+    } catch {
       // Invalid regex, skip
     }
   }
@@ -170,7 +170,7 @@ function promptText(raw) {
   try {
     const parsed = JSON.parse(raw);
     if (parsed && typeof parsed.prompt === "string") return parsed.prompt;
-  } catch (err) {
+  } catch {
     // not JSON
   }
   return raw;
@@ -211,7 +211,7 @@ async function askLaya(prompt, skills, config, fetchImpl = globalThis.fetch) {
       typeof answer.answer_confidence === "number" ? answer.answer_confidence : 0;
     if (confidence < config.minConfidence) return null;
     return { skill: answer.choice, confidence };
-  } catch (err) {
+  } catch {
     return null;
   }
 }
@@ -360,7 +360,6 @@ async function main() {
     console.log("");
 
     for (const evaluation of evaluations) {
-      const statusIcon = evaluation.status === "activate" ? "→" : "?";
       console.log(`  <skill name="${evaluation.name}" confidence="${evaluation.confidence}" status="${evaluation.status}">`);
 
       if (evaluation.matches.length > 0) {
