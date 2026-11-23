@@ -65,22 +65,6 @@ async function readStdin() {
   });
 }
 
-// Check if command exists
-function commandExists(cmd) {
-  try {
-    execSync(`which ${cmd}`, { stdio: "pipe" });
-    return true;
-  } catch {
-    // On Windows, try where instead
-    try {
-      execSync(`where ${cmd}`, { stdio: "pipe" });
-      return true;
-    } catch {
-      return false;
-    }
-  }
-}
-
 // Run formatter
 function runFormatter(filePath, formatType) {
   // Check for prettier in node_modules or globally
@@ -90,7 +74,7 @@ function runFormatter(filePath, formatType) {
       console.error(`Formatted ${filePath} with prettier`);
       return true;
     }
-  } catch (err) {
+  } catch {
     // Prettier failed, try next formatter
   }
 
@@ -103,7 +87,7 @@ function runFormatter(filePath, formatType) {
       console.error(`Formatted ${filePath} with biome`);
       return true;
     }
-  } catch (err) {
+  } catch {
     // Biome failed, try next formatter
   }
 
@@ -115,7 +99,7 @@ function runFormatter(filePath, formatType) {
         console.error(`Fixed ${filePath} with eslint`);
         return true;
       }
-    } catch (err) {
+    } catch {
       // ESLint failed
     }
   }

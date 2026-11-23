@@ -55,7 +55,7 @@ function getGitStatus() {
       changedFiles: statusLines,
       isClean: statusLines === 0,
     };
-  } catch (err) {
+  } catch {
     // Not a git repo
     return null;
   }
@@ -73,7 +73,7 @@ function getRecentCommits(count = 5) {
     ).trim();
 
     return result.split("\n").filter(Boolean);
-  } catch (err) {
+  } catch {
     return [];
   }
 }
@@ -90,7 +90,7 @@ function getRecentIssues() {
     );
 
     return JSON.parse(result);
-  } catch (err) {
+  } catch {
     // gh CLI not available or not in a GitHub repo
     return [];
   }
@@ -111,7 +111,7 @@ function detectProjectType() {
       if (deps.vue) return "vue";
       if (deps.react) return "react";
       return "node";
-    } catch (err) {
+    } catch {
       return "node";
     }
   }

@@ -165,7 +165,6 @@ function validateCommands() {
   const commandFiles = findMdFiles(COMMANDS_DIR);
   info(`Found ${commandFiles.length} command files`);
 
-  let validCount = 0;
 
   for (const filePath of commandFiles) {
     const content = fs.readFileSync(filePath, 'utf8');
@@ -194,7 +193,6 @@ function validateCommands() {
     }
 
     success(`Command valid: ${fileName}`);
-    validCount++;
   }
 
   return commandFiles.length;
@@ -215,7 +213,6 @@ function validateAgents() {
   const agentFiles = findMdFiles(AGENTS_DIR);
   info(`Found ${agentFiles.length} agent files`);
 
-  let validCount = 0;
 
   for (const filePath of agentFiles) {
     const content = fs.readFileSync(filePath, 'utf8');
@@ -247,7 +244,6 @@ function validateAgents() {
     }
 
     success(`Agent valid: ${fileName}`);
-    validCount++;
   }
 
   return agentFiles.length;
@@ -277,7 +273,6 @@ function validateSkills() {
 
   info(`Found ${skillDirs.length} skill directories`);
 
-  let validCount = 0;
 
   for (const skillDir of skillDirs) {
     const skillPath = path.join(SKILLS_DIR, skillDir, 'SKILL.md');
@@ -308,7 +303,6 @@ function validateSkills() {
     }
 
     success(`Skill valid: ${skillDir}`);
-    validCount++;
   }
 
   return skillDirs.length;
@@ -366,7 +360,7 @@ function validateSymlinks() {
       } else if (stats.isDirectory()) {
         success(`Directory exists: ${link}`);
       }
-    } catch (e) {
+    } catch {
       warn(`Missing ${link} directory or symlink at root`);
       warnings.push(`Missing: ${link}`);
     }

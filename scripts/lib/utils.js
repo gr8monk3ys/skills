@@ -6,7 +6,7 @@
 const fs = require("fs");
 const path = require("path");
 const os = require("os");
-const { execSync, spawn } = require("child_process");
+const { execSync } = require("child_process");
 
 // Constants
 const CLAUDE_DIR = path.join(os.homedir(), ".claude");
@@ -66,7 +66,7 @@ function readJson(filePath, defaultValue = null) {
     }
     const content = fs.readFileSync(filePath, "utf8");
     return JSON.parse(content);
-  } catch (err) {
+  } catch {
     warn(`Failed to parse JSON: ${filePath}`);
     return defaultValue;
   }
@@ -219,7 +219,9 @@ function cleanOldSessions(maxSessions = 50, maxDays = 7) {
     if (f.mtime.getTime() < cutoff) {
       try {
         fs.unlinkSync(f.path);
-      } catch {}
+      } catch {
+        // best-effort cleanup of old log files
+      }
     }
   });
 }
@@ -313,7 +315,7 @@ function runCommand(cmd, options = {}) {
       stdio: ["pipe", "pipe", "pipe"],
       ...options,
     }).trim();
-  } catch (err) {
+  } catch {
     return null;
   }
 }

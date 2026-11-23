@@ -72,7 +72,7 @@ function notify(title, message) {
       execSync(`powershell -Command "${script}"`, { stdio: "pipe" });
       return true;
     }
-  } catch (err) {
+  } catch {
     // Notification failed - this is expected if notification system unavailable
     return false;
   }

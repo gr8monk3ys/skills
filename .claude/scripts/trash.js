@@ -119,7 +119,7 @@ function moveToTrash(filePath) {
       destination: trashPath,
       isDirectory
     }
-  } catch (renameError) {
+  } catch {
     // If rename fails (cross-device), try copy and delete
     try {
       if (isDirectory) {

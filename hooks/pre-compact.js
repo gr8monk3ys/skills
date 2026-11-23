@@ -87,7 +87,7 @@ function getRecentFiles() {
           });
         }
       }
-    } catch (err) {
+    } catch {
       // Directory read failed - this is normal for some directories
     }
   }

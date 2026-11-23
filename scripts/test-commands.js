@@ -24,8 +24,6 @@ function log(color, symbol, message) {
   console.log(`${color}${symbol}${colors.reset} ${message}`);
 }
 
-function success(message) { log(colors.green, '✓', message); }
-function error(message) { log(colors.red, '✗', message); }
 function warn(message) { log(colors.yellow, '⚠', message); }
 function info(message) { log(colors.blue, 'ℹ', message); }
 
