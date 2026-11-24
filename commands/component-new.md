@@ -1,6 +1,6 @@
 ---
 description: Create a new React component with TypeScript and modern best practices
-model: claude-opus-4-8
+model: opus
 ---
 
 Generate a new React component following 2025 best practices.

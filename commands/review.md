@@ -1,6 +1,6 @@
 ---
 description: RIPER Review Phase - Quality gates before considering work complete
-model: claude-sonnet-4-6
+model: sonnet
 ---
 
 # Review Phase

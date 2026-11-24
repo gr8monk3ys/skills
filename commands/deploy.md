@@ -1,6 +1,6 @@
 ---
 description: Generate deployment configurations and workflows
-model: claude-opus-4-8
+model: opus
 ---
 
 Generate deployment configuration for the specified platform and environment.

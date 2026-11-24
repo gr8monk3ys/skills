@@ -2,7 +2,7 @@
 description: Scaffold a Next.js 15 Server Action with Zod validation and typed results
 argument-hint: "<actionName> [what it does]"
 allowed-tools: Read, Write, Edit, Glob, Grep
-model: claude-opus-4-8
+model: opus
 ---
 
 Generate a Next.js 15 Server Action with `'use server'`, Zod input validation, an auth

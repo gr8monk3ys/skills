@@ -1,7 +1,7 @@
 ---
 name: test-strategist
 description: Use this agent when planning test strategies, analyzing test coverage, or designing comprehensive testing approaches. Activates on test planning, coverage analysis, or when asking about what to test.
-model: claude-sonnet-4-5
+model: sonnet
 color: green
 ---
 
