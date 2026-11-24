@@ -1,6 +1,6 @@
 ---
 description: Create a new Next.js page with App Router best practices
-model: claude-opus-4-8
+model: opus
 ---
 
 Generate a new Next.js 15 page following modern App Router patterns.

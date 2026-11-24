@@ -94,7 +94,7 @@ function testFrontmatter(filePath, content) {
   }
 
   // Validate model value
-  const validModels = ['claude-opus-4-5', 'claude-sonnet-4-5', 'claude-haiku-4'];
+  const validModels = ['opus', 'sonnet', 'haiku', 'inherit'];
   if (frontmatter.model && !validModels.includes(frontmatter.model)) {
     testResults.warnings++;
     warn(`${testName}: Unknown model "${frontmatter.model}"`);
@@ -158,10 +158,10 @@ function testModelConsistency(filePath, content) {
     return true; // Skip if no model specified
   }
 
-  // API commands should use opus-4-5 for best results
-  if (filePath.includes('/api/') && frontmatter.model !== 'claude-opus-4-5') {
+  // API commands should use opus for best results
+  if (filePath.includes('/api/') && frontmatter.model !== 'opus') {
     testResults.warnings++;
-    warn(`${testName}: API commands should use claude-opus-4-5 for best results`);
+    warn(`${testName}: API commands should use opus for best results`);
   }
 
   recordTest(testName, true, 'Model assignment appropriate');

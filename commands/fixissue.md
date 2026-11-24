@@ -1,6 +1,6 @@
 ---
 description: End-to-end issue resolution - fetch, branch, fix, test, commit, PR, close
-model: claude-sonnet-4-6
+model: sonnet
 ---
 
 # Fix Issue Workflow

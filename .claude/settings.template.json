@@ -49,8 +49,8 @@
     "pr": "This PR was generated with assistance from Claude Code."
   },
 
-  "model": "claude-sonnet-4-5-20250514",
-  "_modelComment": "Options: claude-sonnet-4-5-20250514, claude-opus-4-5-20250514",
+  "model": "sonnet",
+  "_modelComment": "Use an alias so retirements never break this: sonnet, opus or haiku (each tracks the latest model of that tier).",
 
   "alwaysThinkingEnabled": false,
   "_thinkingComment": "Set to true for deeper reasoning on complex tasks",

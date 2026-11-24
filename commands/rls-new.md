@@ -2,7 +2,7 @@
 description: Scaffold Supabase Row Level Security policies from a description, with tests
 argument-hint: "<table> [access description]"
 allowed-tools: Read, Write, Edit, Glob, Grep, Bash(supabase *)
-model: claude-opus-4-8
+model: opus
 ---
 
 Generate Supabase Row Level Security (RLS) policies for a table, plus tests, from a
