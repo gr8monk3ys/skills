@@ -20,7 +20,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest]
-        node-version: [20, 24]
+        node-version: [24]
 
     steps:
       - name: Checkout repository
