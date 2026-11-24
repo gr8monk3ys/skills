@@ -1,6 +1,6 @@
 ---
 description: PR automation - validate, merge, cleanup, and sync
-model: claude-sonnet-4-6
+model: sonnet
 ---
 
 # Auto Merge Workflow

@@ -1,6 +1,6 @@
 ---
 description: Generate TypeScript types from Supabase database schema
-model: claude-opus-4-8
+model: opus
 ---
 
 Generate TypeScript types from the Supabase database schema.

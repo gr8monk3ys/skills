@@ -1,6 +1,6 @@
 ---
 description: Run linting and fix code quality issues
-model: claude-opus-4-8
+model: opus
 ---
 
 Run linting and fix code quality issues in the codebase.

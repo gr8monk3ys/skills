@@ -22,7 +22,7 @@ test('parseFrontmatter extracts name and single-line description', () => {
   const content = `---
 name: api-new
 description: Create a new Next.js API route with validation
-model: claude-opus-4-5
+model: opus
 ---
 
 Body content.

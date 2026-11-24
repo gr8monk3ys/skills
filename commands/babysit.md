@@ -3,7 +3,7 @@ description: Watch a PR in a loop and auto-fix CI failures and review comments
 argument-hint: "<pr-number|url> [--no-fix]"
 allowed-tools: Read, Edit, Bash, Grep, Glob
 disable-model-invocation: true
-model: claude-sonnet-4-6
+model: sonnet
 ---
 
 Babysit a pull request until it is green and merged: keep watching CI, deploys, and
