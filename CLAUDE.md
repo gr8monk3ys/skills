@@ -7,7 +7,7 @@ Project memory for Claude when working in this repository.
 A Claude Code plugin that scaffolds Next.js + React + Supabase code, distributed via npm (`@gr8monk3ys/claude-code-plugin`) and the Claude Code plugin marketplace. Designed to compose with the [superpowers](https://github.com/obra/superpowers) plugin — superpowers handles process, this plugin handles stack-specific scaffolding.
 
 <!-- AUTOGEN:counts -->
-**17 commands** · **6 agents** · **23 skills** · **14 hooks** · **2 monitors**
+**17 commands** · **6 agents** · **23 skills** · **15 hooks** · **2 monitors**
 <!-- /AUTOGEN:counts -->
 
 ## Commands
