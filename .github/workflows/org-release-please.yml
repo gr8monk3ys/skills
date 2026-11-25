@@ -27,6 +27,18 @@ jobs:
           set -euo pipefail
           strategy=""
 
+          # release-please-config.json means manifest mode: release_type stays
+          # empty so the action reads that config. It is the only way to use
+          # `extra-files`, which this repo needs: the version also lives in
+          # .claude-plugin/plugin.json, and a release PR that bumps
+          # package.json alone fails `sync-manifest.js --check` (see #54).
+          if [ -f release-please-config.json ]; then
+            echo "supported=true" >> "$GITHUB_OUTPUT"
+            echo "release_type=" >> "$GITHUB_OUTPUT"
+            echo "Using release-please-config.json (manifest mode)"
+            exit 0
+          fi
+
           if [ -f package.json ]; then
             strategy="node"
           elif [ -f pyproject.toml ] || [ -f setup.py ] || [ -f setup.cfg ] || [ -f requirements.txt ]; then
