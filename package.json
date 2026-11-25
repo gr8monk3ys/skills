@@ -54,7 +54,7 @@
     "node": ">=18.0.0"
   },
   "scripts": {
-    "test": "node tests/run-all.js && node --test tests/manifest-sync.test.js tests/skill-activator-laya.test.js",
+    "test": "node tests/run-all.js && node --test tests/manifest-sync.test.js tests/skill-activator-laya.test.js tests/verify-before-stop.test.js",
     "lint": "eslint .",
     "check": "npm run lint && npm run sync:check && npm test",
     "sync": "node scripts/sync-manifest.js",

@@ -8,7 +8,7 @@
 Slash commands that scaffold Next.js, React, and Supabase code, skills that hold that code to one set of conventions, and a routing hook that picks the skill from your prompt. Composes with [superpowers](https://github.com/obra/superpowers): that plugin owns the process, this one owns the stack.
 
 <!-- AUTOGEN:counts -->
-**17 commands** · **6 agents** · **23 skills** · **14 hooks** · **2 monitors**
+**17 commands** · **6 agents** · **23 skills** · **15 hooks** · **2 monitors**
 <!-- /AUTOGEN:counts -->
 
 ---
@@ -62,6 +62,31 @@ lcc doctor
 `lcc install` copies the commands, agents, skills, and hooks into `~/.claude/`; `lcc doctor` checks that every piece landed.
 
 Installing from GitHub rather than the registry is deliberate: `@gr8monk3ys/claude-code-plugin` is not published yet, so `npm install -g @gr8monk3ys/claude-code-plugin` returns a 404. The GitHub form installs the same package and the same `lcc` binary.
+
+</details>
+
+<details>
+<summary><strong>Per repository</strong>, so every clone and cloud session loads it</summary>
+
+The marketplace also lists three upstream plugins, each pinned to a commit: `mattpocock-skills` ([mattpocock/skills](https://github.com/mattpocock/skills)), `impeccable` ([pbakaus/impeccable](https://github.com/pbakaus/impeccable)) and `ponytail` ([DietrichGebert/ponytail](https://github.com/DietrichGebert/ponytail)). To bump one, change its `sha` here; every repo picks it up on its next session.
+
+In a repository's `.claude/settings.json`:
+
+```json
+{
+  "extraKnownMarketplaces": {
+    "lorenzos-claude-code": { "source": { "source": "github", "repo": "gr8monk3ys/skills" } }
+  },
+  "enabledPlugins": {
+    "lorenzos-claude-code@lorenzos-claude-code": true,
+    "mattpocock-skills@lorenzos-claude-code": true,
+    "impeccable@lorenzos-claude-code": true,
+    "ponytail@lorenzos-claude-code": true
+  }
+}
+```
+
+**Verify gate.** In any repo with a `scripts/verify`, the `verify-before-stop` hook runs it before a session can finish, if the session changed anything. A failure sends the output back to Claude to fix; after three failed tries the session may stop with a warning. `CLAUDE_SKIP_VERIFY=1` turns it off for one session.
 
 </details>
 
@@ -203,6 +228,7 @@ Each skill has a page written for the human deciding whether to reach for it. Th
 | `subagent-start` |  |
 | `subagent-stop` |  |
 | `validate-json` |  |
+| `verify-before-stop` |  |
 <!-- /AUTOGEN:hooks -->
 
 ## Monitors

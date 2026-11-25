@@ -12,7 +12,7 @@
         "name": "Lorenzo",
         "url": "https://github.com/gr8monk3ys"
       },
-      "description": "17 commands, 6 agents, 23 skills, 14 hooks, 2 monitors. Scaffolds Next.js + React + Supabase code; composes with the superpowers plugin for process discipline.",
+      "description": "17 commands, 6 agents, 23 skills, 15 hooks, 2 monitors. Scaffolds Next.js + React + Supabase code; composes with the superpowers plugin for process discipline.",
       "name": "lorenzos-claude-code",
       "source": "./",
       "tags": [
@@ -25,6 +25,39 @@
         "minimal"
       ],
       "version": "4.1.0"
+    },
+    {
+      "name": "mattpocock-skills",
+      "description": "Matt Pocock's engineering skills (TDD, code review, diagnosing bugs, grilling, specs and tickets). Upstream, pinned.",
+      "source": {
+        "source": "github",
+        "repo": "mattpocock/skills",
+        "sha": "d1478fcb140db0b93c0c8df17bcfd311844749d0"
+      },
+      "homepage": "https://github.com/mattpocock/skills",
+      "category": "engineering"
+    },
+    {
+      "name": "impeccable",
+      "description": "Paul Bakaus's frontend design skill: /impeccable audit, critique, polish and anti-pattern checks. Upstream, pinned.",
+      "source": {
+        "source": "github",
+        "repo": "pbakaus/impeccable",
+        "sha": "9e460a87ef338ee9d12c7beed8fedc597a5af5f7"
+      },
+      "homepage": "https://impeccable.style",
+      "category": "design"
+    },
+    {
+      "name": "ponytail",
+      "description": "Dietrich Gebert's lazy-senior-dev mode: YAGNI, stdlib first, no unrequested abstractions. Upstream, pinned.",
+      "source": {
+        "source": "github",
+        "repo": "DietrichGebert/ponytail",
+        "sha": "7801d061243d7b753bad0e0b3c057cd250b11755"
+      },
+      "homepage": "https://github.com/DietrichGebert/ponytail",
+      "category": "productivity"
     }
   ]
 }
